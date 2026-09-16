@@ -234,5 +234,5 @@ def test_framework_hook_covers_every_generator_boundary() -> None:
 def test_ci_runs_the_public_check_command() -> None:
     workflow = (ROOT / ".github/workflows/ci.yml").read_text(encoding="utf-8")
 
-    assert "run: pnpm check" in workflow
+    assert "run: pnpm validate" in workflow
     assert "Validate manifests and committed Claude package freshness" not in workflow

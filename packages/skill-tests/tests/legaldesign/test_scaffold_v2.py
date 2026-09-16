@@ -4,6 +4,7 @@ import copy
 import importlib.util
 import json
 import sys
+from argparse import Namespace
 from collections.abc import Callable
 from pathlib import Path
 from typing import Any
@@ -22,6 +23,19 @@ SPEC.loader.exec_module(scaffold)
 
 def canonical() -> dict[str, Any]:
     return json.loads(VALID.read_text(encoding="utf-8"))
+
+
+def test_template_check_rejects_fixture_matter_terms(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    template = tmp_path / "template.html"
+    args = Namespace(path=template, asset="stacked-explainer.html")
+    template.write_text("<html><body>[Neutral heading]</body></html>", encoding="utf-8")
+    assert scaffold._command_template_check(args) == 0
+    capsys.readouterr()
+    template.write_text("<html><body>Delaware</body></html>", encoding="utf-8")
+    assert scaffold._command_template_check(args) == 1
+    assert "matter term 'Delaware'" in capsys.readouterr().err
 
 
 def unknown_component(payload: dict[str, Any]) -> None:

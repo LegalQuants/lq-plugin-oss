@@ -56,4 +56,4 @@ def test_ruff_commands_use_the_same_path_set() -> None:
     assert f"ruff check {expected}" in lint_py
     assert "pnpm lint:py" in pre_commit
     assert "pnpm lint:py" in hook
-    assert "pnpm check" in workflow
+    assert "run: pnpm lint:py" in workflow

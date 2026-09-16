@@ -1,5 +1,10 @@
 name: CI
 
+# Independent jobs keep PR wall-clock time close to the slowest check. The
+# compatibility matrices apply only to the test jobs, and the final `CI` job
+# is the single required gate. Windows jobs are advisory because hosted
+# Windows availability is an account-level concern for public repositories.
+
 on:
   push:
     branches: [main]
@@ -14,18 +19,136 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  check:
-    name: Public source and packages
+  biome:
+    name: Biome
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: ./.github/actions/setup-js
+      - run: pnpm lint
+
+  js-typecheck:
+    name: TypeScript
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: ./.github/actions/setup-js
+      - run: pnpm typecheck
+
+  js-test:
+    name: Vitest
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: ./.github/actions/setup-js
+      - run: pnpm test:js
+
+  js-test-windows:
+    # Keep this signal visible without allowing a hosted-runner billing or
+    # platform outage to turn every public pull request red.
+    name: Vitest (Windows, advisory)
+    runs-on: windows-latest
+    timeout-minutes: 10
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: ./.github/actions/setup-js
+      - run: pnpm test:js
+
+  ruff:
+    name: Ruff
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: ./.github/actions/setup-python
+      - run: pnpm lint:py
+
+  ty:
+    name: ty
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: ./.github/actions/setup-python
+      - run: pnpm typecheck:py
+
+  py-test:
+    name: pytest (Python ${{ matrix.python }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.12", "3.13", "3.14"]
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: ./.github/actions/setup-python
+        with:
+          python-version: ${{ matrix.python }}
+      # Some Python tests validate schemas with the packaged Ajv runtime.
+      - uses: ./.github/actions/setup-js
+      - name: Install Poppler for PDF render checks
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils
+      - run: pnpm test:py
+
+  py-test-windows:
+    # Advisory until this remains green across hosted Windows images.
+    name: pytest (Windows, advisory)
+    runs-on: windows-latest
+    timeout-minutes: 45
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: ./.github/actions/setup-python
+        with:
+          python-version: "3.12"
+      - uses: ./.github/actions/setup-js
+      # Keep a slow or hung directory from hiding results from the rest of the
+      # public suite. Git Bash supplies the timeout and loop used here.
+      - run: |
+          status=0
+          for d in packages/skill-tests/tests/*/; do
+            echo "::group::$d"
+            timeout 300 uv run pytest -q -p no:cacheprovider -rfE \
+              -o faulthandler_timeout=90 --durations=5 "$d" || { echo "::warning::$d exit $?"; status=1; }
+            echo "::endgroup::"
+          done
+          exit $status
+        shell: bash
+
+  browser-runtime:
+    name: Browser and runtime checks
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - uses: ./.github/actions/setup-js
       - uses: ./.github/actions/setup-python
+      - uses: ./.github/actions/setup-js
       - name: Install browser test dependencies
         run: pnpm exec playwright install --with-deps chromium
-      - name: Check source, scripts, tests, and committed plugin bundles
-        run: pnpm check
+      - run: pnpm test:browser
+      - run: pnpm assets:check
+
+  pack:
+    name: Pack and archive
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: ./.github/actions/setup-js
+      - uses: ./.github/actions/setup-python
+      - name: Validate manifests and committed plugin bundles
+        run: pnpm validate
+      - name: Build provider packages
+        run: pnpm plugin-pack
+      - name: Check generated provider packages
+        run: pnpm plugin-pack:check
+      - name: Validate packaged schemas
+        run: uv run pytest -q packages/skill-tests/tests/cite-check/test_schemas.py
       - name: Build provider submission archives
         run: pnpm release:archives
       - name: Upload provider packages
@@ -35,3 +158,39 @@ jobs:
           path: dist/releases/*
           if-no-files-found: error
           retention-days: 30
+
+  ci:
+    name: CI
+    if: ${{ always() && !cancelled() }}
+    needs:
+      - biome
+      - js-typecheck
+      - js-test
+      - ruff
+      - ty
+      - py-test
+      - browser-runtime
+      - pack
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Require every check
+        env:
+          NEEDS: ${{ toJSON(needs) }}
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          import sys
+
+          needs = json.loads(os.environ["NEEDS"])
+          failed = [
+              name
+              for name, job in needs.items()
+              if job.get("result") != "success"
+          ]
+          if failed:
+              print("failed jobs:", ", ".join(failed))
+              sys.exit(1)
+          print("all required jobs passed")
+          PY
