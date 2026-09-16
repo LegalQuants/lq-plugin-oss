@@ -23,6 +23,8 @@ REPO_ROOT = SKILL_ROOT.parents[2]
 ASSET_ROOT = SKILL_ROOT / "assets"
 COMPONENT_CONTRACT = SKILL_ROOT / "references" / "components.json"
 DESIGN_SCHEMA = SKILL_ROOT / "schemas" / "design-authority.schema.json"
+# Optional maintainer fixture: installed skills retain the generic template checks
+# below without depending on a repository evaluation corpus.
 MATTER_TERMS = REPO_ROOT / "packages" / "legaldesign" / "fixtures" / "matter-terms.json"
 SPEC_VERSION_V2 = "legaldesign.build.v2"
 SPEC_VERSION = "legaldesign.build.v3"

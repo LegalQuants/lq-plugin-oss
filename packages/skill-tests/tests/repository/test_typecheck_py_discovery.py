@@ -33,7 +33,7 @@ def test_ci_uses_the_same_discovery_script() -> None:
     script = (ROOT / "packages/pluginctl/scripts/typecheck-py.sh").read_text(
         encoding="utf-8"
     )
-    assert "run: pnpm typecheck:py" in workflow
+    assert "run: sh packages/pluginctl/scripts/typecheck-py.sh" in workflow
     assert "uv run ty check skills/litigation/cite-check" not in workflow
     assert "skills/*/skill.yaml" not in script
 
