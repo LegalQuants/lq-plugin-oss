@@ -1,0 +1,8 @@
+interface:
+  display_name: "Conform"
+  short_description: "Adapt precedent language into a document's own terms"
+  default_prompt: "Using current /definition-check ledgers for both documents, conform the selected precedent clause into the core document's vocabulary and report the mapping, redline, and any escalations."
+  brand_color: "#2d2d2d"
+
+policy:
+  allow_implicit_invocation: true

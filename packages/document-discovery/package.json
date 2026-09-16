@@ -1,0 +1,13 @@
+{
+  "name": "@lq/document-discovery-tests",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "test:browser": "node browser/run.mjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.62.0",
+    "ajv": "^8.20.0"
+  }
+}

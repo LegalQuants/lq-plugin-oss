@@ -1,0 +1,22 @@
+{
+  "scenario": "complete-source-set",
+  "user": {
+    "request": "Cite-check this motion against the authorities in the supplied folder.",
+    "target": "input/motion.md",
+    "authorities": [
+      "input/authorities/example-case.docx",
+      "input/authorities/rule.pdf"
+    ],
+    "intendedUse": "draft motion for filing",
+    "tribunal": "Example Superior Court",
+    "jurisdiction": "Example State",
+    "proceduralPosture": "motion to dismiss",
+    "asOfDate": null
+  },
+  "expected": {
+    "canBeginReview": true,
+    "mustAskBeforeReview": [],
+    "executionFallback": "native-workers-or-sequential",
+    "disclosures": ["supplied-source review is not currentness research"]
+  }
+}

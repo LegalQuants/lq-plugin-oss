@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://legalquants.example/schemas/definition-check-review-packet-v3.json",
+  "title": "Definition Check Document-Aware Review Packet",
+  "type": "object",
+  "required": ["package_schema", "view_type", "authority", "matter_id", "document_id", "version_id", "comparison_version_id", "snapshot_sha256", "prompt_sha256", "items", "packet_sha256"],
+  "properties": {
+    "package_schema": { "const": "review-packet-v3" },
+    "view_type": { "type": "string", "minLength": 1 },
+    "authority": { "const": "proposal_only" },
+    "matter_id": { "type": "string", "minLength": 1 },
+    "document_id": { "type": "string", "minLength": 1 },
+    "version_id": { "type": "string", "minLength": 1 },
+    "comparison_version_id": { "type": ["string", "null"] },
+    "snapshot_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "prompt_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "items": { "type": "array", "items": { "type": "object", "required": ["item_ordinal"] } },
+    "packet_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+  },
+  "additionalProperties": false
+}

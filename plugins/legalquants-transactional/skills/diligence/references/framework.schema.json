@@ -1,0 +1,103 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "diligence framework",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["framework_version", "approved", "source_inputs", "lenses"],
+  "properties": {
+    "framework_version": {"type": "integer", "minimum": 1},
+    "approved": {"type": "boolean"},
+    "source_inputs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["kind", "label"],
+        "properties": {
+          "kind": {"enum": ["checklist", "pleading", "chronology", "rfp", "other"]},
+          "label": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "lenses": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["lens_id", "name", "items"],
+        "properties": {
+          "lens_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+          "name": {"type": "string", "minLength": 1},
+          "items": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["issue_id", "question", "hit_rule", "exclusions", "evidence", "answer_shape", "disposition", "overlap_owner"],
+              "properties": {
+                "issue_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+                "question": {"type": "string", "minLength": 1},
+                "hit_rule": {"type": "string", "minLength": 1},
+                "exclusions": {"type": "array", "items": {"type": "string", "minLength": 1}},
+                "materiality": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["default", "bands"],
+                  "properties": {
+                    "default": {"enum": ["high", "medium", "low"]},
+                    "bands": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": ["band", "when"],
+                        "properties": {
+                          "band": {"enum": ["high", "medium", "low"]},
+                          "when": {"type": "string", "minLength": 1}
+                        }
+                      }
+                    }
+                  }
+                },
+                "evidence": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["required", "unresolved_when"],
+                  "properties": {
+                    "required": {"const": "verbatim quote plus section reference"},
+                    "unresolved_when": {"type": "string", "minLength": 1}
+                  }
+                },
+                "answer_shape": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["statuses", "characterization_max_words", "template"],
+                  "properties": {
+                    "statuses": {
+                      "type": "array",
+                      "items": {"enum": ["present", "absent", "unresolved"]},
+                      "minItems": 3,
+                      "maxItems": 3
+                    },
+                    "characterization_max_words": {"type": "integer", "minimum": 5, "maximum": 120},
+                    "template": {"type": "string", "minLength": 1}
+                  }
+                },
+                "disposition": {"enum": ["report", "register", "queue"]},
+                "overlap_owner": {
+                  "anyOf": [
+                    {"type": "null"},
+                    {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"}
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

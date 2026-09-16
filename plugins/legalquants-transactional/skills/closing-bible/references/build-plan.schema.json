@@ -1,0 +1,61 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "closing-bible build plan (build-plan.json)",
+  "description": "PRD §4 'Gate 2: Build-plan approval': the exact document order, the selected source file for each item, output names, conversion steps and any qualified statuses. Written by `plan` from an APPROVED closing-index; approved by the lawyer (approved: true); consumed by `build` and `update`, which refuse an unapproved plan or one whose corpus_id or index hash has moved. Nothing is assembled that is not on this plan.",
+  "type": "object",
+  "required": ["schema_version", "corpus_id", "index_sha256", "approved", "include_qualified", "package", "entries", "excluded", "volume_pages"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "corpus_id": { "type": "string" },
+    "index_sha256": { "type": "string", "description": "sha256 of the approved closing-index.json bytes this plan was built from; build refuses if the index on disk differs." },
+    "approved": { "type": "boolean", "description": "true only after the lawyer approved the plan at Gate 2. build/update refuse false." },
+    "include_qualified": { "type": "boolean", "description": "PRD §9: qualified items (unsigned, undated, incomplete) enter the bible only on express instruction. false = only ready and not-required-excluded; true = qualified items included, each visibly qualified in the index and receipt, and the receipt outcome cannot be complete." },
+    "package": {
+      "type": "object",
+      "required": ["version", "folder", "prior_folder"],
+      "additionalProperties": false,
+      "properties": {
+        "version": { "type": "integer", "minimum": 1 },
+        "folder": { "type": "string", "description": "closing-bible-vNNN, created beside the closing folder; never inside it." },
+        "prior_folder": { "type": ["string", "null"], "description": "For update: the prior package, preserved untouched." }
+      }
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["order", "item_id", "title", "status", "qualification", "source_id", "source_path", "output_name", "conversion", "execution_pages"],
+        "additionalProperties": false,
+        "properties": {
+          "order": { "type": "integer", "minimum": 1 },
+          "item_id": { "type": "string", "pattern": "^CB-[0-9]{3}$" },
+          "title": { "type": "string" },
+          "status": { "enum": ["ready", "unsigned", "undated", "incomplete"] },
+          "qualification": { "type": "string" },
+          "source_id": { "type": "string", "pattern": "^sha256:[0-9a-f]{12}$" },
+          "source_path": { "type": "string", "description": "Relative to the closing folder." },
+          "output_name": { "type": "string", "description": "NNN - Title.<ext> inside indexed-set/; the native file keeps its extension, the rendered copy is .pdf." },
+          "conversion": { "enum": ["none", "docx-to-pdf", "unrenderable"], "description": "none: already a PDF. docx-to-pdf: converted for the combined PDF only, native retained. unrenderable: kept native in indexed-set, absent from the combined PDF, named in the receipt." },
+          "execution_pages": { "type": "array", "items": { "type": "integer", "minimum": 1 }, "description": "Signature-page numbers within the source, from execution-overview; bookmarked in the combined PDF." }
+        }
+      }
+    },
+    "excluded": {
+      "type": "array",
+      "description": "Every index item NOT entering the bible, with the reason — the lawyer sees the whole set at Gate 2.",
+      "items": {
+        "type": "object",
+        "required": ["item_id", "title", "status", "reason"],
+        "additionalProperties": false,
+        "properties": {
+          "item_id": { "type": "string" },
+          "title": { "type": "string" },
+          "status": { "type": "string" },
+          "reason": { "enum": ["not-required", "missing", "unreadable", "version-conflict", "qualified-not-included"] }
+        }
+      }
+    },
+    "volume_pages": { "type": ["integer", "null"], "minimum": 50, "description": "Split the combined PDF into numbered volumes of at most this many pages, with a master index; null = single file." }
+  }
+}

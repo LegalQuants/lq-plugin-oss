@@ -1,0 +1,63 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "closing-bible closing index (closing-index.json)",
+  "description": "PRD §4 outputs: the expected closing set and what was found for each item. Before Gate 1 it is the proposed index; after Gate 1 it is the approved index (approved: true). Every item carries exactly one status from status-taxonomy.md; `unexpected` is never an item status — unexpected families are listed separately until the user decides. Written by the reconciliation script; approved by the lawyer. Carries the fields PRD §4 'Assembly' needs for the numbered index (title, parties, document date, execution status, source reference, starting page) so build mode adds no schema bump.",
+  "type": "object",
+  "required": ["schema_version", "matter", "index_source", "approved", "corpus_id", "items", "unexpected_families"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "matter": { "type": "string" },
+    "index_source": { "enum": ["user-checklist", "sigpack-ledger", "drafted-from-census"], "description": "PRD §4 precedence: a user-approved checklist or index; else a sigpack ledger (plus any supplied checklist, whose rows appear as checklist_ref); else an index drafted from the census and confirmed by the user." },
+    "approved": { "type": "boolean", "description": "true only after the user confirmed the set at Gate 1. Nothing downstream reads an unapproved index." },
+    "corpus_id": { "type": "string", "description": "The manifest this index was reconciled against. An approved index supplied to reconcile for a different corpus_id is refused, not read: its decisions were taken about other files." },
+    "items": { "type": "array", "items": { "$ref": "#/definitions/item" } },
+    "unexpected_families": {
+      "type": "array",
+      "description": "Families that match no expected item. Preserved and listed; the user decides at Gate 1 whether each becomes an item or is marked not-required.",
+      "items": {
+        "type": "object",
+        "required": ["family_id", "title_hint", "member_ids"],
+        "additionalProperties": false,
+        "properties": {
+          "family_id": { "type": "string" },
+          "title_hint": { "type": "string" },
+          "member_ids": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "item": {
+      "type": "object",
+      "required": ["item_id", "order", "title", "parties", "checklist_ref", "execution_expected", "status", "family_id", "selected_id", "document_date", "start_page", "execution", "missing_components", "qualification"],
+      "additionalProperties": false,
+      "properties": {
+        "item_id": { "type": "string", "pattern": "^CB-[0-9]{3}$", "description": "Stable and human-readable; never renumbered after Gate 1." },
+        "order": { "type": "integer", "minimum": 1, "description": "Position in the bible: the lawyer's order, not the filesystem's." },
+        "title": { "type": "string" },
+        "parties": { "type": "array", "items": { "type": "string" }, "description": "Where appropriate and already available (checklist or ledger). Never invented." },
+        "checklist_ref": { "type": ["string", "null"] },
+        "execution_expected": { "type": "boolean" },
+        "status": { "enum": ["ready", "unsigned", "undated", "incomplete", "version-conflict", "missing", "unreadable", "not-required"] },
+        "family_id": { "type": ["string", "null"], "description": "null only when missing. An item marked not-required at Gate 1 keeps the family it came from." },
+        "selected_id": { "type": ["string", "null"], "pattern": "^sha256:[0-9a-f]{12}$", "description": "The selected final source. Set only for ready, unsigned, undated, incomplete. Always null on version-conflict, missing, unreadable, not-required." },
+        "document_date": { "type": ["string", "null"], "description": "As printed on the execution page or read from the ledger. Never from a filename or timestamp." },
+        "start_page": { "type": ["integer", "null"], "minimum": 1, "description": "Starting page in the combined PDF. null in audit mode." },
+        "execution": {
+          "type": "object",
+          "required": ["evidence_source", "apparent_status", "dated", "ledger_page_ids"],
+          "additionalProperties": false,
+          "properties": {
+            "evidence_source": { "enum": ["sigpack-ledger", "visual-inspection", "none"] },
+            "apparent_status": { "enum": ["appears-signed", "appears-incomplete", "appears-unsigned", "unclear", "not-expected", "not-inspected"] },
+            "dated": { "enum": ["dated", "undated", "not-expected", "unclear"] },
+            "ledger_page_ids": { "type": "array", "items": { "type": "string" }, "description": "sigpack signature_pages[].id values cited; at least one when the ledger is the source." }
+          }
+        },
+        "missing_components": { "type": "array", "items": { "type": "string" } },
+        "qualification": { "type": "string", "maxLength": 500, "description": "One line, in the lawyer's language, saying why this item is not ready. Empty when ready or not-required." }
+      }
+    }
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "title": "Claude Code Plugin Manifest",
+  "description": "Vendored shape of Claude Code's .claude-plugin/plugin.json manifest. Pin updates deliberately.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["name"],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "version": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "author": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "email": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        }
+      },
+      "required": ["name"],
+      "additionalProperties": false
+    },
+    "homepage": {
+      "type": "string"
+    },
+    "repository": {
+      "type": "string"
+    },
+    "license": {
+      "type": "string"
+    },
+    "keywords": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "skills": {
+      "oneOf": [
+        {
+          "type": "string",
+          "pattern": "^\\./"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^\\./"
+          }
+        }
+      ]
+    }
+  }
+}

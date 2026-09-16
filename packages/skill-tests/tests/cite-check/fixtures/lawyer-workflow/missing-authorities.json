@@ -1,0 +1,33 @@
+{
+  "scenario": "missing-sources-and-context",
+  "user": {
+    "request": "Please check the brief before I file it.",
+    "target": "input/brief.md",
+    "authorities": ["input/authorities/one-case.pdf"],
+    "intendedUse": "unknown",
+    "tribunal": "unknown",
+    "jurisdiction": "unknown",
+    "proceduralPosture": "unknown",
+    "asOfDate": null
+  },
+  "expected": {
+    "canBeginReview": false,
+    "mustAskBeforeReview": [
+      "intendedUse",
+      "tribunal",
+      "jurisdiction",
+      "proceduralPosture"
+    ],
+    "offerAuthorityRoutes": [
+      "Westlaw-download",
+      "user-supplied-files",
+      "automatic-public-case-search"
+    ],
+    "mustNotAskFor": ["Westlaw password", "API key", "terminal setup"],
+    "executionFallback": "native-workers-or-sequential",
+    "disclosures": [
+      "missing authorities prevent a complete report",
+      "currentness is outside supplied-source review"
+    ]
+  }
+}

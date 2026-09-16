@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://legalquants.example/schemas/definition-check-matter-records-1.0.0.json",
+  "title": "Definition Check Matter Component Records",
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$" },
+    "qualifiedLocation": {
+      "type": "object",
+      "required": ["matter_id", "document_id", "version_id", "part", "block_id", "block_order", "char_start", "char_end"],
+      "properties": {
+        "matter_id": { "$ref": "#/$defs/id" },
+        "document_id": { "$ref": "#/$defs/id" },
+        "version_id": { "$ref": "#/$defs/id" },
+        "part": { "type": "string", "minLength": 1 },
+        "block_id": { "$ref": "#/$defs/id" },
+        "block_order": { "type": "integer", "minimum": 0 },
+        "char_start": { "type": "integer", "minimum": 0 },
+        "char_end": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "definedTermRegistry": {
+      "type": "object",
+      "required": ["schema_version", "matter_id", "document_id", "version_id", "authority", "definitions", "term_variants", "authorized_by_adjudication_ids"],
+      "properties": {
+        "schema_version": { "const": "1.0.0" },
+        "matter_id": { "$ref": "#/$defs/id" },
+        "document_id": { "$ref": "#/$defs/id" },
+        "version_id": { "$ref": "#/$defs/id" },
+        "authority": { "const": "accepted_definitions_only" },
+        "definitions": { "type": "array", "items": { "type": "object", "required": ["id", "qualified_id", "term", "location"] } },
+        "term_variants": { "type": "array", "items": { "type": "object" } },
+        "authorized_by_adjudication_ids": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    },
+    "usageRecord": {
+      "type": "object",
+      "required": ["id", "qualified_id", "term", "observed_form", "location"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "qualified_id": { "type": "string", "pattern": "^qid:" },
+        "term": { "type": "string", "minLength": 1 },
+        "observed_form": { "type": "string", "minLength": 1 },
+        "location": { "$ref": "#/$defs/qualifiedLocation" }
+      }
+    },
+    "versionMapping": {
+      "type": "object",
+      "required": ["mapping_id", "state", "prior_definition_id", "current_definition_id", "evidence", "adjudication_id", "reviewer_note"],
+      "properties": {
+        "mapping_id": { "type": "string", "minLength": 1 },
+        "state": { "enum": ["added", "removed", "renamed", "moved", "materially_changed", "unchanged", "changed_usage", "unresolved"] },
+        "prior_definition_id": { "type": ["string", "null"] },
+        "current_definition_id": { "type": ["string", "null"] },
+        "evidence": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/qualifiedLocation" } },
+        "adjudication_id": { "type": ["string", "null"] },
+        "reviewer_note": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "crossDocumentFinding": {
+      "type": "object",
+      "required": ["finding_id", "state", "document_version_ids", "evidence", "adjudication_id", "reviewer_note"],
+      "properties": {
+        "finding_id": { "$ref": "#/$defs/id" },
+        "state": { "enum": ["valid_cross_document_definition", "conflicting_definitions", "missing_selected_companion", "broken_selected_scope_reference", "out_of_scope", "unresolved"] },
+        "document_version_ids": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/id" } },
+        "evidence": { "type": "array", "items": { "$ref": "#/$defs/qualifiedLocation" } },
+        "adjudication_id": { "type": ["string", "null"] },
+        "reviewer_note": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    }
+  }
+}

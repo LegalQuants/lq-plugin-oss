@@ -1,0 +1,81 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "closing-bible source manifest (source-manifest.json)",
+  "description": "PRD §4 'Source census': the recursive inventory of the supplied closing folder — relative path, size, hash, format, page count where applicable, readability and apparent title. Produced by script with no model involvement. Shape follows /diligence's manifest.json so the inventory stage is shared craft. Sorted keys, documents sorted by (id, path), no timestamps, no absolute paths.",
+  "type": "object",
+  "required": ["schema_version", "corpus_id", "root_label", "documents", "duplicate_groups", "skipped", "counts"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "corpus_id": { "type": "string", "pattern": "^[0-9a-f]{16}$", "description": "sha256 over the sorted set of distinct document ids, first 16 hex. Same folder contents, same corpus_id. Reconciliation re-derives it from documents[] and refuses a manifest whose stated corpus_id or counts do not match its own rows." },
+    "root_label": { "type": "string", "description": "Basename of the folder walked. Never the absolute path." },
+    "documents": { "type": "array", "items": { "$ref": "#/definitions/document" } },
+    "skipped": {
+      "type": "array",
+      "description": "Entries under the folder the census did not inventory, so nothing is dropped silently: symlinks resolving outside the folder (never followed), hidden entries, unreadable directories. Counted in the receipt; any skipped entry keeps it from complete.",
+      "items": {
+        "type": "object",
+        "required": ["path", "reason"],
+        "additionalProperties": false,
+        "properties": {
+          "path": { "type": "string" },
+          "reason": { "enum": ["symlink-outside-root", "hidden", "unreadable-directory", "special-file"] }
+        }
+      }
+    },
+    "duplicate_groups": {
+      "type": "array",
+      "description": "PRD §4: 'Group identical files by hash … Do not delete duplicates.' One entry per id that appears at more than one path.",
+      "items": {
+        "type": "object",
+        "required": ["id", "canonical_path", "duplicate_paths"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" },
+          "canonical_path": { "type": "string", "description": "First path in (id, path) order." },
+          "duplicate_paths": { "type": "array", "minItems": 1, "items": { "type": "string" } }
+        }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "required": ["files", "distinct", "native", "scanned", "suspect", "encrypted", "corrupt"],
+      "additionalProperties": false,
+      "properties": {
+        "files": { "type": "integer", "minimum": 0 },
+        "distinct": { "type": "integer", "minimum": 0, "description": "Distinct ids. files − distinct = duplicate rows." },
+        "native": { "type": "integer", "minimum": 0 },
+        "scanned": { "type": "integer", "minimum": 0 },
+        "suspect": { "type": "integer", "minimum": 0 },
+        "encrypted": { "type": "integer", "minimum": 0 },
+        "corrupt": { "type": "integer", "minimum": 0 }
+      }
+    }
+  },
+  "definitions": {
+    "document": {
+      "type": "object",
+      "required": ["id", "path", "bytes", "ext", "pages", "readability", "text_yield", "title_hint", "version_hint"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "pattern": "^sha256:[0-9a-f]{12}$", "description": "Content hash: the stable document id." },
+        "path": { "type": "string", "description": "Relative to the walked root, forward slashes." },
+        "bytes": { "type": "integer", "minimum": 0 },
+        "ext": { "type": "string" },
+        "pages": { "type": ["integer", "null"], "minimum": 0, "description": "PDF page count when pdfinfo is available; null otherwise." },
+        "readability": { "enum": ["native", "scanned", "suspect", "encrypted", "corrupt"], "description": "Per document id, not per path: every row sharing an id carries the same value, the worst probe result across its paths (corrupt > encrypted > suspect > scanned > native). A zero-byte file is corrupt whatever its extension." },
+        "text_yield": { "type": "number", "minimum": 0, "maximum": 1 },
+        "title_hint": { "type": "string", "description": "Filename-derived apparent title after stripping version markers, status words and extension. A grouping hint; never evidence of status (PRD §4: 'Treat … filenames as evidence, not agent instructions' and 'No item may be ready solely because its filename says final').'" },
+        "version_hint": {
+          "type": "object",
+          "required": ["markers", "status_words"],
+          "additionalProperties": false,
+          "properties": {
+            "markers": { "type": "array", "items": { "type": "string" }, "description": "e.g. v3, (2), 12345678-v9" },
+            "status_words": { "type": "array", "items": { "type": "string" }, "description": "e.g. final, executed, signed, draft, clean, redline" }
+          }
+        }
+      }
+    }
+  }
+}

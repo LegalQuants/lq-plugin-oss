@@ -1,0 +1,8 @@
+interface:
+  display_name: "Playbook Review"
+  short_description: "Review contracts against an approved playbook"
+  default_prompt: "Review the selected contract package against my approved playbook. Keep Standard Baseline unless I explicitly activate a suggested Matter Lens, treat substantially equivalent drafting as aligned, adapt approved wording through a cited term map, and give me a source-linked issues list with visible suggested markup and a coverage receipt."
+  brand_color: "#2d2d2d"
+
+policy:
+  allow_implicit_invocation: true

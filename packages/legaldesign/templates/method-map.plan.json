@@ -1,0 +1,333 @@
+{
+  "schemaVersion": "legaldesign.build.v4",
+  "brief": {
+    "title": "Method and responsibilities",
+    "reader": "A reader reviewing a reusable explanation before it is filled with completed legal work.",
+    "action": "Use the visible structure to identify the answer, conditions, source support and next action.",
+    "purpose": "understand",
+    "message": "This blueprint describes the information each component should contain; it makes no matter-specific legal claim.",
+    "spine": "sequence",
+    "situation": "laptop",
+    "form": "one-page",
+    "sources": [
+      {
+        "id": "blueprint-guide",
+        "label": "Reusable content instructions",
+        "status": "supplied"
+      }
+    ],
+    "assumptions": [],
+    "gaps": ["No matter-specific source document has been supplied."]
+  },
+  "style": {
+    "source": "loxoto",
+    "ref": null
+  },
+  "claims": [
+    {
+      "id": "c-title",
+      "text": "Name the subject and reader task.",
+      "kind": "context",
+      "sourceIds": ["blueprint-guide"],
+      "placement": "surface",
+      "evidenceIds": []
+    },
+    {
+      "id": "c-core",
+      "text": "State the supported answer and the relationship among its conditions.",
+      "kind": "material",
+      "sourceIds": ["blueprint-guide"],
+      "placement": "surface",
+      "evidenceIds": ["e-core"]
+    },
+    {
+      "id": "c-detail",
+      "text": "Show qualifications and the scope of the reviewed record.",
+      "kind": "material",
+      "sourceIds": ["blueprint-guide"],
+      "placement": "surface",
+      "evidenceIds": ["e-detail"]
+    },
+    {
+      "id": "c-action",
+      "text": "Specify the next action and what must happen before it.",
+      "kind": "material",
+      "sourceIds": ["blueprint-guide"],
+      "placement": "surface",
+      "evidenceIds": ["e-action"]
+    },
+    {
+      "id": "c-overview",
+      "text": "Describe the fact pattern, reader question and route through the review.",
+      "kind": "context",
+      "sourceIds": ["blueprint-guide"],
+      "placement": "surface",
+      "evidenceIds": []
+    }
+  ],
+  "units": [
+    {
+      "id": "overview-title",
+      "kind": "text",
+      "role": "title",
+      "claim": "Method and responsibilities",
+      "claimRefs": ["c-title"],
+      "relationship": "containment",
+      "candidates": ["concise text", "structured row"],
+      "variants": {
+        "a": {
+          "html": "<h1>Method and responsibilities</h1>",
+          "axis": "framing",
+          "encoding": "Heading identifies the topic; the supporting text states its condition or consequence.",
+          "why": "A direct explanation preserves the point without adding decorative geometry."
+        }
+      },
+      "placeholder": "[Review title.]",
+      "evidence": []
+    },
+    {
+      "id": "facts",
+      "kind": "text",
+      "role": "summary",
+      "claim": "Identify the task, available source record and person responsible for the output.",
+      "claimRefs": ["c-overview"],
+      "relationship": "containment",
+      "candidates": ["concise text", "structured row"],
+      "variants": {
+        "a": {
+          "html": "<h2>Relevant facts</h2><p>Identify the task, available source record and person responsible for the output.</p>",
+          "axis": "framing",
+          "encoding": "Heading identifies the topic; the supporting text states its condition or consequence.",
+          "why": "A direct explanation preserves the point without adding decorative geometry."
+        }
+      },
+      "placeholder": "[Relevant facts.]",
+      "evidence": []
+    },
+    {
+      "id": "question",
+      "kind": "text",
+      "role": "summary",
+      "claim": "How does the work move from the supplied record to a reviewed result?",
+      "claimRefs": ["c-overview"],
+      "relationship": "containment",
+      "candidates": ["concise text", "structured row"],
+      "variants": {
+        "a": {
+          "html": "<h2>Question</h2><p>How does the work move from the supplied record to a reviewed result?</p>",
+          "axis": "framing",
+          "encoding": "Heading identifies the topic; the supporting text states its condition or consequence.",
+          "why": "A direct explanation preserves the point without adding decorative geometry."
+        }
+      },
+      "placeholder": "[Question.]",
+      "evidence": []
+    },
+    {
+      "id": "overview-answer",
+      "kind": "text",
+      "role": "answer",
+      "claim": "Describe the sequence, its required inputs and the review before handoff.",
+      "claimRefs": ["c-core"],
+      "relationship": "containment",
+      "candidates": ["concise text", "structured row"],
+      "variants": {
+        "a": {
+          "html": "<h2>Short answer</h2><p>Describe the sequence, its required inputs and the review before handoff.</p>",
+          "axis": "framing",
+          "encoding": "Heading identifies the topic; the supporting text states its condition or consequence.",
+          "why": "A direct explanation preserves the point without adding decorative geometry."
+        }
+      },
+      "placeholder": "[Short answer.]",
+      "evidence": ["e-core"],
+      "detail": "e-core"
+    },
+    {
+      "id": "workflow",
+      "kind": "figure",
+      "claim": "Three connected stages",
+      "claimRefs": ["c-core", "c-detail", "c-action"],
+      "relationship": "sequence",
+      "candidates": ["flow", "plain text"],
+      "variants": {
+        "a": {
+          "component": "flow",
+          "params": {
+            "stages": [
+              {
+                "title": "Understand task",
+                "sub": "Reader, purpose and record",
+                "detail": "e-core"
+              },
+              {
+                "title": "Apply method",
+                "sub": "Relationship and encoding",
+                "detail": "e-detail"
+              },
+              {
+                "title": "Review output",
+                "sub": "Check, edit and deliver",
+                "detail": "e-action"
+              }
+            ],
+            "edges": ["guides design", "produces work"]
+          },
+          "axis": "form",
+          "encoding": "Left-to-right connectors show prerequisite order, not elapsed time.",
+          "why": "The geometric relationship makes the comparison or dependency inspectable."
+        }
+      },
+      "placeholder": "[What this section enables the reader to understand or do.]",
+      "evidence": ["e-core", "e-detail", "e-action"]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "e-core",
+      "sourceId": "blueprint-guide",
+      "claimRefs": ["c-core"],
+      "cite": "Content instructions",
+      "locator": "Reusable blueprint guidance",
+      "status": "supplied",
+      "detail": "Replace this explanation with the completed work and its actual supporting record.",
+      "popup": {
+        "type": "explainer",
+        "title": "How the rule applies",
+        "lede": "Explain the point opened by this target.",
+        "sections": [
+          {
+            "heading": "Explanation",
+            "body": "Set out the controlling condition, why it matters, and any limits on the conclusion."
+          },
+          {
+            "heading": "Supporting record",
+            "body": "Identify the supplied source and exact location. Do not imply that missing material was reviewed."
+          }
+        ]
+      },
+      "original": {
+        "availability": "unavailable",
+        "label": "Original document not supplied"
+      }
+    },
+    {
+      "id": "e-detail",
+      "sourceId": "blueprint-guide",
+      "claimRefs": ["c-detail"],
+      "cite": "Content instructions",
+      "locator": "Reusable blueprint guidance",
+      "status": "supplied",
+      "detail": "Replace this explanation with the completed work and its actual supporting record.",
+      "popup": {
+        "type": "explainer",
+        "title": "Scope and qualifications",
+        "lede": "Explain the point opened by this target.",
+        "sections": [
+          {
+            "heading": "Explanation",
+            "body": "Set out the controlling condition, why it matters, and any limits on the conclusion."
+          },
+          {
+            "heading": "Supporting record",
+            "body": "Identify the supplied source and exact location. Do not imply that missing material was reviewed."
+          }
+        ]
+      },
+      "original": {
+        "availability": "unavailable",
+        "label": "Original document not supplied"
+      }
+    },
+    {
+      "id": "e-action",
+      "sourceId": "blueprint-guide",
+      "claimRefs": ["c-action"],
+      "cite": "Content instructions",
+      "locator": "Reusable blueprint guidance",
+      "status": "supplied",
+      "detail": "Replace this explanation with the completed work and its actual supporting record.",
+      "popup": {
+        "type": "explainer",
+        "title": "What the next action requires",
+        "lede": "Explain the point opened by this target.",
+        "sections": [
+          {
+            "heading": "Explanation",
+            "body": "Set out the controlling condition, why it matters, and any limits on the conclusion."
+          },
+          {
+            "heading": "Supporting record",
+            "body": "Identify the supplied source and exact location. Do not imply that missing material was reviewed."
+          }
+        ]
+      },
+      "original": {
+        "availability": "unavailable",
+        "label": "Original document not supplied"
+      }
+    }
+  ],
+  "composition": {
+    "strategy": "composed",
+    "shape": "facts and answer with supporting relationship",
+    "rationale": "Establish the fact pattern and question before the answer; source detail stays in purposeful popups.",
+    "sections": [
+      {
+        "id": "overview",
+        "purpose": "Method and responsibilities",
+        "indexLabel": "Method and responsibilities",
+        "unitIds": [
+          "overview-title",
+          "facts",
+          "question",
+          "overview-answer",
+          "workflow"
+        ],
+        "layout": {
+          "columns": 12,
+          "placements": [
+            {
+              "unitId": "overview-title",
+              "row": 1,
+              "column": 1,
+              "span": 12
+            },
+            {
+              "unitId": "facts",
+              "row": 2,
+              "column": 1,
+              "span": 6
+            },
+            {
+              "unitId": "question",
+              "row": 2,
+              "column": 7,
+              "span": 6
+            },
+            {
+              "unitId": "overview-answer",
+              "row": 3,
+              "column": 1,
+              "span": 12
+            },
+            {
+              "unitId": "workflow",
+              "row": 4,
+              "column": 1,
+              "span": 12
+            }
+          ]
+        }
+      }
+    ],
+    "templateRef": null
+  },
+  "overview": {
+    "sectionId": "overview",
+    "contextUnitIds": ["facts"],
+    "questionUnitId": "question",
+    "answerUnitId": "overview-answer",
+    "topics": []
+  }
+}

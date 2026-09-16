@@ -1,0 +1,8 @@
+interface:
+  display_name: "Closing Bible"
+  short_description: "Closing-set audit, index and receipt"
+  default_prompt: "Use $closing-bible to audit this closing folder against the checklist and tell me what is final, executed, missing or in conflict."
+  brand_color: "#2d2d2d"
+
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,395 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://legalquants.example/schemas/definition-check-ledger-0.14.0.json",
+  "title": "Definition Check Ledger",
+  "type": "object",
+  "required": ["schema_version", "engine_version", "run_status", "capability_profile", "source", "methods_run", "methods_not_run", "definitions", "term_variants", "usages", "findings", "evidence", "lexical_observations", "candidate_proposals", "context_requests", "review_traces", "term_candidates", "semantic_adjudications", "semantic_review", "occurrence_candidates", "occurrence_collisions", "occurrence_adjudications", "occurrence_review", "reference_candidates", "reference_adjudications", "reference_review", "limitations"],
+  "properties": {
+    "schema_version": { "const": "0.14.0" },
+    "engine_version": { "type": "string", "minLength": 1 },
+    "run_status": { "enum": ["completed", "completed_reduced_assurance", "not_run_missing_capability", "not_run_policy_restricted", "not_run_unsupported_input", "partial_input", "insufficient_evidence", "failed"] },
+    "capability_profile": { "enum": ["C0_INSTRUCTION_ONLY", "C1_HOST_TEXT", "C2_LOCAL_COMMAND_NO_PYTHON", "C3_PYTHON_STDLIB", "C4_FULL_LOCAL", "C5_APPROVED_INTEGRATIONS"] },
+    "source": { "$ref": "#/$defs/source" },
+    "methods_run": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "methods_not_run": { "type": "array", "items": { "$ref": "#/$defs/skippedMethod" } },
+    "definitions": { "type": "array", "items": { "$ref": "#/$defs/definition" } },
+    "term_variants": { "type": "array", "items": { "$ref": "#/$defs/termVariant" } },
+    "usages": { "type": "array", "items": { "$ref": "#/$defs/usage" } },
+    "findings": { "type": "array", "items": { "$ref": "#/$defs/finding" } },
+    "evidence": { "type": "array", "items": { "$ref": "#/$defs/evidenceItem" } },
+    "lexical_observations": { "type": "array", "items": { "$ref": "#/$defs/lexicalCandidateObservation" } },
+    "candidate_proposals": { "type": "array", "items": { "$ref": "#/$defs/candidateProposal" } },
+    "context_requests": { "type": "array", "items": { "$ref": "#/$defs/contextRequest" } },
+    "review_traces": { "type": "array", "items": { "$ref": "#/$defs/reviewTrace" } },
+    "term_candidates": { "type": "array", "items": { "$ref": "#/$defs/termCandidate" } },
+    "semantic_adjudications": { "type": "array", "items": { "$ref": "#/$defs/semanticAdjudication" } },
+    "semantic_review": { "$ref": "#/$defs/semanticReview" },
+    "occurrence_candidates": { "type": "array", "items": { "$ref": "#/$defs/occurrenceCandidate" } },
+    "occurrence_collisions": { "type": "array", "items": { "$ref": "#/$defs/occurrenceCollision" } },
+    "occurrence_adjudications": { "type": "array", "items": { "$ref": "#/$defs/occurrenceAdjudication" } },
+    "occurrence_review": { "$ref": "#/$defs/semanticReview" },
+    "reference_candidates": { "type": "array", "items": { "$ref": "#/$defs/referenceCandidate" } },
+    "reference_adjudications": { "type": "array", "items": { "$ref": "#/$defs/referenceAdjudication" } },
+    "reference_review": { "$ref": "#/$defs/semanticReview" },
+    "limitations": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "location": {
+      "type": "object",
+      "required": ["part", "block_id", "block_order", "char_start", "char_end"],
+      "properties": {
+        "part": { "type": "string" },
+        "block_id": { "type": "string" },
+        "block_order": { "type": "integer", "minimum": 0 },
+        "char_start": { "type": "integer", "minimum": 0 },
+        "char_end": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "source": {
+      "type": "object",
+      "required": ["document_id", "name", "sha256", "coverage", "warnings"],
+      "properties": {
+        "document_id": { "type": "string", "minLength": 1 },
+        "name": { "type": "string", "minLength": 1 },
+        "sha256": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$" },
+        "coverage": { "type": "object" },
+        "warnings": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": true
+    },
+    "definition": {
+      "type": "object",
+      "required": ["id", "term", "normalized_term", "definition_text", "location", "pattern", "aliases", "reference_location"],
+      "properties": {
+        "id": { "type": "string" },
+        "term": { "type": "string" },
+        "normalized_term": { "type": "string" },
+        "definition_text": { "type": "string" },
+        "location": { "$ref": "#/$defs/location" },
+        "pattern": { "type": "string" },
+        "aliases": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "scope": { "type": ["string", "null"] },
+        "reference_target": { "type": ["string", "null"] },
+        "reference_location": { "oneOf": [{ "$ref": "#/$defs/location" }, { "type": "null" }] }
+      },
+      "additionalProperties": false
+    },
+    "usage": {
+      "type": "object",
+      "required": ["id", "term", "normalized_term", "observed_form", "location", "is_definition_occurrence", "variant_id"],
+      "properties": {
+        "id": { "type": "string" },
+        "term": { "type": "string" },
+        "normalized_term": { "type": "string" },
+        "observed_form": { "type": "string" },
+        "location": { "$ref": "#/$defs/location" },
+        "is_definition_occurrence": { "type": "boolean" },
+        "variant_id": { "type": ["string", "null"] }
+      },
+      "additionalProperties": false
+    },
+    "termVariant": {
+      "type": "object",
+      "required": ["id", "term", "normalized_term", "observed_form", "variant_type", "mapping_status", "usage_ids", "mapped_usage_ids", "rejected_usage_ids", "shadowed_usage_ids", "unresolved_usage_ids"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "term": { "type": "string", "minLength": 1 },
+        "normalized_term": { "type": "string", "minLength": 1 },
+        "observed_form": { "type": "string", "minLength": 1 },
+        "variant_type": { "enum": ["alias", "plural", "singular", "possessive", "capitalization", "spacing", "composite"] },
+        "mapping_status": { "enum": ["mapped", "mixed", "rejected", "shadowed", "unresolved"] },
+        "usage_ids": { "type": "array", "minItems": 1, "items": { "type": "string" }, "uniqueItems": true },
+        "mapped_usage_ids": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "rejected_usage_ids": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "shadowed_usage_ids": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "unresolved_usage_ids": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+      },
+      "additionalProperties": false
+    },
+    "finding": {
+      "type": "object",
+      "required": ["id", "rule_id", "kind", "severity", "message", "normalized_term", "evidence", "review_state", "scope_qualification", "scope_target", "scope_evidence"],
+      "properties": {
+        "id": { "type": "string" },
+        "rule_id": { "type": "string" },
+        "kind": { "enum": ["deterministic", "semantic"] },
+        "severity": { "enum": ["info", "low", "medium", "high"] },
+        "message": { "type": "string" },
+        "normalized_term": { "type": ["string", "null"] },
+        "evidence": { "type": "array", "items": { "$ref": "#/$defs/location" } },
+        "confidence": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+        "review_state": { "enum": ["open", "accepted", "rejected", "deferred", "needs_review", "insufficient_evidence"] },
+        "scope_qualification": { "enum": ["none", "possible_inherited_definition"] },
+        "scope_target": { "type": ["string", "null"] },
+        "scope_evidence": { "type": "array", "items": { "$ref": "#/$defs/location" } }
+      },
+      "additionalProperties": false
+    },
+    "evidenceItem": {
+      "type": "object",
+      "required": ["id", "location", "excerpt", "stance", "method"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "location": { "$ref": "#/$defs/location" },
+        "excerpt": { "type": "string", "minLength": 1, "maxLength": 4000 },
+        "stance": { "enum": ["supports", "contradicts", "context"] },
+        "method": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "lexicalCandidateObservation": {
+      "type": "object",
+      "required": ["id", "term", "normalized_term", "location", "detector", "detector_version", "observation_type"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "term": { "type": "string", "minLength": 1 },
+        "normalized_term": { "type": "string", "minLength": 1 },
+        "location": { "$ref": "#/$defs/location" },
+        "detector": { "type": "string", "minLength": 1 },
+        "detector_version": { "type": "string", "minLength": 1 },
+        "observation_type": { "enum": ["quoted_label"] }
+      },
+      "additionalProperties": false
+    },
+    "contextRequest": {
+      "type": "object",
+      "required": ["id", "candidate_id", "request_type", "query", "reason", "requested_by", "status", "hop", "max_results", "result_evidence_ids"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "candidate_id": { "type": "string", "minLength": 1 },
+        "request_type": { "enum": ["expand_location", "search_term", "retrieve_definitions_section", "retrieve_reference", "retrieve_occurrences", "escalate_review"] },
+        "query": { "type": "string", "minLength": 1 },
+        "reason": { "type": "string", "minLength": 1 },
+        "requested_by": { "type": "string", "minLength": 1 },
+        "status": { "enum": ["requested", "fulfilled", "failed", "denied", "budget_exhausted"] },
+        "hop": { "type": "integer", "minimum": 1 },
+        "max_results": { "type": "integer", "minimum": 1, "maximum": 100 },
+        "result_evidence_ids": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+      },
+      "additionalProperties": false
+    },
+    "candidateProposal": {
+      "type": "object",
+      "required": ["id", "candidate_id", "term", "normalized_term", "location", "state", "agent_role", "revision", "rationale_summary", "confidence", "definition_text", "evidence_for", "evidence_against", "context_request_ids", "reason_codes", "supersedes", "model_id", "prompt_version"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "candidate_id": { "type": "string", "minLength": 1 },
+        "term": { "type": "string", "minLength": 1 },
+        "normalized_term": { "type": "string", "minLength": 1 },
+        "location": { "$ref": "#/$defs/location" },
+        "state": { "enum": ["candidate", "not_a_candidate", "needs_context", "abstain"] },
+        "agent_role": { "type": "string", "minLength": 1 },
+        "revision": { "type": "integer", "minimum": 1 },
+        "rationale_summary": { "type": "string", "minLength": 1, "maxLength": 2000 },
+        "confidence": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+        "definition_text": { "type": ["string", "null"] },
+        "evidence_for": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "evidence_against": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "context_request_ids": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "reason_codes": { "type": "array", "items": { "type": "string" }, "uniqueItems": true, "description": "Deprecated compatibility field; compact review expansion writes an empty array." },
+        "supersedes": { "type": ["string", "null"] },
+        "model_id": { "type": ["string", "null"] },
+        "prompt_version": { "type": ["string", "null"] }
+      },
+      "additionalProperties": false
+    },
+    "reviewTrace": {
+      "type": "object",
+      "required": ["id", "subject_type", "subject_id", "action", "agent_role", "rationale_summary", "evidence_for", "evidence_against", "context_request_ids", "reason_codes", "confidence", "uncertainty", "model_id", "prompt_version", "visibility"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "subject_type": { "type": "string", "minLength": 1 },
+        "subject_id": { "type": "string", "minLength": 1 },
+        "action": { "enum": ["include", "exclude", "merge", "escalate", "abstain"] },
+        "agent_role": { "type": "string", "minLength": 1 },
+        "rationale_summary": { "type": "string", "minLength": 1, "maxLength": 2000 },
+        "evidence_for": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "evidence_against": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "context_request_ids": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "reason_codes": { "type": "array", "items": { "type": "string" }, "uniqueItems": true, "description": "Deprecated compatibility field; compact review expansion writes an empty array." },
+        "confidence": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+        "uncertainty": { "type": ["string", "null"] },
+        "model_id": { "type": ["string", "null"] },
+        "prompt_version": { "type": ["string", "null"] },
+        "visibility": { "enum": ["internal", "authorized_reviewer"] }
+      },
+      "additionalProperties": false
+    },
+    "termCandidate": {
+      "type": "object",
+      "required": ["review_id", "term", "normalized_term", "locations", "origins", "definition_ids", "finding_ids", "observation_ids", "proposal_ids", "structural_hints"],
+      "properties": {
+        "review_id": { "type": "string", "minLength": 1 },
+        "term": { "type": "string", "minLength": 1 },
+        "normalized_term": { "type": "string", "minLength": 1 },
+        "locations": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/location" } },
+        "origins": { "type": "array", "minItems": 1, "items": { "enum": ["deterministic_definition", "quoted_text", "potential_undefined", "agent_discovery"] }, "uniqueItems": true },
+        "definition_ids": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "finding_ids": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "observation_ids": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "proposal_ids": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "structural_hints": { "type": "array", "items": { "enum": ["likely_heading", "includes_likely_heading_occurrence"] }, "uniqueItems": true }
+      },
+      "additionalProperties": false
+    },
+    "definitionSpan": {
+      "type": "object",
+      "required": ["definition_text", "location"],
+      "properties": {
+        "definition_text": { "type": "string", "minLength": 1 },
+        "location": { "$ref": "#/$defs/location" }
+      },
+      "additionalProperties": false
+    },
+    "semanticAdjudication": {
+      "type": "object",
+      "required": ["id", "review_id", "decision", "evidence", "rationale_summary", "reason_codes", "confidence", "agent_role", "definition_text", "definition_location", "definition_spans", "canonical_term", "canonical_review_id", "model_id", "prompt_version", "review_reason", "scope_qualification", "scope_target", "scope_evidence"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "review_id": { "type": "string", "minLength": 1 },
+        "decision": { "enum": ["confirmed_defined", "confirmed_alias", "confirmed_undefined", "confirmed_external_reference", "rejected_not_a_term", "rejected_proper_name", "needs_review", "insufficient_evidence"] },
+        "evidence": { "type": "array", "items": { "$ref": "#/$defs/location" } },
+        "rationale_summary": { "type": "string", "minLength": 1, "maxLength": 2000 },
+        "reason_codes": { "type": "array", "items": { "type": "string" }, "uniqueItems": true, "description": "Deprecated compatibility field; compact review expansion writes an empty array." },
+        "confidence": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+        "agent_role": { "type": "string", "minLength": 1 },
+        "definition_text": { "type": ["string", "null"] },
+        "definition_location": {
+          "oneOf": [
+            { "$ref": "#/$defs/location" },
+            { "type": "null" }
+          ]
+        },
+        "definition_spans": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/definitionSpan" },
+          "uniqueItems": true
+        },
+        "canonical_term": { "type": ["string", "null"] },
+        "canonical_review_id": { "type": ["string", "null"] },
+        "model_id": { "type": ["string", "null"] },
+        "prompt_version": { "type": ["string", "null"] },
+        "review_reason": { "type": ["string", "null"], "enum": [null, "missing_external_evidence", "ambiguous_term_identity", "uncertain_occurrence_identity", "incomplete_source_context", "ambiguous_reference"] },
+        "scope_qualification": { "enum": ["none", "possible_inherited_definition"] },
+        "scope_target": { "type": ["string", "null"] },
+        "scope_evidence": { "type": "array", "items": { "$ref": "#/$defs/location" } }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "decision": { "const": "confirmed_defined" } }, "required": ["decision"] },
+          "then": { "properties": { "definition_spans": { "minItems": 1 } } },
+          "else": { "properties": { "definition_spans": { "maxItems": 0 } } }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "semanticReview": {
+      "type": "object",
+      "required": ["status", "queue_count", "decided_count", "unresolved_count", "review_execution", "review_id_namespace"],
+      "properties": {
+        "status": { "enum": ["not_run", "complete", "incomplete"] },
+        "queue_count": { "type": "integer", "minimum": 0 },
+        "decided_count": { "type": "integer", "minimum": 0 },
+        "unresolved_count": { "type": "integer", "minimum": 0 },
+        "review_execution": { "type": "string", "minLength": 1 },
+        "review_id_namespace": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "occurrenceCandidate": {
+      "type": "object",
+      "required": ["review_id", "usage_id", "term", "observed_form", "location", "variant_id", "collision_id", "competing_usage_ids", "competing_terms", "competing_locations"],
+      "properties": {
+        "review_id": { "type": "string", "minLength": 1 },
+        "usage_id": { "type": "string", "minLength": 1 },
+        "term": { "type": "string", "minLength": 1 },
+        "observed_form": { "type": "string", "minLength": 1 },
+        "location": { "$ref": "#/$defs/location" },
+        "variant_id": { "type": ["string", "null"] },
+        "collision_id": { "type": ["string", "null"] },
+        "competing_usage_ids": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "competing_terms": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "competing_locations": { "type": "array", "items": { "$ref": "#/$defs/location" } }
+      },
+      "additionalProperties": false
+    },
+    "occurrenceCollision": {
+      "type": "object",
+      "required": ["id", "location", "usage_ids", "normalized_terms", "mapped_usage_ids", "rejected_usage_ids", "shadowed_usage_ids", "unresolved_usage_ids"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "location": { "$ref": "#/$defs/location" },
+        "usage_ids": { "type": "array", "minItems": 2, "items": { "type": "string" }, "uniqueItems": true },
+        "normalized_terms": { "type": "array", "minItems": 2, "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
+        "mapped_usage_ids": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "rejected_usage_ids": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "shadowed_usage_ids": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "unresolved_usage_ids": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+      },
+      "additionalProperties": false
+    },
+    "occurrenceAdjudication": {
+      "type": "object",
+      "required": ["id", "review_id", "usage_id", "decision", "rationale_summary", "reason_codes", "confidence", "agent_role", "model_id", "prompt_version", "review_reason"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "review_id": { "type": "string", "minLength": 1 },
+        "usage_id": { "type": "string", "minLength": 1 },
+        "decision": { "enum": ["defined_term_use", "ordinary_language", "proper_name_component", "inconsistent_capitalization", "shadowed_by_overlapping_term", "needs_review", "insufficient_evidence"] },
+        "rationale_summary": { "type": "string", "minLength": 1, "maxLength": 2000 },
+        "reason_codes": { "type": "array", "items": { "type": "string" }, "uniqueItems": true, "description": "Deprecated compatibility field; compact review expansion writes an empty array." },
+        "confidence": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+        "agent_role": { "type": "string", "minLength": 1 },
+        "model_id": { "type": ["string", "null"] },
+        "prompt_version": { "type": ["string", "null"] },
+        "review_reason": { "type": ["string", "null"], "enum": [null, "missing_external_evidence", "ambiguous_term_identity", "uncertain_occurrence_identity", "incomplete_source_context", "ambiguous_reference"] }
+      },
+      "additionalProperties": false
+    },
+    "referenceCandidate": {
+      "type": "object",
+      "required": ["review_id", "definition_id", "term", "normalized_term", "reference_target", "location", "reference_location", "scope"],
+      "properties": {
+        "review_id": { "type": "string", "minLength": 1 },
+        "definition_id": { "type": "string", "minLength": 1 },
+        "term": { "type": "string", "minLength": 1 },
+        "normalized_term": { "type": "string", "minLength": 1 },
+        "reference_target": { "type": "string", "minLength": 1 },
+        "location": { "$ref": "#/$defs/location" },
+        "reference_location": { "$ref": "#/$defs/location" },
+        "scope": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "referenceAdjudication": {
+      "type": "object",
+      "required": ["id", "review_id", "definition_id", "decision", "evidence", "rationale_summary", "reason_codes", "confidence", "agent_role", "model_id", "prompt_version", "review_reason"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "review_id": { "type": "string", "minLength": 1 },
+        "definition_id": { "type": "string", "minLength": 1 },
+        "decision": { "enum": ["resolved", "broken", "out_of_scope", "needs_review", "insufficient_evidence"] },
+        "evidence": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/location" } },
+        "rationale_summary": { "type": "string", "minLength": 1, "maxLength": 2000 },
+        "reason_codes": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "confidence": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+        "agent_role": { "type": "string", "minLength": 1 },
+        "model_id": { "type": ["string", "null"] },
+        "prompt_version": { "type": ["string", "null"] },
+        "review_reason": { "type": ["string", "null"], "enum": [null, "missing_external_evidence", "ambiguous_term_identity", "uncertain_occurrence_identity", "incomplete_source_context", "ambiguous_reference"] }
+      },
+      "additionalProperties": false
+    },
+    "skippedMethod": {
+      "type": "object",
+      "required": ["method", "reason"],
+      "properties": {
+        "method": { "type": "string" },
+        "reason": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

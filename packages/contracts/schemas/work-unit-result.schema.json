@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://legalquants.com/schemas/work-unit-result.schema.json",
+  "title": "WorkUnitResult",
+  "description": "Minimal structured result for one independent work unit. Skills may add fields; they must not replace unitId or status.",
+  "type": "object",
+  "required": ["unitId", "status"],
+  "properties": {
+    "unitId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "type": "string",
+      "minLength": 1
+    },
+    "notes": {
+      "type": ["string", "null"]
+    }
+  }
+}

@@ -1,0 +1,783 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://legalquants.com/schemas/playbook-engine.schema.json",
+  "title": "LegalQuants Playbook Engine artifacts",
+  "description": "Canonical contract shared by playbook-builder and playbook-review.",
+  "oneOf": [
+    { "$ref": "#/$defs/sourceManifest" },
+    { "$ref": "#/$defs/playbook" },
+    { "$ref": "#/$defs/activation" },
+    { "$ref": "#/$defs/effectiveStance" },
+    { "$ref": "#/$defs/termMap" },
+    { "$ref": "#/$defs/issuesList" },
+    { "$ref": "#/$defs/coverageReceipt" },
+    { "$ref": "#/$defs/buildReceipt" },
+    { "$ref": "#/$defs/reviewReceipt" },
+    { "$ref": "#/$defs/playbookRegistry" }
+  ],
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "readingPage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["pageNumber", "readingMethod", "readability"],
+      "properties": {
+        "pageNumber": { "type": "integer", "minimum": 1 },
+        "readingMethod": {
+          "enum": [
+            "native-text",
+            "vision",
+            "mixed",
+            "pending-vision",
+            "unreadable"
+          ]
+        },
+        "readability": { "enum": ["readable", "partial", "unreadable"] },
+        "textSha256": { "$ref": "#/$defs/sha256" },
+        "warning": { "type": ["string", "null"] }
+      }
+    },
+    "element": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["elementId", "kind", "ordinal", "sourceText"],
+      "properties": {
+        "elementId": { "type": "string", "minLength": 1 },
+        "kind": {
+          "enum": [
+            "heading",
+            "paragraph",
+            "table-cell",
+            "definition",
+            "schedule"
+          ]
+        },
+        "ordinal": { "type": "integer", "minimum": 1 },
+        "clauseRef": { "type": ["string", "null"] },
+        "pageNumber": { "type": ["integer", "null"], "minimum": 1 },
+        "sourceText": { "type": "string" },
+        "textSha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "definedTerm": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "termId",
+        "term",
+        "normalizedTerm",
+        "definitionText",
+        "documentSha256",
+        "elementId",
+        "clauseRef"
+      ],
+      "properties": {
+        "termId": { "type": "string", "minLength": 1 },
+        "term": { "type": "string", "minLength": 1 },
+        "normalizedTerm": { "type": "string", "minLength": 1 },
+        "definitionText": { "type": "string", "minLength": 1 },
+        "documentSha256": { "$ref": "#/$defs/sha256" },
+        "elementId": { "type": "string", "minLength": 1 },
+        "clauseRef": { "type": ["string", "null"] }
+      }
+    },
+    "sourceDocument": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "documentId",
+        "fileName",
+        "format",
+        "sha256",
+        "sizeBytes",
+        "ordinal",
+        "sourceRole",
+        "readability",
+        "pages",
+        "elements",
+        "definedTerms",
+        "warnings"
+      ],
+      "properties": {
+        "documentId": { "type": "string", "minLength": 1 },
+        "fileName": { "type": "string", "minLength": 1 },
+        "format": { "enum": ["docx", "pdf", "md", "txt", "xlsx", "csv"] },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "sizeBytes": { "type": "integer", "minimum": 0 },
+        "ordinal": { "type": "integer", "minimum": 1 },
+        "sourceRole": {
+          "enum": [
+            "approved-template",
+            "negotiated-final",
+            "km-guidance",
+            "unannotated-precedent",
+            "contract-under-review"
+          ]
+        },
+        "readability": {
+          "enum": ["readable", "partial", "unreadable", "pending-host-read"]
+        },
+        "pages": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/readingPage" }
+        },
+        "elements": { "type": "array", "items": { "$ref": "#/$defs/element" } },
+        "definedTerms": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/definedTerm" }
+        },
+        "warnings": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "sourceManifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifactType",
+        "schemaVersion",
+        "manifestId",
+        "createdAt",
+        "inputBoundary",
+        "documents",
+        "manifestSha256"
+      ],
+      "properties": {
+        "artifactType": { "const": "source-manifest" },
+        "schemaVersion": { "const": "1.0" },
+        "manifestId": { "type": "string", "minLength": 1 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "inputBoundary": { "type": "string", "minLength": 1 },
+        "documents": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/sourceDocument" }
+        },
+        "manifestSha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "wording": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["summary", "text", "approvalStatus"],
+      "properties": {
+        "summary": { "type": "string", "minLength": 1 },
+        "text": { "type": ["string", "null"] },
+        "approvalStatus": { "enum": ["approved", "candidate"] }
+      }
+    },
+    "fallback": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rank", "condition", "wording"],
+      "properties": {
+        "rank": { "type": "integer", "minimum": 1 },
+        "condition": { "type": "string", "minLength": 1 },
+        "wording": { "$ref": "#/$defs/wording" }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["documentSha256", "elementId", "exactText", "sourceRole"],
+      "properties": {
+        "documentSha256": { "$ref": "#/$defs/sha256" },
+        "elementId": { "type": "string", "minLength": 1 },
+        "exactText": { "type": "string", "minLength": 1 },
+        "sourceRole": {
+          "enum": [
+            "approved-template",
+            "negotiated-final",
+            "km-guidance",
+            "unannotated-precedent"
+          ]
+        }
+      }
+    },
+    "position": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["summary", "preferred", "fallbacks", "redLine", "priority"],
+      "properties": {
+        "summary": { "type": "string", "minLength": 1 },
+        "preferred": { "$ref": "#/$defs/wording" },
+        "fallbacks": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/fallback" }
+        },
+        "redLine": { "type": ["string", "null"] },
+        "priority": { "enum": ["high", "medium", "low"] }
+      }
+    },
+    "playbookIssue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "issueId",
+        "topic",
+        "status",
+        "basePosition",
+        "provenance",
+        "dependencies"
+      ],
+      "properties": {
+        "issueId": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]*$"
+        },
+        "topic": { "type": "string", "minLength": 1 },
+        "status": { "enum": ["approved", "candidate", "conflicted"] },
+        "basePosition": { "$ref": "#/$defs/position" },
+        "provenance": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/provenance" }
+        },
+        "dependencies": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "adjustment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["issueId", "reason", "changes"],
+      "properties": {
+        "issueId": { "type": "string", "minLength": 1 },
+        "reason": { "type": "string", "minLength": 1 },
+        "changes": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": true,
+          "propertyNames": {
+            "pattern": "^[A-Za-z][A-Za-z0-9]*(\\.[A-Za-z][A-Za-z0-9]*)*$"
+          }
+        }
+      }
+    },
+    "matterLens": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["lensId", "label", "description", "status", "adjustments"],
+      "properties": {
+        "lensId": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]*$"
+        },
+        "label": { "type": "string", "minLength": 1 },
+        "description": { "type": "string", "minLength": 1 },
+        "status": { "enum": ["approved", "candidate"] },
+        "adjustments": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/adjustment" }
+        }
+      }
+    },
+    "playbook": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifactType",
+        "schemaVersion",
+        "playbookId",
+        "version",
+        "title",
+        "status",
+        "perspective",
+        "agreementFamily",
+        "sourceManifestSha256",
+        "issues",
+        "matterLenses"
+      ],
+      "properties": {
+        "artifactType": { "const": "contract-playbook" },
+        "schemaVersion": { "const": "1.0" },
+        "playbookId": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]*$"
+        },
+        "version": { "type": "string", "minLength": 1 },
+        "title": { "type": "string", "minLength": 1 },
+        "status": { "enum": ["draft", "approved", "retired"] },
+        "perspective": { "type": "string", "minLength": 1 },
+        "agreementFamily": { "type": "string", "minLength": 1 },
+        "governingLaw": { "type": ["string", "null"] },
+        "dateStyle": { "enum": ["uk", "us", "iso"] },
+        "sourceManifestSha256": { "$ref": "#/$defs/sha256" },
+        "issues": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/playbookIssue" }
+        },
+        "matterLenses": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/matterLens" }
+        }
+      }
+    },
+    "matterInstruction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["instructionId", "issueId", "reason", "changes"],
+      "properties": {
+        "instructionId": { "type": "string", "minLength": 1 },
+        "issueId": { "type": "string", "minLength": 1 },
+        "reason": { "type": "string", "minLength": 1 },
+        "changes": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": true
+        }
+      }
+    },
+    "activation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifactType",
+        "schemaVersion",
+        "activatedLenses",
+        "suggestedLenses",
+        "matterInstructions",
+        "confirmedByLawyer"
+      ],
+      "properties": {
+        "artifactType": { "const": "matter-lens-activation" },
+        "schemaVersion": { "const": "1.0" },
+        "activatedLenses": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        },
+        "suggestedLenses": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        },
+        "matterInstructions": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/matterInstruction" }
+        },
+        "confirmedByLawyer": { "type": "boolean" },
+        "confirmationNote": { "type": ["string", "null"] }
+      }
+    },
+    "effectiveIssue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["issueId", "topic", "position", "trace"],
+      "properties": {
+        "issueId": { "type": "string", "minLength": 1 },
+        "topic": { "type": "string", "minLength": 1 },
+        "position": { "$ref": "#/$defs/position" },
+        "trace": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "conflict": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["issueId", "field", "sources", "values"],
+      "properties": {
+        "issueId": { "type": "string" },
+        "field": { "type": "string" },
+        "sources": {
+          "type": "array",
+          "minItems": 2,
+          "items": { "type": "string" }
+        },
+        "values": { "type": "array", "minItems": 2 }
+      }
+    },
+    "effectiveStance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifactType",
+        "schemaVersion",
+        "playbookId",
+        "playbookVersion",
+        "status",
+        "baseline",
+        "activatedLenses",
+        "suggestedLenses",
+        "matterInstructions",
+        "issues",
+        "conflicts",
+        "stanceSha256"
+      ],
+      "properties": {
+        "artifactType": { "const": "effective-stance" },
+        "schemaVersion": { "const": "1.0" },
+        "playbookId": { "type": "string" },
+        "playbookVersion": { "type": "string" },
+        "status": { "enum": ["ready", "blocked"] },
+        "baseline": { "const": "standard-baseline" },
+        "activatedLenses": { "type": "array", "items": { "type": "string" } },
+        "suggestedLenses": { "type": "array", "items": { "type": "string" } },
+        "matterInstructions": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "issues": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/effectiveIssue" }
+        },
+        "conflicts": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/conflict" }
+        },
+        "stanceSha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "termMapEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "entryId",
+        "houseDefinition",
+        "contractDefinition",
+        "relation",
+        "decisionBasis",
+        "draftingAction",
+        "rationale",
+        "lawyerReview"
+      ],
+      "properties": {
+        "entryId": { "type": "string", "minLength": 1 },
+        "houseDefinition": { "$ref": "#/$defs/definedTerm" },
+        "contractDefinition": {
+          "oneOf": [{ "$ref": "#/$defs/definedTerm" }, { "type": "null" }]
+        },
+        "relation": {
+          "enum": [
+            "exact",
+            "equivalent",
+            "undefined",
+            "defined-differently",
+            "unresolved"
+          ]
+        },
+        "decisionBasis": {
+          "enum": [
+            "deterministic-exact",
+            "model-cited",
+            "lawyer-confirmed",
+            "not-assessed"
+          ]
+        },
+        "draftingAction": {
+          "enum": ["use-contract-term", "insert-definition", "hard-stop"]
+        },
+        "rationale": { "type": "string", "minLength": 1 },
+        "lawyerReview": { "enum": ["pending", "confirmed", "not-required"] }
+      }
+    },
+    "termMap": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifactType",
+        "schemaVersion",
+        "runId",
+        "playbookId",
+        "playbookVersion",
+        "playbookSourceManifestSha256",
+        "contractSourceManifestSha256",
+        "entries"
+      ],
+      "properties": {
+        "artifactType": { "const": "term-map" },
+        "schemaVersion": { "const": "1.0" },
+        "runId": { "type": "string", "minLength": 1 },
+        "playbookId": { "type": "string", "minLength": 1 },
+        "playbookVersion": { "type": "string", "minLength": 1 },
+        "playbookSourceManifestSha256": { "$ref": "#/$defs/sha256" },
+        "contractSourceManifestSha256": { "$ref": "#/$defs/sha256" },
+        "entries": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/termMapEntry" }
+        }
+      }
+    },
+    "markupSegment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["op", "text"],
+      "properties": {
+        "op": { "enum": ["equal", "delete", "insert"] },
+        "text": { "type": "string", "minLength": 1 }
+      }
+    },
+    "reviewIssue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "issueId",
+        "playbookIssueId",
+        "classification",
+        "materiality",
+        "documentSha256",
+        "elementId",
+        "clauseRef",
+        "originalText",
+        "proposedText",
+        "markupSegments",
+        "draftingProvenance",
+        "rationale",
+        "lawyerReview"
+      ],
+      "properties": {
+        "issueId": { "type": "string", "minLength": 1 },
+        "playbookIssueId": { "type": ["string", "null"] },
+        "classification": {
+          "enum": [
+            "aligned-preferred",
+            "aligned-fallback",
+            "deviation",
+            "missing-protection",
+            "extra-obligation",
+            "unclear",
+            "not-applicable",
+            "playbook-gap",
+            "playbook-conflict"
+          ]
+        },
+        "materiality": { "enum": ["high", "medium", "low", "none"] },
+        "documentSha256": { "$ref": "#/$defs/sha256" },
+        "elementId": { "type": "string", "minLength": 1 },
+        "clauseRef": { "type": ["string", "null"] },
+        "originalText": { "type": "string" },
+        "proposedText": { "type": "string" },
+        "markupSegments": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/markupSegment" }
+        },
+        "draftingProvenance": {
+          "enum": ["approved-playbook", "candidate-drafting", "mixed", "none"]
+        },
+        "rationale": { "type": "string", "minLength": 1 },
+        "externalComment": { "type": "string" },
+        "lawyerReview": {
+          "enum": ["pending", "accepted", "rejected", "revised", "not-required"]
+        }
+      }
+    },
+    "structuralWarning": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["category", "summary"],
+      "properties": {
+        "category": {
+          "enum": [
+            "missing-document",
+            "precedence-conflict",
+            "governing-law-conflict",
+            "irregular-drafting",
+            "other"
+          ]
+        },
+        "summary": { "type": "string", "minLength": 1 },
+        "detail": { "type": "string" },
+        "clauseRef": { "type": ["string", "null"] },
+        "relatedIssueIds": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "issuesList": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifactType",
+        "schemaVersion",
+        "runId",
+        "sourceManifestSha256",
+        "playbookId",
+        "playbookVersion",
+        "effectiveStanceSha256",
+        "issues"
+      ],
+      "properties": {
+        "artifactType": { "const": "issues-list" },
+        "schemaVersion": { "const": "1.0" },
+        "runId": { "type": "string", "minLength": 1 },
+        "sourceManifestSha256": { "$ref": "#/$defs/sha256" },
+        "playbookId": { "type": "string", "minLength": 1 },
+        "playbookVersion": { "type": "string", "minLength": 1 },
+        "effectiveStanceSha256": { "$ref": "#/$defs/sha256" },
+        "contractName": { "type": "string" },
+        "generatedAt": { "type": "string", "format": "date-time" },
+        "structuralWarnings": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/structuralWarning" }
+        },
+        "elementSweep": { "$ref": "#/$defs/elementSweep" },
+        "issues": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/reviewIssue" }
+        }
+      }
+    },
+    "elementSweep": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "completed": {
+          "oneOf": [
+            { "const": "all-remaining" },
+            {
+              "type": "array",
+              "items": { "type": "string", "minLength": 1 }
+            }
+          ]
+        },
+        "parked": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "unreadable": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "coverageCounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["expected", "completed", "parked", "unreadable"],
+      "properties": {
+        "expected": { "type": "integer", "minimum": 0 },
+        "completed": { "type": "integer", "minimum": 0 },
+        "parked": { "type": "integer", "minimum": 0 },
+        "unreadable": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "ruleCounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["expected", "evaluated", "notApplicable", "blocked"],
+      "properties": {
+        "expected": { "type": "integer", "minimum": 0 },
+        "evaluated": { "type": "integer", "minimum": 0 },
+        "notApplicable": { "type": "integer", "minimum": 0 },
+        "blocked": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "coverageReceipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifactType",
+        "schemaVersion",
+        "runId",
+        "documents",
+        "elements",
+        "rules",
+        "reconciled",
+        "errors"
+      ],
+      "properties": {
+        "artifactType": { "const": "coverage-receipt" },
+        "schemaVersion": { "const": "1.0" },
+        "runId": { "type": "string", "minLength": 1 },
+        "documents": { "$ref": "#/$defs/coverageCounts" },
+        "elements": { "$ref": "#/$defs/coverageCounts" },
+        "rules": { "$ref": "#/$defs/ruleCounts" },
+        "reconciled": { "type": "boolean" },
+        "errors": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "buildReceipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifactType",
+        "schemaVersion",
+        "playbookId",
+        "playbookVersion",
+        "sourceManifestSha256",
+        "playbookSha256",
+        "approvedIssueCount",
+        "candidateIssueCount",
+        "validationErrors"
+      ],
+      "properties": {
+        "artifactType": { "const": "build-receipt" },
+        "schemaVersion": { "const": "1.0" },
+        "playbookId": { "type": "string" },
+        "playbookVersion": { "type": "string" },
+        "sourceManifestSha256": { "$ref": "#/$defs/sha256" },
+        "playbookSha256": { "$ref": "#/$defs/sha256" },
+        "approvedIssueCount": { "type": "integer", "minimum": 0 },
+        "candidateIssueCount": { "type": "integer", "minimum": 0 },
+        "validationErrors": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "reviewReceipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifactType",
+        "schemaVersion",
+        "runId",
+        "playbookId",
+        "playbookVersion",
+        "sourceManifestSha256",
+        "effectiveStanceSha256",
+        "issuesCount",
+        "classificationCounts",
+        "reconciled"
+      ],
+      "properties": {
+        "artifactType": { "const": "review-receipt" },
+        "schemaVersion": { "const": "1.0" },
+        "runId": { "type": "string", "minLength": 1 },
+        "playbookId": { "type": "string" },
+        "playbookVersion": { "type": "string" },
+        "sourceManifestSha256": { "$ref": "#/$defs/sha256" },
+        "effectiveStanceSha256": { "$ref": "#/$defs/sha256" },
+        "issuesCount": { "type": "integer", "minimum": 0 },
+        "classificationCounts": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        },
+        "reconciled": { "type": "boolean" }
+      }
+    },
+    "playbookRegistryEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "playbookId",
+        "playbookName",
+        "version",
+        "sealedAt",
+        "packagePath"
+      ],
+      "properties": {
+        "playbookId": { "type": "string", "minLength": 1 },
+        "playbookName": { "type": "string", "minLength": 1 },
+        "version": { "type": "string", "minLength": 1 },
+        "agreementFamily": { "type": "string" },
+        "perspective": { "type": "string" },
+        "issueCount": { "type": "integer", "minimum": 0 },
+        "sealedAt": { "type": "string" },
+        "packagePath": { "type": "string", "minLength": 1 }
+      }
+    },
+    "playbookRegistry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifactType", "schemaVersion", "playbooks"],
+      "properties": {
+        "artifactType": { "const": "playbook-registry" },
+        "schemaVersion": { "const": "1.0" },
+        "playbooks": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/playbookRegistryEntry" }
+        }
+      }
+    }
+  }
+}

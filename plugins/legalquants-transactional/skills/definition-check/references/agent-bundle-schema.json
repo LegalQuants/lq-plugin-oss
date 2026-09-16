@@ -1,0 +1,253 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://legalquants.example/schemas/definition-check-agent-bundle-v1.json",
+  "title": "Definition Check Agent Bundle",
+  "type": "object",
+  "required": ["schema_version"],
+  "properties": {
+    "schema_version": { "const": "agent-bundle-v1" },
+    "discovery_review": { "$ref": "#/$defs/discovery_review" },
+    "evidence": { "type": "array", "items": { "$ref": "#/$defs/evidence" } },
+    "context_requests": { "type": "array", "items": { "$ref": "#/$defs/context_request" } },
+    "candidate_proposals": { "type": "array", "items": { "$ref": "#/$defs/candidate_proposal" } },
+    "review_traces": { "type": "array", "items": { "$ref": "#/$defs/review_trace" } },
+    "semantic_findings": { "type": "array", "items": { "$ref": "#/$defs/semantic_finding" } },
+    "semantic_adjudications": { "type": "array", "items": { "$ref": "#/$defs/semantic_adjudication" } },
+    "occurrence_adjudications": { "type": "array", "items": { "$ref": "#/$defs/occurrence_adjudication" } },
+    "reference_adjudications": { "type": "array", "items": { "$ref": "#/$defs/reference_adjudication" } }
+  },
+  "anyOf": [
+    { "required": ["discovery_review"] },
+    { "properties": { "evidence": { "minItems": 1 } }, "required": ["evidence"] },
+    { "properties": { "context_requests": { "minItems": 1 } }, "required": ["context_requests"] },
+    { "properties": { "candidate_proposals": { "minItems": 1 } }, "required": ["candidate_proposals"] },
+    { "properties": { "review_traces": { "minItems": 1 } }, "required": ["review_traces"] },
+    { "properties": { "semantic_findings": { "minItems": 1 } }, "required": ["semantic_findings"] },
+    { "properties": { "semantic_adjudications": { "minItems": 1 } }, "required": ["semantic_adjudications"] },
+    { "properties": { "occurrence_adjudications": { "minItems": 1 } }, "required": ["occurrence_adjudications"] },
+    { "properties": { "reference_adjudications": { "minItems": 1 } }, "required": ["reference_adjudications"] }
+  ],
+  "$defs": {
+    "discovery_review": {
+      "type": "object",
+      "required": ["source_sha256", "prompt_sha256", "queue_sha256", "responses"],
+      "properties": {
+        "source_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "prompt_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "queue_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "responses": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["packet", "rows"],
+            "properties": {
+              "packet": { "type": "integer", "minimum": 1 },
+              "rows": {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "minItems": 5,
+                  "maxItems": 5,
+                  "prefixItems": [
+                    { "type": "integer", "minimum": 1 },
+                    { "type": "integer", "minimum": 0 },
+                    { "type": "integer", "minimum": 1 },
+                    { "type": "string", "minLength": 1 },
+                    { "type": "string" }
+                  ],
+                  "items": false
+                }
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "nonempty_string": { "type": "string", "minLength": 1 },
+    "nullable_string": { "type": ["string", "null"] },
+    "string_set": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    },
+    "confidence": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+    "review_reason": {
+      "type": ["string", "null"],
+      "enum": [null, "missing_external_evidence", "ambiguous_term_identity", "uncertain_occurrence_identity", "incomplete_source_context", "ambiguous_reference"]
+    },
+    "location": {
+      "type": "object",
+      "required": ["part", "block_id", "block_order", "char_start", "char_end"],
+      "properties": {
+        "part": { "$ref": "#/$defs/nonempty_string" },
+        "block_id": { "$ref": "#/$defs/nonempty_string" },
+        "block_order": { "type": "integer", "minimum": 0 },
+        "char_start": { "type": "integer", "minimum": 0 },
+        "char_end": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "evidence": {
+      "type": "object",
+      "required": ["id", "location", "excerpt", "stance", "method"],
+      "properties": {
+        "id": { "$ref": "#/$defs/nonempty_string" },
+        "location": { "$ref": "#/$defs/location" },
+        "excerpt": { "type": "string", "minLength": 1, "maxLength": 4000 },
+        "stance": { "enum": ["supports", "contradicts", "context"] },
+        "method": { "$ref": "#/$defs/nonempty_string" }
+      },
+      "additionalProperties": false
+    },
+    "context_request": {
+      "type": "object",
+      "required": ["id", "candidate_id", "request_type", "query", "reason", "requested_by"],
+      "properties": {
+        "id": { "$ref": "#/$defs/nonempty_string" },
+        "candidate_id": { "$ref": "#/$defs/nonempty_string" },
+        "request_type": { "enum": ["expand_location", "search_term", "retrieve_definitions_section", "retrieve_reference", "retrieve_occurrences", "escalate_review"] },
+        "query": { "$ref": "#/$defs/nonempty_string" },
+        "reason": { "$ref": "#/$defs/nonempty_string" },
+        "requested_by": { "$ref": "#/$defs/nonempty_string" },
+        "status": { "enum": ["requested", "fulfilled", "failed", "denied", "budget_exhausted"] },
+        "hop": { "type": "integer", "minimum": 1 },
+        "max_results": { "type": "integer", "minimum": 1, "maximum": 100 },
+        "result_evidence_ids": { "$ref": "#/$defs/string_set" }
+      },
+      "additionalProperties": false
+    },
+    "candidate_proposal": {
+      "type": "object",
+      "required": ["id", "candidate_id", "term", "normalized_term", "location", "state", "agent_role", "revision", "rationale_summary"],
+      "properties": {
+        "id": { "$ref": "#/$defs/nonempty_string" },
+        "candidate_id": { "$ref": "#/$defs/nonempty_string" },
+        "term": { "$ref": "#/$defs/nonempty_string" },
+        "normalized_term": { "$ref": "#/$defs/nonempty_string" },
+        "location": { "$ref": "#/$defs/location" },
+        "state": { "enum": ["candidate", "not_a_candidate", "needs_context", "abstain"] },
+        "agent_role": { "$ref": "#/$defs/nonempty_string" },
+        "revision": { "type": "integer", "minimum": 1 },
+        "rationale_summary": { "type": "string", "minLength": 1, "maxLength": 2000 },
+        "confidence": { "$ref": "#/$defs/confidence" },
+        "definition_text": { "$ref": "#/$defs/nullable_string" },
+        "evidence_for": { "$ref": "#/$defs/string_set" },
+        "evidence_against": { "$ref": "#/$defs/string_set" },
+        "context_request_ids": { "$ref": "#/$defs/string_set" },
+        "reason_codes": { "$ref": "#/$defs/string_set" },
+        "supersedes": { "$ref": "#/$defs/nullable_string" },
+        "model_id": { "$ref": "#/$defs/nullable_string" },
+        "prompt_version": { "$ref": "#/$defs/nullable_string" }
+      },
+      "additionalProperties": false
+    },
+    "review_trace": {
+      "type": "object",
+      "required": ["id", "subject_type", "subject_id", "action", "agent_role", "rationale_summary"],
+      "properties": {
+        "id": { "$ref": "#/$defs/nonempty_string" },
+        "subject_type": { "$ref": "#/$defs/nonempty_string" },
+        "subject_id": { "$ref": "#/$defs/nonempty_string" },
+        "action": { "enum": ["include", "exclude", "merge", "escalate", "abstain"] },
+        "agent_role": { "$ref": "#/$defs/nonempty_string" },
+        "rationale_summary": { "type": "string", "minLength": 1, "maxLength": 2000 },
+        "evidence_for": { "$ref": "#/$defs/string_set" },
+        "evidence_against": { "$ref": "#/$defs/string_set" },
+        "context_request_ids": { "$ref": "#/$defs/string_set" },
+        "reason_codes": { "$ref": "#/$defs/string_set" },
+        "confidence": { "$ref": "#/$defs/confidence" },
+        "uncertainty": { "$ref": "#/$defs/nullable_string" },
+        "model_id": { "$ref": "#/$defs/nullable_string" },
+        "prompt_version": { "$ref": "#/$defs/nullable_string" },
+        "visibility": { "enum": ["internal", "authorized_reviewer"] }
+      },
+      "additionalProperties": false
+    },
+    "semantic_finding": {
+      "type": "object",
+      "required": ["id", "rule_id", "kind", "severity", "message"],
+      "properties": {
+        "id": { "$ref": "#/$defs/nonempty_string" },
+        "rule_id": { "$ref": "#/$defs/nonempty_string" },
+        "kind": { "const": "semantic" },
+        "severity": { "enum": ["info", "low", "medium", "high"] },
+        "message": { "$ref": "#/$defs/nonempty_string" },
+        "normalized_term": { "$ref": "#/$defs/nullable_string" },
+        "evidence": { "type": "array", "items": { "$ref": "#/$defs/location" } },
+        "confidence": { "$ref": "#/$defs/confidence" },
+        "review_state": { "enum": ["open", "accepted", "rejected", "deferred", "needs_review", "insufficient_evidence"] }
+      },
+      "additionalProperties": false
+    },
+    "definition_span": {
+      "type": "array",
+      "prefixItems": [
+        { "type": "integer", "minimum": 0 },
+        { "type": "integer", "minimum": 0 },
+        { "type": "integer", "minimum": 1 }
+      ],
+      "items": false,
+      "minItems": 3,
+      "maxItems": 3
+    },
+    "semantic_adjudication": {
+      "type": "object",
+      "required": ["review_id", "decision", "rationale_summary"],
+      "properties": {
+        "review_id": { "$ref": "#/$defs/nonempty_string" },
+        "decision": { "enum": ["confirmed_defined", "confirmed_alias", "confirmed_undefined", "confirmed_external_reference", "rejected_not_a_term", "rejected_proper_name", "needs_review", "insufficient_evidence"] },
+        "evidence_indexes": { "type": "array", "items": { "type": "integer", "minimum": 0 }, "uniqueItems": true },
+        "rationale_summary": { "type": "string", "minLength": 1, "maxLength": 2000 },
+        "reason_codes": { "$ref": "#/$defs/string_set" },
+        "confidence": { "$ref": "#/$defs/confidence" },
+        "agent_role": { "$ref": "#/$defs/nonempty_string" },
+        "definition_text": { "$ref": "#/$defs/nullable_string" },
+        "definition_context_index": { "type": ["integer", "null"], "minimum": 0 },
+        "definition_start": { "type": ["integer", "null"], "minimum": 0 },
+        "definition_end": { "type": ["integer", "null"], "minimum": 1 },
+        "canonical_term": { "$ref": "#/$defs/nullable_string" },
+        "model_id": { "$ref": "#/$defs/nullable_string" },
+        "prompt_version": { "$ref": "#/$defs/nullable_string" },
+        "definition_spans": { "type": "array", "items": { "$ref": "#/$defs/definition_span" }, "uniqueItems": true },
+        "review_reason": { "$ref": "#/$defs/review_reason" }
+      },
+      "additionalProperties": false
+    },
+    "occurrence_adjudication": {
+      "type": "object",
+      "required": ["review_id", "decision", "rationale_summary"],
+      "properties": {
+        "review_id": { "$ref": "#/$defs/nonempty_string" },
+        "decision": { "enum": ["defined_term_use", "ordinary_language", "proper_name_component", "inconsistent_capitalization", "shadowed_by_overlapping_term", "needs_review", "insufficient_evidence"] },
+        "rationale_summary": { "type": "string", "minLength": 1, "maxLength": 2000 },
+        "reason_codes": { "$ref": "#/$defs/string_set" },
+        "confidence": { "$ref": "#/$defs/confidence" },
+        "agent_role": { "$ref": "#/$defs/nonempty_string" },
+        "model_id": { "$ref": "#/$defs/nullable_string" },
+        "prompt_version": { "$ref": "#/$defs/nullable_string" },
+        "review_reason": { "$ref": "#/$defs/review_reason" }
+      },
+      "additionalProperties": false
+    },
+    "reference_adjudication": {
+      "type": "object",
+      "required": ["review_id", "decision", "rationale_summary"],
+      "properties": {
+        "review_id": { "$ref": "#/$defs/nonempty_string" },
+        "decision": { "enum": ["resolved", "broken", "out_of_scope", "needs_review", "insufficient_evidence"] },
+        "evidence_indexes": { "type": "array", "items": { "type": "integer", "minimum": 0 }, "uniqueItems": true },
+        "rationale_summary": { "type": "string", "minLength": 1, "maxLength": 2000 },
+        "reason_codes": { "$ref": "#/$defs/string_set" },
+        "confidence": { "$ref": "#/$defs/confidence" },
+        "agent_role": { "$ref": "#/$defs/nonempty_string" },
+        "model_id": { "$ref": "#/$defs/nullable_string" },
+        "prompt_version": { "$ref": "#/$defs/nullable_string" },
+        "review_reason": { "$ref": "#/$defs/review_reason" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

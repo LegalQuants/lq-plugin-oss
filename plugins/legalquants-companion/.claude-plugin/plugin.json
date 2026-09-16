@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "legalquants-companion",
+  "version": "0.1.0",
+  "description": "Your journey with AI as a lawyer — ask, assess, reflect, apply, connect.",
+  "author": {
+    "name": "LegalQuants",
+    "url": "https://legalquants.com"
+  },
+  "homepage": "https://github.com/LegalQuants/lq-plugin-oss",
+  "repository": "https://github.com/LegalQuants/lq-plugin-oss",
+  "keywords": [
+    "legal",
+    "skills",
+    "agents"
+  ],
+  "skills": "./skills/"
+}

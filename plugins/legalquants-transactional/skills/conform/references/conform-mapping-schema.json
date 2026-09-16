@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://legalquants.example/schemas/conform-mapping-1.0.0.json",
+  "title": "Conform Mapping Record",
+  "description": "One evidence-backed mapping between a source-document concept and a core-document expression of that concept.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "mapping_id",
+    "source_span",
+    "destination_terms",
+    "mapping_type",
+    "evidence",
+    "escalation"
+  ],
+  "properties": {
+    "mapping_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable identifier for this mapping record, deterministic for the same source hash, core hash, source span, and mapping_type."
+    },
+    "source_span": {
+      "$ref": "#/$defs/qualified_location"
+    },
+    "destination_terms": {
+      "type": "array",
+      "minItems": 0,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["term", "location"],
+        "properties": {
+          "term": { "type": "string", "minLength": 1 },
+          "location": { "$ref": "#/$defs/qualified_location" }
+        }
+      },
+      "description": "Zero destination terms is valid only for mapping_type no_mapping. One destination term is the common case. More than one destination term is required for one_to_many; more than one source concept collapsing into the same destination term is recorded as separate mapping records sharing many_to_one mapping_type."
+    },
+    "mapping_type": {
+      "enum": [
+        "equivalent",
+        "narrower_scope",
+        "broader_scope",
+        "false_friend",
+        "one_to_many",
+        "many_to_one",
+        "no_mapping",
+        "leakage_flag",
+        "needs_review",
+        "insufficient_evidence"
+      ]
+    },
+    "evidence": {
+      "type": "array",
+      "minItems": 0,
+      "items": { "$ref": "#/$defs/evidence_item" },
+      "description": "Bounded excerpts from the source and/or core document ledgers that support the mapping decision. needs_review and insufficient_evidence may carry zero or partial evidence; every other mapping_type requires at least one item."
+    },
+    "escalation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["required", "reason"],
+      "properties": {
+        "required": { "type": "boolean" },
+        "reason": { "type": "string" }
+      },
+      "description": "reason is empty only when required is false."
+    },
+    "adjudication_id": {
+      "type": ["string", "null"],
+      "description": "Supervisor-assigned identifier linking this mapping to the worker response it was materialized from, or null for a supervisor-only determination (for example a deterministic no_mapping when the source concept has no candidate at all)."
+    },
+    "reviewer_note": {
+      "type": "string",
+      "maxLength": 2000,
+      "description": "Short human-readable note explaining the mapping, written by the worker or supervisor. Never raw chain-of-thought."
+    }
+  },
+  "$defs": {
+    "qualified_location": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["document_role", "document_id", "part", "block_id", "block_order", "char_start", "char_end"],
+      "properties": {
+        "document_role": { "enum": ["source", "core"] },
+        "document_id": { "type": "string", "minLength": 1 },
+        "part": { "type": "string", "minLength": 1 },
+        "block_id": { "type": "string", "minLength": 1 },
+        "block_order": { "type": "integer", "minimum": 0 },
+        "char_start": { "type": "integer", "minimum": 0 },
+        "char_end": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "evidence_item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["location", "excerpt", "stance"],
+      "properties": {
+        "location": { "$ref": "#/$defs/qualified_location" },
+        "excerpt": { "type": "string", "minLength": 1 },
+        "stance": { "enum": ["supports", "contradicts", "context"] }
+      }
+    }
+  }
+}

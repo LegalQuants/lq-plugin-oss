@@ -1,0 +1,19 @@
+# Optional local checks; CI runs the complete public check command.
+repos:
+  - repo: local
+    hooks:
+      - id: biome-staged
+        name: biome (staged)
+        language: system
+        pass_filenames: false
+        entry: pnpm exec biome check --staged --no-errors-on-unmatched
+      - id: ruff
+        name: Python format and lint
+        language: system
+        pass_filenames: false
+        entry: pnpm lint:py
+      - id: pluginctl-packages
+        name: Check generated plugin bundles
+        language: system
+        pass_filenames: false
+        entry: pnpm plugin-pack:check

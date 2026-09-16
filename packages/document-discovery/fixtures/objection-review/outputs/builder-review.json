@@ -1,0 +1,117 @@
+{
+  "kind": "objection-review",
+  "format_version": 1,
+  "id": "builder-output-review",
+  "title": "Builder subset \u00b7 Review demonstration",
+  "source": {
+    "file": "served-second-set.md",
+    "sha256": "7e59a265a75dc89027df089b96c1495f5d5c15a7f5ca7ce3319770175745f530"
+  },
+  "library": {
+    "kind": "objection-library",
+    "format_version": 1,
+    "id": "builder-demo-library",
+    "version": 2,
+    "entries": [
+      {
+        "id": "scope",
+        "family": "scope",
+        "label": "Unrelated scope",
+        "variant": "specific scope",
+        "wording": "Responding Party objects to {{scope}} because {{reason}}.",
+        "fields": {
+          "scope": "the precise portion challenged",
+          "reason": "the request-specific reason"
+        },
+        "guidance": "Identify the unrelated category; do not object merely because a request is broad.",
+        "conditions": [
+          "The supplied claims and facts establish the lack of a relevant connection."
+        ],
+        "exclusions": [
+          "Relevant project records within the disputed transaction."
+        ],
+        "sources": [
+          {
+            "source_id": "prior-response-a.md",
+            "locator": "Objection paragraph; substitutions proposed for curation"
+          }
+        ],
+        "status": "approved",
+        "approval": {
+          "record": "Simulated development curation decision, not attorney approval: accept exact candidate.",
+          "proposal_batch": "builder-development-1",
+          "proposal_id": "capture-scope"
+        }
+      }
+    ],
+    "parent_sha256": "aac774d772e5512c78b1c8187720110d3af20372a38b9b4b24b8b3171cb14b68",
+    "applied_batches": ["builder-development-1"],
+    "last_decisions": {
+      "batch": "builder-development-1",
+      "accepted": ["capture-scope"],
+      "proposals_sha256": "daef72f531049bf91de2d456395a90160e09f6a7a99c1e93c92186539d161d36"
+    }
+  },
+  "context": [
+    {
+      "id": "definitions",
+      "title": "Served definitions and instructions",
+      "locator": "served-requests.md, introductory text",
+      "text": "Harbor means the sensor project governed by the March 2024 supply agreement. Alder means Alder Instruments. Documents includes existing ESI and attachments. The default period is January 1, 2024 through December 31, 2025 unless a request states otherwise. Original numbering is retained, including the repeated 8 and omitted 9 and 15."
+    },
+    {
+      "id": "facts",
+      "title": "Supplied case context",
+      "locator": "context.md, fictional facts",
+      "text": "Bayline Labs alleges June 2025 Harbor sensors failed the agreed inspection criteria. Alder disputes the failures and causation. The only transactions pleaded concern Harbor, a product first designed in 2024. No other product or earlier design is alleged to be relevant. No employee-health or compensation issue is pleaded. Litigation counsel's legal-advice communications are confidential; no waiver is reported. Counsel interview memoranda were prepared after this dispute arose. The cost and accessibility of the backup tapes, prior-production identifiers, and any duplication burden have not been established. No search, production or withholding decisions have been supplied."
+    },
+    {
+      "id": "authority",
+      "title": "Supplied governing-source packet and limits",
+      "locator": "authority.md; FRCP 26(b), 34(b)(2)",
+      "text": "Federal rules supply a relevance/proportionality framework, protection for qualifying privileged and trial-preparation material, and item-specific response requirements. Rule 34 requires specific reasons, the extent of a partial objection, and disclosure of withholding. The objection draft leaves actual response and withholding positions to counsel. This is a synthetic federal RFP exercise. No real district or judge is assigned, and no local-order or circuit-law verification is claimed."
+    }
+  ],
+  "requests": [
+    {
+      "id": "alder-2-r01",
+      "label": "RFP 21",
+      "text": "Produce all customer complaint communications for every Alder product from 2024 through 2025.",
+      "locator": "served-second-set.md, occurrence 1",
+      "context_ids": ["definitions", "facts", "authority"],
+      "suggestions": [
+        {
+          "entry_id": "scope",
+          "params": {
+            "scope": "customer complaint communications about products other than Harbor",
+            "reason": "the supplied dispute concerns only Harbor sensors and identifies no relevance theory for other products"
+          },
+          "rationale": "The curated subset uses the same review contract, without a format conversion. This is a simulated development approval.",
+          "basis": [
+            "Supplied case context",
+            "Approved synthetic library guidance",
+            "FRCP 26(b) / 34(b)(2); local checks incomplete"
+          ],
+          "missing": [],
+          "preselected": true
+        }
+      ]
+    },
+    {
+      "id": "alder-2-r02",
+      "label": "RFP 22",
+      "text": "Produce the Harbor inspection report for the June 2025 shipment.",
+      "locator": "served-second-set.md, occurrence 2",
+      "context_ids": ["definitions", "facts", "authority"],
+      "suggestions": []
+    },
+    {
+      "id": "alder-2-r03",
+      "label": "RFP 23",
+      "text": "Produce the Harbor supplier invoices dated June 2025.",
+      "locator": "served-second-set.md, occurrence 3",
+      "context_ids": ["definitions", "facts", "authority"],
+      "suggestions": []
+    }
+  ]
+}

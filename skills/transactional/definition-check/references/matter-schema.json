@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://legalquants.example/schemas/definition-check-matter-1.0.0.json",
+  "title": "Definition Check Matter Snapshot Manifest",
+  "type": "object",
+  "required": ["schema_version", "media_type", "matter", "snapshot", "scope", "documents", "document_versions", "document_relationships", "components"],
+  "properties": {
+    "schema_version": { "const": "1.1.0" },
+    "media_type": { "const": "application/vnd.legalquants.definition-check+zip" },
+    "matter": { "$ref": "#/$defs/matter" },
+    "snapshot": { "$ref": "#/$defs/snapshot" },
+    "scope": { "$ref": "#/$defs/scope" },
+    "documents": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/document" } },
+    "document_versions": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/documentVersion" } },
+    "document_relationships": { "type": "array", "items": { "$ref": "#/$defs/documentRelationship" } },
+    "components": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/component" } }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$" },
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "matter": {
+      "type": "object",
+      "required": ["matter_id", "matter_type", "display_name"],
+      "properties": {
+        "matter_id": { "$ref": "#/$defs/id" },
+        "matter_type": { "type": "string", "minLength": 1 },
+        "display_name": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "snapshot": {
+      "type": "object",
+      "required": ["snapshot_id", "created_at", "parent_snapshot_sha256", "completion_state"],
+      "properties": {
+        "snapshot_id": { "$ref": "#/$defs/id" },
+        "created_at": { "type": "string", "format": "date-time" },
+        "parent_snapshot_sha256": { "oneOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }] },
+        "completion_state": { "enum": ["complete", "incomplete", "failed"] }
+      },
+      "additionalProperties": false
+    },
+    "scope": {
+      "type": "object",
+      "required": ["primary_document_version_id", "selected_document_version_ids", "missing_selected_companions"],
+      "properties": {
+        "primary_document_version_id": { "$ref": "#/$defs/id" },
+        "selected_document_version_ids": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/id" } },
+        "missing_selected_companions": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } }
+      },
+      "additionalProperties": false
+    },
+    "document": {
+      "type": "object",
+      "required": ["document_id", "document_family_id", "role", "display_name"],
+      "properties": {
+        "document_id": { "$ref": "#/$defs/id" },
+        "document_family_id": { "$ref": "#/$defs/id" },
+        "role": { "enum": ["agreement", "schedule", "exhibit", "amendment", "ancillary", "incorporated_document", "precedent", "other"] },
+        "display_name": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "documentVersion": {
+      "type": "object",
+      "required": ["version_id", "document_id", "parent_version_id", "supersedes", "source_sha256", "status"],
+      "properties": {
+        "version_id": { "$ref": "#/$defs/id" },
+        "document_id": { "$ref": "#/$defs/id" },
+        "parent_version_id": { "oneOf": [{ "$ref": "#/$defs/id" }, { "type": "null" }] },
+        "supersedes": { "oneOf": [{ "$ref": "#/$defs/id" }, { "type": "null" }] },
+        "source_sha256": { "oneOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }] },
+        "status": { "enum": ["prior", "current", "selected", "unknown"] }
+      },
+      "additionalProperties": false
+    },
+    "documentRelationship": {
+      "type": "object",
+      "required": ["relationship_id", "from_document_id", "to_document_id", "type", "authority", "evidence_ids"],
+      "properties": {
+        "relationship_id": { "$ref": "#/$defs/id" },
+        "from_document_id": { "$ref": "#/$defs/id" },
+        "to_document_id": { "$ref": "#/$defs/id" },
+        "type": { "enum": ["schedule_of", "exhibit_to", "amends", "incorporates", "ancillary_to", "precedent_for"] },
+        "authority": { "enum": ["user_asserted", "reviewed", "unresolved"] },
+        "evidence_ids": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/id" } }
+      },
+      "additionalProperties": false
+    },
+    "component": {
+      "type": "object",
+      "required": ["path", "role", "authority", "document_id", "version_id", "sha256", "record_count"],
+      "properties": {
+        "path": { "type": "string", "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\\\).+$" },
+        "role": { "enum": ["document_metadata", "canonical_defined_term_registry", "canonical_usage_index", "document_findings", "lexical_observations", "candidate_proposals", "adjudications", "review_provenance", "version_lineage", "cross_document_findings"] },
+        "authority": { "enum": ["canonical", "provenance", "comparison"] },
+        "document_id": { "oneOf": [{ "$ref": "#/$defs/id" }, { "type": "null" }] },
+        "version_id": { "oneOf": [{ "$ref": "#/$defs/id" }, { "type": "null" }] },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "record_count": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    }
+  }
+}

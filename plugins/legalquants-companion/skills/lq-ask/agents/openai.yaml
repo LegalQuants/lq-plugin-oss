@@ -1,0 +1,8 @@
+interface:
+  display_name: "Ask"
+  short_description: "What the LegalQuants community actually knows"
+  default_prompt: "Use $lq-ask to answer from the LegalQuants community corpus: <question>"
+  brand_color: "#2d2d2d"
+
+policy:
+  allow_implicit_invocation: false

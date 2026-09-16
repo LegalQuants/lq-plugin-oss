@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://legalquants.example/schemas/definition-check-context-request-v1.json",
+  "title": "Definition Check Context Request",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "id",
+    "candidate_id",
+    "request_type",
+    "query",
+    "reason",
+    "requested_by"
+  ],
+  "properties": {
+    "schema_version": { "const": "context-request-v1" },
+    "id": { "type": "string", "minLength": 1 },
+    "candidate_id": { "type": "string", "minLength": 1 },
+    "request_type": {
+      "enum": [
+        "expand_location",
+        "search_term",
+        "retrieve_definitions_section",
+        "retrieve_reference",
+        "retrieve_occurrences",
+        "escalate_review"
+      ]
+    },
+    "query": { "type": "string", "minLength": 1 },
+    "reason": { "type": "string", "minLength": 1 },
+    "requested_by": { "type": "string", "minLength": 1 },
+    "status": {
+      "enum": ["requested", "fulfilled", "failed", "denied", "budget_exhausted"],
+      "default": "requested"
+    },
+    "hop": { "type": "integer", "minimum": 1, "default": 1 },
+    "max_results": { "type": "integer", "minimum": 1, "maximum": 100, "default": 20 },
+    "result_evidence_ids": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true,
+      "default": []
+    }
+  },
+  "additionalProperties": false
+}

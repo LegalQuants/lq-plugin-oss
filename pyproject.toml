@@ -1,0 +1,110 @@
+[project]
+name = "lq-plugin-oss"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "pypdf>=6.19.0",
+    "pytest>=8.3",
+    "python-docx>=1.2.0",
+    "ruff>=0.8",
+    "ty>=0.0.10",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["packages/skill-tests/tests"]
+
+[tool.ruff]
+target-version = "py312"
+src = ["skills", "packages"]
+extend-exclude = ["dist", "node_modules", "governance", "tmp"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.ruff.lint.per-file-ignores]
+# Preserve literal served text and XML in the synthetic development packet.
+"skills/core/regulatory/scripts/fetch_source.py" = ["UP017"]  # datetime.UTC is 3.11+; scripts stay 3.10-clean
+"skills/transactional/sigpack/scripts/sigpack.py" = ["E501"]
+"skills/transactional/definition-check/**/*.py" = ["E501", "UP045"]
+"skills/transactional/definition-check/scripts/*.py" = ["E402", "I001", "UP007"]
+"skills/transactional/closing-bible/**/*.py" = ["E501"]
+"packages/skill-tests/tests/closing-bible/**/*.py" = ["E501"]
+"skills/transactional/conform/**/*.py" = ["E501", "UP045"]
+"skills/transactional/conform/scripts/*.py" = ["E402", "I001", "UP007"]
+"skills/transactional/diligence/scripts/shared/build_families.py" = ["E501", "UP031"]
+"skills/transactional/diligence/scripts/shared/render_gate1.py" = ["E501"]
+"skills/transactional/diligence/scripts/shared/render_readback.py" = ["E501", "UP031"]
+"skills/transactional/diligence/scripts/shared/render_report.py" = ["E501"]
+"skills/transactional/diligence/scripts/shared/validate_framework.py" = ["E501", "UP031"]
+"skills/transactional/diligence/scripts/shared/verify_quotes.py" = ["E501"]
+"skills/litigation/docreview/scripts/render_crosswalk.py" = ["E501"]
+"skills/litigation/docreview/scripts/render_dmap.py" = ["E501"]
+"skills/litigation/docreview/scripts/render_privilege_queue.py" = ["E501"]
+"skills/litigation/docreview/scripts/shared/build_families.py" = ["E501", "UP031"]
+"skills/litigation/docreview/scripts/shared/render_gate1.py" = ["E501"]
+"skills/litigation/docreview/scripts/shared/render_readback.py" = ["E501", "UP031"]
+"skills/litigation/docreview/scripts/shared/render_report.py" = ["E501"]
+"skills/litigation/docreview/scripts/shared/validate_framework.py" = ["E501", "UP031"]
+"skills/litigation/docreview/scripts/shared/verify_quotes.py" = ["E501"]
+"skills/transactional/playbook-builder/**/*.py" = ["E501"]
+"skills/transactional/playbook-review/**/*.py" = ["E501"]
+"packages/skill-tests/tests/playbook_engine/**/*.py" = ["E501"]
+
+[tool.ty.environment]
+python-version = "3.12"
+# Skill scripts are imported by evals, hooks, and sibling CLIs via sys.path,
+# not as installable packages. Keep this list in lockstep with skills/*/*/scripts.
+extra-paths = [
+    "skills/litigation/docreview/scripts/shared",
+    "skills/transactional/diligence/scripts/shared",
+    "skills/transactional/playbook-builder/scripts/shared",
+    "skills/transactional/playbook-review/scripts/shared",
+    "skills/companion/legalquants/scripts",
+    "skills/companion/lq-ask/scripts",
+    "skills/companion/lq-reflect/scripts",
+    "skills/companion/my-lq-moment/scripts",
+    "skills/core/legaldesign/scripts",
+    "skills/core/lq-start/scripts",
+    "skills/core/regulatory/scripts",
+    "skills/core/timenarratives/scripts",
+    "skills/core/wiki/scripts",
+    "skills/litigation/cite-check/scripts",
+    "skills/litigation/docreview/scripts",
+    "skills/litigation/document-discovery/scripts",
+    "skills/litigation/pressuretest/scripts",
+    "skills/transactional/closing-bible/scripts",
+    "skills/transactional/closing-checklist/scripts",
+    "skills/transactional/conform/scripts",
+    "skills/transactional/definition-check/scripts",
+    "skills/transactional/diligence/scripts",
+    "skills/transactional/playbook-builder/scripts",
+    "skills/transactional/playbook-review/scripts",
+    "skills/transactional/read-redline/scripts",
+    "skills/transactional/sigpack/scripts",
+]
+
+[tool.ty.analysis]
+# Optional host-runtime libraries used by a few skill/eval entry points. They
+# are not project dependencies; treat them as Any rather than excluding files.
+replace-imports-with-any = [
+    "docx",
+    "docx.**",
+    "fitz",
+    "httpx",
+    "pdfplumber",
+    "PIL",
+    "PIL.**",
+    "pypdf",
+    "pypdf.**",
+]
+
+[tool.ty.src]
+# Official invocation is scripts/typecheck-py.sh (every first-party Python tree).
+# This include is the fallback for a bare `uv run ty check`.
+include = ["skills", "packages"]
+
+[tool.ty.terminal]
+error-on-warning = false

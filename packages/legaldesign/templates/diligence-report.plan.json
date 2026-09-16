@@ -1,0 +1,769 @@
+{
+  "schemaVersion": "legaldesign.build.v4",
+  "brief": {
+    "title": "Diligence review",
+    "reader": "A reader reviewing a reusable explanation before it is filled with completed legal work.",
+    "action": "Use the visible structure to identify the answer, conditions, source support and next action.",
+    "purpose": "understand",
+    "message": "This blueprint describes the information each component should contain; it makes no matter-specific legal claim.",
+    "spine": "sequence",
+    "situation": "laptop",
+    "form": "slide-brief",
+    "sources": [
+      {
+        "id": "blueprint-guide",
+        "label": "Reusable content instructions",
+        "status": "supplied"
+      }
+    ],
+    "assumptions": [],
+    "gaps": ["No matter-specific source document has been supplied."]
+  },
+  "style": {
+    "source": "loxoto",
+    "ref": null
+  },
+  "claims": [
+    {
+      "id": "c-title",
+      "text": "Name the subject and reader task.",
+      "kind": "context",
+      "sourceIds": ["blueprint-guide"],
+      "placement": "surface",
+      "evidenceIds": []
+    },
+    {
+      "id": "c-core",
+      "text": "State the supported answer and the relationship among its conditions.",
+      "kind": "material",
+      "sourceIds": ["blueprint-guide"],
+      "placement": "surface",
+      "evidenceIds": ["e-core"]
+    },
+    {
+      "id": "c-detail",
+      "text": "Show qualifications and the scope of the reviewed record.",
+      "kind": "material",
+      "sourceIds": ["blueprint-guide"],
+      "placement": "surface",
+      "evidenceIds": ["e-detail"]
+    },
+    {
+      "id": "c-action",
+      "text": "Specify the next action and what must happen before it.",
+      "kind": "material",
+      "sourceIds": ["blueprint-guide"],
+      "placement": "surface",
+      "evidenceIds": ["e-action"]
+    },
+    {
+      "id": "c-overview",
+      "text": "Describe the fact pattern, reader question and route through the review.",
+      "kind": "context",
+      "sourceIds": ["blueprint-guide"],
+      "placement": "surface",
+      "evidenceIds": []
+    }
+  ],
+  "units": [
+    {
+      "id": "overview-title",
+      "kind": "text",
+      "role": "title",
+      "claim": "Diligence review",
+      "claimRefs": ["c-title"],
+      "relationship": "containment",
+      "candidates": ["concise text", "structured row"],
+      "variants": {
+        "a": {
+          "html": "<h1>Diligence review</h1>",
+          "axis": "framing",
+          "encoding": "Heading identifies the topic; the supporting text states its condition or consequence.",
+          "why": "A direct explanation preserves the point without adding decorative geometry."
+        }
+      },
+      "placeholder": "[Review title.]",
+      "evidence": []
+    },
+    {
+      "id": "facts",
+      "kind": "text",
+      "role": "summary",
+      "claim": "Identify the transaction, documents reviewed and material gaps in the record.",
+      "claimRefs": ["c-overview"],
+      "relationship": "containment",
+      "candidates": ["concise text", "structured row"],
+      "variants": {
+        "a": {
+          "html": "<h2>Relevant facts</h2><p>Identify the transaction, documents reviewed and material gaps in the record.</p>",
+          "axis": "framing",
+          "encoding": "Heading identifies the topic; the supporting text states its condition or consequence.",
+          "why": "A direct explanation preserves the point without adding decorative geometry."
+        }
+      },
+      "placeholder": "[Relevant facts.]",
+      "evidence": []
+    },
+    {
+      "id": "question",
+      "kind": "text",
+      "role": "summary",
+      "claim": "What must be resolved before the reader can proceed?",
+      "claimRefs": ["c-overview"],
+      "relationship": "containment",
+      "candidates": ["concise text", "structured row"],
+      "variants": {
+        "a": {
+          "html": "<h2>Question</h2><p>What must be resolved before the reader can proceed?</p>",
+          "axis": "framing",
+          "encoding": "Heading identifies the topic; the supporting text states its condition or consequence.",
+          "why": "A direct explanation preserves the point without adding decorative geometry."
+        }
+      },
+      "placeholder": "[Question.]",
+      "evidence": []
+    },
+    {
+      "id": "overview-answer",
+      "kind": "text",
+      "role": "answer",
+      "claim": "State the central finding, its practical consequence and the action required.",
+      "claimRefs": ["c-core"],
+      "relationship": "containment",
+      "candidates": ["concise text", "structured row"],
+      "variants": {
+        "a": {
+          "html": "<h2>Short answer</h2><p>State the central finding, its practical consequence and the action required.</p>",
+          "axis": "framing",
+          "encoding": "Heading identifies the topic; the supporting text states its condition or consequence.",
+          "why": "A direct explanation preserves the point without adding decorative geometry."
+        }
+      },
+      "placeholder": "[Short answer.]",
+      "evidence": ["e-core"],
+      "detail": "e-core"
+    },
+    {
+      "id": "topic-1",
+      "kind": "card",
+      "role": "summary",
+      "claim": "Open the supporting explanation and source detail.",
+      "claimRefs": ["c-overview"],
+      "relationship": "containment",
+      "candidates": ["concise text", "structured row"],
+      "variants": {
+        "a": {
+          "html": "<h2>Review summary</h2><p>Open the supporting explanation and source detail.</p>",
+          "axis": "framing",
+          "encoding": "Heading identifies the topic; the supporting text states its condition or consequence.",
+          "why": "A direct explanation preserves the point without adding decorative geometry."
+        }
+      },
+      "placeholder": "[Review summary.]",
+      "evidence": []
+    },
+    {
+      "id": "topic-2",
+      "kind": "card",
+      "role": "summary",
+      "claim": "Inspect the qualifications and practical response.",
+      "claimRefs": ["c-overview"],
+      "relationship": "containment",
+      "candidates": ["concise text", "structured row"],
+      "variants": {
+        "a": {
+          "html": "<h2>Findings and consequences</h2><p>Inspect the qualifications and practical response.</p>",
+          "axis": "framing",
+          "encoding": "Heading identifies the topic; the supporting text states its condition or consequence.",
+          "why": "A direct explanation preserves the point without adding decorative geometry."
+        }
+      },
+      "placeholder": "[Findings and consequences.]",
+      "evidence": []
+    },
+    {
+      "id": "topic-3",
+      "kind": "card",
+      "role": "summary",
+      "claim": "Check responsibilities and the next action.",
+      "claimRefs": ["c-overview"],
+      "relationship": "containment",
+      "candidates": ["concise text", "structured row"],
+      "variants": {
+        "a": {
+          "html": "<h2>Follow-up plan</h2><p>Check responsibilities and the next action.</p>",
+          "axis": "framing",
+          "encoding": "Heading identifies the topic; the supporting text states its condition or consequence.",
+          "why": "A direct explanation preserves the point without adding decorative geometry."
+        }
+      },
+      "placeholder": "[Follow-up plan.]",
+      "evidence": []
+    },
+    {
+      "id": "t1",
+      "kind": "text",
+      "role": "summary",
+      "claim": "Review summary",
+      "claimRefs": ["c-title"],
+      "relationship": "containment",
+      "candidates": ["concise text", "structured row"],
+      "variants": {
+        "a": {
+          "html": "<h2>Review summary</h2>",
+          "axis": "framing",
+          "encoding": "Heading identifies the topic; the supporting text states its condition or consequence.",
+          "why": "A direct explanation preserves the point without adding decorative geometry."
+        }
+      },
+      "placeholder": "[Review summary.]",
+      "evidence": []
+    },
+    {
+      "id": "answer",
+      "kind": "card",
+      "role": "finding",
+      "claim": "Summarize the central finding and identify the reviewed record.",
+      "claimRefs": ["c-core"],
+      "relationship": "containment",
+      "candidates": ["concise text", "structured row"],
+      "variants": {
+        "a": {
+          "html": "<h2>What we found</h2><p>Summarize the central finding and identify the reviewed record.</p>",
+          "axis": "framing",
+          "encoding": "The heading names this part of the issue; the body supplies the finding, implication or supported action in reading order.",
+          "why": "A concise card separates this point from the supporting figure without inventing a conclusion."
+        }
+      },
+      "placeholder": "Summarize the central finding and identify the reviewed record.",
+      "evidence": ["e-core"],
+      "detail": "e-core"
+    },
+    {
+      "id": "summary-implication",
+      "kind": "card",
+      "role": "summary",
+      "claim": "Explain the practical effect and any limit caused by missing material.",
+      "claimRefs": ["c-detail"],
+      "relationship": "containment",
+      "candidates": ["concise text", "structured row"],
+      "variants": {
+        "a": {
+          "html": "<h2>Why it matters</h2><p>Explain the practical effect and any limit caused by missing material.</p>",
+          "axis": "framing",
+          "encoding": "The heading names this part of the issue; the body supplies the finding, implication or supported action in reading order.",
+          "why": "A concise card separates this point from the supporting figure without inventing a conclusion."
+        }
+      },
+      "placeholder": "Explain the practical effect and any limit caused by missing material.",
+      "evidence": ["e-detail"],
+      "detail": "e-detail"
+    },
+    {
+      "id": "summary-recommendation",
+      "kind": "card",
+      "role": "action",
+      "claim": "State the supplied recommendation, or the unresolved question if none is supported.",
+      "claimRefs": ["c-action"],
+      "relationship": "containment",
+      "candidates": ["concise text", "structured row"],
+      "variants": {
+        "a": {
+          "html": "<h2>Recommendation</h2><p>State the supplied recommendation, or the unresolved question if none is supported.</p>",
+          "axis": "framing",
+          "encoding": "The heading names this part of the issue; the body supplies the finding, implication or supported action in reading order.",
+          "why": "A concise card separates this point from the supporting figure without inventing a conclusion."
+        }
+      },
+      "placeholder": "State the supplied recommendation, or the unresolved question if none is supported.",
+      "evidence": ["e-action"],
+      "detail": "e-action"
+    },
+    {
+      "id": "register",
+      "kind": "figure",
+      "claim": "Show how the reviewed record, its scope and an open point inform the review conclusion.",
+      "claimRefs": ["c-core", "c-detail", "c-action"],
+      "relationship": "convergence",
+      "candidates": ["hub", "concise text"],
+      "variants": {
+        "a": {
+          "component": "hub",
+          "params": {
+            "centre": "Review conclusion",
+            "spokes": [
+              {
+                "title": "Record",
+                "edge": "supports",
+                "detail": "e-core"
+              },
+              {
+                "title": "Scope",
+                "edge": "limits",
+                "detail": "e-detail"
+              },
+              {
+                "title": "Open point",
+                "edge": "qualifies",
+                "detail": "e-action"
+              }
+            ],
+            "toward": "centre"
+          },
+          "axis": "form",
+          "encoding": "Record → supports → Review conclusion; Scope → limits → Review conclusion; Open point → qualifies → Review conclusion. The inputs converge independently; no sequence or quantity is implied.",
+          "why": "A three-input registered hub exposes how separate considerations qualify one conclusion."
+        }
+      },
+      "placeholder": "Name the conclusion and the distinct source, scope and qualification that inform it.",
+      "evidence": ["e-core", "e-detail", "e-action"]
+    },
+    {
+      "id": "t2",
+      "kind": "text",
+      "role": "summary",
+      "claim": "Findings and consequences",
+      "claimRefs": ["c-title"],
+      "relationship": "containment",
+      "candidates": ["concise text", "structured row"],
+      "variants": {
+        "a": {
+          "html": "<h2>Findings and consequences</h2>",
+          "axis": "framing",
+          "encoding": "Heading identifies the topic; the supporting text states its condition or consequence.",
+          "why": "A direct explanation preserves the point without adding decorative geometry."
+        }
+      },
+      "placeholder": "[Findings and consequences.]",
+      "evidence": []
+    },
+    {
+      "id": "finding",
+      "kind": "card",
+      "role": "finding",
+      "claim": "State the supported finding and identify the relevant provision or event.",
+      "claimRefs": ["c-core"],
+      "relationship": "containment",
+      "candidates": ["concise text", "structured row"],
+      "variants": {
+        "a": {
+          "html": "<h2>What we found</h2><p>State the supported finding and identify the relevant provision or event.</p>",
+          "axis": "framing",
+          "encoding": "The heading names this part of the issue; the body supplies the finding, implication or supported action in reading order.",
+          "why": "A concise card separates this point from the supporting figure without inventing a conclusion."
+        }
+      },
+      "placeholder": "State the supported finding and identify the relevant provision or event.",
+      "evidence": ["e-core"],
+      "detail": "e-core"
+    },
+    {
+      "id": "gap",
+      "kind": "card",
+      "role": "summary",
+      "claim": "Explain the consequence and preserve any condition or unresolved gap.",
+      "claimRefs": ["c-detail"],
+      "relationship": "containment",
+      "candidates": ["concise text", "structured row"],
+      "variants": {
+        "a": {
+          "html": "<h2>Why it matters</h2><p>Explain the consequence and preserve any condition or unresolved gap.</p>",
+          "axis": "framing",
+          "encoding": "The heading names this part of the issue; the body supplies the finding, implication or supported action in reading order.",
+          "why": "A concise card separates this point from the supporting figure without inventing a conclusion."
+        }
+      },
+      "placeholder": "Explain the consequence and preserve any condition or unresolved gap.",
+      "evidence": ["e-detail"],
+      "detail": "e-detail"
+    },
+    {
+      "id": "response",
+      "kind": "card",
+      "role": "action",
+      "claim": "State the supplied response and what must be established before it can be taken.",
+      "claimRefs": ["c-action"],
+      "relationship": "containment",
+      "candidates": ["concise text", "structured row"],
+      "variants": {
+        "a": {
+          "html": "<h2>Recommendation</h2><p>State the supplied response and what must be established before it can be taken.</p>",
+          "axis": "framing",
+          "encoding": "The heading names this part of the issue; the body supplies the finding, implication or supported action in reading order.",
+          "why": "A concise card separates this point from the supporting figure without inventing a conclusion."
+        }
+      },
+      "placeholder": "State the supplied response and what must be established before it can be taken.",
+      "evidence": ["e-action"],
+      "detail": "e-action"
+    },
+    {
+      "id": "findings-flow",
+      "kind": "figure",
+      "claim": "Show the practical consequence of the supported finding.",
+      "claimRefs": ["c-core", "c-detail", "c-action"],
+      "relationship": "sequence",
+      "candidates": ["flow", "concise text"],
+      "variants": {
+        "a": {
+          "component": "flow",
+          "params": {
+            "stages": [
+              {
+                "title": "Finding",
+                "sub": "State the supported issue",
+                "detail": "e-core"
+              },
+              {
+                "title": "Consequence",
+                "sub": "State its practical effect",
+                "detail": "e-detail"
+              }
+            ],
+            "edges": ["causes"]
+          },
+          "axis": "form",
+          "encoding": "Finding → causes → Consequence. Use this causal connection only where supported; it does not encode chronology or severity.",
+          "why": "A two-stage registered flow keeps the stated relationship legible beside the issue explanation."
+        }
+      },
+      "placeholder": "Name the supported prerequisite and the action or consequence it enables.",
+      "evidence": ["e-core", "e-detail", "e-action"]
+    },
+    {
+      "id": "t3",
+      "kind": "text",
+      "role": "summary",
+      "claim": "Follow-up plan",
+      "claimRefs": ["c-title"],
+      "relationship": "containment",
+      "candidates": ["concise text", "structured row"],
+      "variants": {
+        "a": {
+          "html": "<h2>Follow-up plan</h2>",
+          "axis": "framing",
+          "encoding": "Heading identifies the topic; the supporting text states its condition or consequence.",
+          "why": "A direct explanation preserves the point without adding decorative geometry."
+        }
+      },
+      "placeholder": "[Follow-up plan.]",
+      "evidence": []
+    },
+    {
+      "id": "followup-finding",
+      "kind": "card",
+      "role": "finding",
+      "claim": "Identify the outstanding item and the current state of the record.",
+      "claimRefs": ["c-core"],
+      "relationship": "containment",
+      "candidates": ["concise text", "structured row"],
+      "variants": {
+        "a": {
+          "html": "<h2>What we found</h2><p>Identify the outstanding item and the current state of the record.</p>",
+          "axis": "framing",
+          "encoding": "The heading names this part of the issue; the body supplies the finding, implication or supported action in reading order.",
+          "why": "A concise card separates this point from the supporting figure without inventing a conclusion."
+        }
+      },
+      "placeholder": "Identify the outstanding item and the current state of the record.",
+      "evidence": ["e-core"],
+      "detail": "e-core"
+    },
+    {
+      "id": "followup-implication",
+      "kind": "card",
+      "role": "summary",
+      "claim": "Explain what the open item prevents or leaves uncertain.",
+      "claimRefs": ["c-detail"],
+      "relationship": "containment",
+      "candidates": ["concise text", "structured row"],
+      "variants": {
+        "a": {
+          "html": "<h2>Why it matters</h2><p>Explain what the open item prevents or leaves uncertain.</p>",
+          "axis": "framing",
+          "encoding": "The heading names this part of the issue; the body supplies the finding, implication or supported action in reading order.",
+          "why": "A concise card separates this point from the supporting figure without inventing a conclusion."
+        }
+      },
+      "placeholder": "Explain what the open item prevents or leaves uncertain.",
+      "evidence": ["e-detail"],
+      "detail": "e-detail"
+    },
+    {
+      "id": "owner",
+      "kind": "card",
+      "role": "action",
+      "claim": "Record the supported next action; add responsibility or timing only if supplied.",
+      "claimRefs": ["c-action"],
+      "relationship": "containment",
+      "candidates": ["concise text", "structured row"],
+      "variants": {
+        "a": {
+          "html": "<h2>Recommendation</h2><p>Record the supported next action; add responsibility or timing only if supplied.</p>",
+          "axis": "framing",
+          "encoding": "The heading names this part of the issue; the body supplies the finding, implication or supported action in reading order.",
+          "why": "A concise card separates this point from the supporting figure without inventing a conclusion."
+        }
+      },
+      "placeholder": "Record the supported next action; add responsibility or timing only if supplied.",
+      "evidence": ["e-action"],
+      "detail": "e-action"
+    },
+    {
+      "id": "path",
+      "kind": "figure",
+      "claim": "Show the input needed before the supported next action.",
+      "claimRefs": ["c-core", "c-detail", "c-action"],
+      "relationship": "sequence",
+      "candidates": ["flow", "concise text"],
+      "variants": {
+        "a": {
+          "component": "flow",
+          "params": {
+            "stages": [
+              {
+                "title": "Required input",
+                "sub": "Name what is needed",
+                "detail": "e-detail"
+              },
+              {
+                "title": "Next action",
+                "sub": "Name the supported step",
+                "detail": "e-action"
+              }
+            ],
+            "edges": ["enables"]
+          },
+          "axis": "form",
+          "encoding": "Required input → enables → Next action. The connector represents a prerequisite, not an invented deadline or completed task.",
+          "why": "A two-stage registered flow keeps the stated relationship legible beside the issue explanation."
+        }
+      },
+      "placeholder": "Name the supported prerequisite and the action or consequence it enables.",
+      "evidence": ["e-core", "e-detail", "e-action"]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "e-core",
+      "sourceId": "blueprint-guide",
+      "claimRefs": ["c-core"],
+      "cite": "Content instructions",
+      "locator": "Reusable blueprint guidance",
+      "status": "supplied",
+      "detail": "Replace this explanation with the completed work and its actual supporting record.",
+      "popup": {
+        "type": "explainer",
+        "title": "How the rule applies",
+        "lede": "Explain the point opened by this target.",
+        "sections": [
+          {
+            "heading": "Explanation",
+            "body": "Set out the controlling condition, why it matters, and any limits on the conclusion."
+          },
+          {
+            "heading": "Supporting record",
+            "body": "Place the actual supporting passage and exact locator here; add an authentic source clip when supplied. No source text or image is included in this template."
+          }
+        ]
+      },
+      "original": {
+        "availability": "unavailable",
+        "label": "Original document not supplied"
+      }
+    },
+    {
+      "id": "e-detail",
+      "sourceId": "blueprint-guide",
+      "claimRefs": ["c-detail"],
+      "cite": "Content instructions",
+      "locator": "Reusable blueprint guidance",
+      "status": "supplied",
+      "detail": "Replace this explanation with the completed work and its actual supporting record.",
+      "popup": {
+        "type": "explainer",
+        "title": "Scope and qualifications",
+        "lede": "Explain the point opened by this target.",
+        "sections": [
+          {
+            "heading": "Explanation",
+            "body": "Set out the controlling condition, why it matters, and any limits on the conclusion."
+          },
+          {
+            "heading": "Supporting record",
+            "body": "Place the actual supporting passage and exact locator here; add an authentic source clip when supplied. No source text or image is included in this template."
+          }
+        ]
+      },
+      "original": {
+        "availability": "unavailable",
+        "label": "Original document not supplied"
+      }
+    },
+    {
+      "id": "e-action",
+      "sourceId": "blueprint-guide",
+      "claimRefs": ["c-action"],
+      "cite": "Content instructions",
+      "locator": "Reusable blueprint guidance",
+      "status": "supplied",
+      "detail": "Replace this explanation with the completed work and its actual supporting record.",
+      "popup": {
+        "type": "explainer",
+        "title": "What the next action requires",
+        "lede": "Explain the point opened by this target.",
+        "sections": [
+          {
+            "heading": "Explanation",
+            "body": "Set out the controlling condition, why it matters, and any limits on the conclusion."
+          },
+          {
+            "heading": "Supporting record",
+            "body": "Place the actual supporting passage and exact locator here; add an authentic source clip when supplied. No source text or image is included in this template."
+          }
+        ]
+      },
+      "original": {
+        "availability": "unavailable",
+        "label": "Original document not supplied"
+      }
+    }
+  ],
+  "composition": {
+    "strategy": "composed",
+    "shape": "overview with linked two-column issue pages",
+    "rationale": "Keep the overview complete, then pair each finding, implication and supported action with a compact figure. Actual source passages belong in the linked detail, with unavailable material disclosed.",
+    "sections": [
+      {
+        "id": "overview",
+        "purpose": "Review overview",
+        "indexLabel": "Review overview",
+        "unitIds": [
+          "overview-title",
+          "facts",
+          "question",
+          "overview-answer",
+          "topic-1",
+          "topic-2",
+          "topic-3"
+        ],
+        "layout": {
+          "columns": 12,
+          "placements": [
+            {
+              "unitId": "overview-title",
+              "row": 1,
+              "column": 1,
+              "span": 12
+            },
+            {
+              "unitId": "facts",
+              "row": 2,
+              "column": 1,
+              "span": 6
+            },
+            {
+              "unitId": "question",
+              "row": 2,
+              "column": 7,
+              "span": 6
+            },
+            {
+              "unitId": "overview-answer",
+              "row": 3,
+              "column": 1,
+              "span": 12
+            },
+            {
+              "unitId": "topic-1",
+              "row": 4,
+              "column": 1,
+              "span": 4
+            },
+            {
+              "unitId": "topic-2",
+              "row": 4,
+              "column": 5,
+              "span": 4
+            },
+            {
+              "unitId": "topic-3",
+              "row": 4,
+              "column": 9,
+              "span": 4
+            }
+          ]
+        }
+      },
+      {
+        "id": "summary",
+        "purpose": "Review summary",
+        "unitIds": [
+          "t1",
+          "answer",
+          "summary-implication",
+          "summary-recommendation",
+          "register"
+        ],
+        "indexLabel": "Review summary",
+        "issueLayout": {
+          "findingUnitId": "answer",
+          "implicationUnitId": "summary-implication",
+          "actionUnitId": "summary-recommendation",
+          "supportUnitIds": ["register"]
+        }
+      },
+      {
+        "id": "findings",
+        "purpose": "Findings and consequences",
+        "unitIds": ["t2", "finding", "gap", "response", "findings-flow"],
+        "indexLabel": "Findings and consequences",
+        "issueLayout": {
+          "findingUnitId": "finding",
+          "implicationUnitId": "gap",
+          "actionUnitId": "response",
+          "supportUnitIds": ["findings-flow"]
+        }
+      },
+      {
+        "id": "followup",
+        "purpose": "Follow-up plan",
+        "unitIds": [
+          "t3",
+          "followup-finding",
+          "followup-implication",
+          "owner",
+          "path"
+        ],
+        "indexLabel": "Follow-up plan",
+        "issueLayout": {
+          "findingUnitId": "followup-finding",
+          "implicationUnitId": "followup-implication",
+          "actionUnitId": "owner",
+          "supportUnitIds": ["path"]
+        }
+      }
+    ],
+    "templateRef": null
+  },
+  "overview": {
+    "sectionId": "overview",
+    "contextUnitIds": ["facts"],
+    "questionUnitId": "question",
+    "answerUnitId": "overview-answer",
+    "topics": [
+      {
+        "unitId": "topic-1",
+        "targetSectionId": "summary"
+      },
+      {
+        "unitId": "topic-2",
+        "targetSectionId": "findings"
+      },
+      {
+        "unitId": "topic-3",
+        "targetSectionId": "followup"
+      }
+    ]
+  }
+}

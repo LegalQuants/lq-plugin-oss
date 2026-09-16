@@ -1,0 +1,8 @@
+interface:
+  display_name: "Sigpack"
+  short_description: "Signature packs and executed-page compilation"
+  default_prompt: "Use $sigpack to prepare signature packs from this closing folder."
+  brand_color: "#2d2d2d"
+
+policy:
+  allow_implicit_invocation: true

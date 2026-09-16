@@ -1,0 +1,8 @@
+interface:
+  display_name: "Playbook Builder"
+  short_description: "Build approved contract playbooks"
+  default_prompt: "Build a source-linked contract playbook from the selected templates, precedents, or KM notes, keeping every inferred position as a candidate until I approve it."
+  brand_color: "#2d2d2d"
+
+policy:
+  allow_implicit_invocation: true

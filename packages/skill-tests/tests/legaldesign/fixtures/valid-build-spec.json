@@ -1,0 +1,118 @@
+{
+  "schemaVersion": "legaldesign.build.v2",
+  "brief": {
+    "reader": "The CEO and CFO",
+    "action": "Decide whether to ask the board to start the charter amendment",
+    "purpose": "decide",
+    "message": "The charter can shield officers from money damages inside statutory limits.",
+    "spine": "containment",
+    "situation": "laptop",
+    "form": "one-page",
+    "sources": [
+      {
+        "id": "memo",
+        "label": "Public-source memo: Delaware officer exculpation",
+        "status": "supplied"
+      }
+    ],
+    "assumptions": ["The reader knows the transaction background."],
+    "gaps": []
+  },
+  "style": {
+    "source": "loxoto",
+    "ref": null
+  },
+  "units": [
+    {
+      "id": "u-answer",
+      "kind": "text",
+      "role": "answer",
+      "claim": "A charter provision can limit covered officers' personal liability for money damages.",
+      "relationship": "containment",
+      "candidates": ["rule then limits", "decision then limits"],
+      "variants": {
+        "a": {
+          "html": "<b>Yes, if the charter says so.</b> The protection stays inside the statutory limits.",
+          "axis": "register",
+          "why": "States the rule before the limits."
+        },
+        "b": {
+          "html": "<b>Yes.</b> Start with the limits, then decide whether to amend the charter.",
+          "axis": "register",
+          "why": "Leads with the decision the reader owns."
+        }
+      },
+      "placeholder": "[The answer paragraph, with the decision in its first sentence.]"
+    },
+    {
+      "id": "u-figure",
+      "kind": "figure",
+      "claim": "The shield covers one class of claims and excludes three others.",
+      "relationship": "containment",
+      "candidates": ["zones", "hierarchy"],
+      "variants": {
+        "a": {
+          "component": "zones",
+          "params": {
+            "zoneA": "Covered by the shield",
+            "itemsA": [
+              {
+                "title": "Careless-decision suits",
+                "detail": "cite-102"
+              }
+            ],
+            "zoneB": "Never covered",
+            "itemsB": [
+              {
+                "title": "Disloyalty",
+                "detail": "cite-102"
+              },
+              {
+                "title": "Bad faith",
+                "detail": "cite-102"
+              },
+              {
+                "title": "The company sues",
+                "detail": "cite-102"
+              }
+            ],
+            "crossing": "The charter line"
+          },
+          "axis": "form",
+          "why": "Enclosure shows what sits inside the shield."
+        },
+        "b": {
+          "component": "hierarchy",
+          "params": {
+            "root": "Officer exculpation",
+            "rootSub": "The charter provision",
+            "branches": [
+              {
+                "title": "Covered",
+                "edge": "the charter shields",
+                "detail": "cite-102"
+              },
+              {
+                "title": "Never covered",
+                "edge": "the statute excludes",
+                "detail": "cite-102"
+              }
+            ]
+          },
+          "axis": "form",
+          "why": "The tree lists the rule and exclusions as branches."
+        }
+      },
+      "placeholder": "[Figure labels for the covered and excluded zones.]",
+      "evidence": ["cite-102"]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "cite-102",
+      "cite": "8 Del. C. §102(b)(7)",
+      "locator": "Section 102(b)(7)",
+      "status": "supplied-unverified"
+    }
+  ]
+}

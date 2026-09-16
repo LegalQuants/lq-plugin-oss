@@ -1,0 +1,159 @@
+{
+  "brief": {
+    "title": "Three fee structures trade predictability against flexibility.",
+    "reader": "The client choosing the fee arrangement",
+    "action": "Choose one fee option before signing the engagement letter",
+    "purpose": "choose",
+    "message": "Choose among hourly, fixed, and capped-hourly fees by weighing budget predictability against scope flexibility.",
+    "spine": "comparison",
+    "situation": "laptop",
+    "form": "one-page",
+    "sources": [
+      {
+        "id": "fee-memo",
+        "label": "Fictional engagement-letter fee options memo",
+        "status": "supplied"
+      }
+    ],
+    "assumptions": [
+      "The review lasts six weeks and the stated scope is complete."
+    ],
+    "gaps": []
+  },
+  "matter": "Engagement letter · fee options",
+  "foot": [
+    "Compare the three options, then choose one before signing.",
+    "Prepared from the supplied fee-options memo"
+  ],
+  "units": {
+    "u-title": {
+      "claim": "Three fee options trade budget predictability against scope flexibility.",
+      "relationship": "comparison",
+      "variants": {
+        "a": "Choose the fee structure that fits the work's uncertainty.",
+        "b": "The six-week review offers three fee structures."
+      }
+    },
+    "u-answer": {
+      "claim": "The fixed fee is most predictable, hourly is most flexible, and capped hourly limits cost while preserving some flexibility.",
+      "relationship": "comparison",
+      "variants": {
+        "a": "<b>Choose on two criteria.</b> Fixed fee gives the most predictable budget. Hourly gives the most flexibility. Capped hourly keeps flexibility and limits the fee to $15,000.",
+        "b": "<b>There are three options.</b> Hourly costs $400 per hour. Fixed fee costs $12,000 for the stated scope. Capped hourly costs $400 per hour, up to $15,000."
+      }
+    },
+    "u-figure": {
+      "claim": "The three options occupy different positions on predictability and flexibility.",
+      "relationship": "comparison",
+      "variants": {
+        "a": {
+          "component": "zones",
+          "params": {
+            "zoneA": "More budget predictability",
+            "itemsA": [
+              {
+                "title": "Fixed fee",
+                "sub": "$12,000 for the stated scope",
+                "detail": "evidence-1"
+              }
+            ],
+            "zoneB": "More scope flexibility",
+            "itemsB": [
+              {
+                "title": "Hourly",
+                "sub": "$400 per hour",
+                "detail": "evidence-1"
+              },
+              {
+                "title": "Capped hourly",
+                "sub": "$400 per hour, capped at $15,000",
+                "detail": "evidence-1"
+              }
+            ],
+            "crossing": "Changes in scope"
+          }
+        },
+        "b": {
+          "component": "hierarchy",
+          "params": {
+            "root": "Choose one fee option",
+            "rootSub": "Before the engagement letter is signed",
+            "branches": [
+              {
+                "title": "Hourly",
+                "sub": "Most flexible",
+                "edge": "$400 per hour",
+                "detail": "evidence-1"
+              },
+              {
+                "title": "Fixed fee",
+                "sub": "Most predictable",
+                "edge": "$12,000",
+                "detail": "evidence-1"
+              },
+              {
+                "title": "Capped hourly",
+                "sub": "Cost ceiling",
+                "edge": "$15,000 cap",
+                "detail": "evidence-1"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "u-card-cover": {
+      "claim": "Hourly is flexible but the total fee is not fixed.",
+      "relationship": "comparison",
+      "variants": {
+        "a": "<h3>When does hourly fit?</h3><div class=\"ld-card-copy\"><p>Use hourly when the scope may change. The rate is $400 per hour and the total is not fixed.</p></div>",
+        "b": "<h3>Hourly.</h3><div class=\"ld-card-copy\"><p>$400 per hour. Highest scope flexibility and lowest budget predictability.</p></div>"
+      }
+    },
+    "u-card-adopt": {
+      "claim": "Fixed fee gives a $12,000 price only for the stated scope.",
+      "relationship": "comparison",
+      "variants": {
+        "a": "<h3>When does fixed fee fit?</h3><div class=\"ld-card-copy\"><p>Use fixed fee when the stated scope is stable. The price is $12,000 for that scope.</p></div>",
+        "b": "<h3>Fixed fee.</h3><div class=\"ld-card-copy\"><p>$12,000 for the stated scope. Highest budget predictability and lowest scope flexibility.</p></div>"
+      }
+    },
+    "u-card-never": {
+      "claim": "Capped hourly charges $400 per hour but stops at $15,000.",
+      "relationship": "comparison",
+      "variants": {
+        "a": "<h3>When does capped hourly fit?</h3><div class=\"ld-card-copy\"><p>Use capped hourly when the scope may change but the client needs a ceiling. The fee stops at $15,000.</p></div>",
+        "b": "<h3>Capped hourly.</h3><div class=\"ld-card-copy\"><p>$400 per hour, capped at $15,000. Some flexibility with a cost ceiling.</p></div>"
+      }
+    },
+    "u-card-why": {
+      "claim": "The choice turns on budget predictability and scope flexibility.",
+      "relationship": "comparison",
+      "variants": {
+        "a": "<h3>Which criteria decide?</h3><div class=\"ld-card-copy\"><p>Budget predictability favors fixed fee. Scope flexibility favors hourly. Capped hourly sits between them.</p></div>",
+        "b": "<h3>Two criteria.</h3><div class=\"ld-card-copy\"><p>Predictability: fixed, then capped hourly, then hourly. Flexibility: hourly, then capped hourly, then fixed.</p></div>"
+      }
+    },
+    "u-next": {
+      "claim": "The client chooses one option before signing.",
+      "relationship": "sequence",
+      "variants": {
+        "a": "<b>Next step.</b> Choose hourly, fixed fee, or capped hourly before signing the engagement letter.",
+        "b": "<b>Your decision.</b> Pick the balance between a predictable budget and flexibility if the scope changes."
+      }
+    },
+    "u-scope": {
+      "claim": "The page compares only the three supplied fee options and two supplied criteria.",
+      "relationship": "containment",
+      "variants": {
+        "a": "This fictional example compares three fee options for a six-week contract review. It does not address expenses, taxes, payment timing, or work outside the stated scope."
+      }
+    }
+  },
+  "evidence": {
+    "cite": "Fee options memo",
+    "locator": "Fee options memo, fee table",
+    "excerpt": "Hourly: $400 per hour. Fixed fee: $12,000 for the stated scope. Capped hourly: $400 per hour, capped at $15,000.",
+    "status": "supplied"
+  }
+}

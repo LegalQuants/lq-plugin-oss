@@ -1,0 +1,97 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "closing-bible receipt (closing-receipt.json)",
+  "description": "PRD §4 outputs: 'closing-receipt.json reconciling expected items, selected sources, included outputs and page counts.' The balance. Recomputed after every run, printed as one line, shown even when complete. expected_items must equal the sum over by_status and every distinct source must sit in exactly one family, or the script refuses to write it (PRD §7: complete source and expected-item accounting). In audit mode included_outputs is empty.",
+  "type": "object",
+  "required": ["schema_version", "corpus_id", "mode", "index_approved", "expected_items", "by_status", "unexpected_families", "sources", "inspection", "sigpack", "package", "included_outputs", "outcome", "as_of"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "corpus_id": { "type": "string" },
+    "mode": { "enum": ["audit", "build", "update"] },
+    "index_approved": { "type": "boolean" },
+    "expected_items": { "type": "integer", "minimum": 0 },
+    "by_status": {
+      "type": "object",
+      "required": ["ready", "unsigned", "undated", "incomplete", "version-conflict", "missing", "unreadable", "not-required"],
+      "additionalProperties": false,
+      "properties": {
+        "ready": { "type": "integer", "minimum": 0 },
+        "unsigned": { "type": "integer", "minimum": 0 },
+        "undated": { "type": "integer", "minimum": 0 },
+        "incomplete": { "type": "integer", "minimum": 0 },
+        "version-conflict": { "type": "integer", "minimum": 0 },
+        "missing": { "type": "integer", "minimum": 0 },
+        "unreadable": { "type": "integer", "minimum": 0 },
+        "not-required": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "unexpected_families": { "type": "integer", "minimum": 0 },
+    "sources": {
+      "type": "object",
+      "required": ["files", "distinct", "in_families", "duplicates", "unreadable", "skipped"],
+      "additionalProperties": false,
+      "properties": {
+        "files": { "type": "integer", "minimum": 0 },
+        "distinct": { "type": "integer", "minimum": 0 },
+        "in_families": { "type": "integer", "minimum": 0, "description": "Must equal distinct." },
+        "duplicates": { "type": "integer", "minimum": 0, "description": "Must equal files − distinct." },
+        "unreadable": { "type": "integer", "minimum": 0, "description": "Distinct source documents whose census readability is encrypted, corrupt or suspect. Any value above 0 fails the receipt (status-taxonomy.md outcomes)." },
+        "skipped": { "type": "integer", "minimum": 0, "description": "Entries the census listed under skipped[] with reason symlink-outside-root, unreadable-directory or special-file. Hidden entries are listed but not counted. Any value above 0 keeps the receipt from complete." }
+      }
+    },
+    "inspection": {
+      "type": "object",
+      "required": ["families", "inspected", "rejected"],
+      "additionalProperties": false,
+      "properties": {
+        "families": { "type": "integer", "minimum": 0 },
+        "inspected": { "type": "integer", "minimum": 0, "description": "Families with a valid inspection record. Fewer than families means some were not looked at; the gap is named in exceptions.md, never absorbed." },
+        "rejected": { "type": "integer", "minimum": 0, "description": "Inspection records that failed validation (wrong members, disallowed status, ready on filename-only evidence). Each is named in exceptions.md with its reason." }
+      }
+    },
+    "sigpack": {
+      "type": "object",
+      "required": ["ledger_supplied", "ledger_current", "documents_cited"],
+      "additionalProperties": false,
+      "properties": {
+        "ledger_supplied": { "type": "boolean" },
+        "ledger_current": { "type": ["boolean", "null"] },
+        "documents_cited": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "package": {
+      "type": ["object", "null"],
+      "description": "build/update only; null in audit. The versioned package this receipt describes (assembly-rules.md).",
+      "required": ["version", "folder", "prior_folder", "combined_pdf", "volumes", "conversions_unverified"],
+      "additionalProperties": false,
+      "properties": {
+        "version": { "type": "integer", "minimum": 1 },
+        "folder": { "type": "string" },
+        "prior_folder": { "type": ["string", "null"] },
+        "combined_pdf": { "type": ["string", "null"], "description": "closing-bible.pdf, or null when it could not be built (no pypdf) or volumes were written." },
+        "volumes": { "type": "array", "items": { "type": "string" } },
+        "conversions_unverified": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "included_outputs": {
+      "type": "array",
+      "description": "build/update only: one row per plan entry, page counts reconciled to the selected source (or its verified conversion). Empty in audit mode.",
+      "items": {
+        "type": "object",
+        "required": ["item_id", "status", "output", "pages_expected", "pages_included", "reconciled"],
+        "additionalProperties": false,
+        "properties": {
+          "item_id": { "type": "string" },
+          "status": { "enum": ["ready", "unsigned", "undated", "incomplete"] },
+          "output": { "type": "string", "description": "The indexed-set file name, and the combined PDF (or volume) page range when included there." },
+          "pages_expected": { "type": ["integer", "null"] },
+          "pages_included": { "type": ["integer", "null"] },
+          "reconciled": { "type": "boolean" }
+        }
+      }
+    },
+    "outcome": { "enum": ["complete", "qualified", "failed"] },
+    "as_of": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" }
+  }
+}

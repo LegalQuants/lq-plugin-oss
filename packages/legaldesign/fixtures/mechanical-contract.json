@@ -1,0 +1,175 @@
+{
+  "version": 2,
+  "default_outputs": ["working-html"],
+  "runtime_ids": [
+    "flow",
+    "timeline",
+    "hierarchy",
+    "zones",
+    "beforeAfter",
+    "hub",
+    "compareTwo",
+    "funnel",
+    "loop",
+    "matrix",
+    "figurePath",
+    "stairSteps",
+    "pyramid",
+    "gears",
+    "rungBars",
+    "hairlineLine",
+    "hairlineArea",
+    "tickDonut",
+    "tickRows",
+    "pairedRungs",
+    "stackedRungs",
+    "plumbScatter",
+    "rungWaterfall",
+    "dotHeat",
+    "tickGauge",
+    "dumbbell",
+    "treemap",
+    "rungHistogram",
+    "tickBox",
+    "streamRibbon",
+    "rangeBars"
+  ],
+  "templates": {
+    "ban_list": [
+      "{{text_",
+      "[Editable content]",
+      "Visualization template",
+      "data:image",
+      "http://",
+      "https://"
+    ],
+    "files": [
+      {
+        "source_asset": "stacked-explainer.html",
+        "path": "skills/core/legaldesign/assets/templates/stacked-explainer.template.html"
+      },
+      {
+        "source_asset": "slide-brief.html",
+        "path": "skills/core/legaldesign/assets/templates/slide-brief.template.html"
+      },
+      {
+        "source_asset": "diligence-report.html",
+        "path": "skills/core/legaldesign/assets/templates/diligence-report.template.html"
+      },
+      {
+        "source_asset": "method-map.html",
+        "path": "skills/core/legaldesign/assets/templates/method-map.template.html"
+      }
+    ]
+  },
+  "cases": {
+    "case-01-memo-decision-map": {
+      "mode": "stacked-explainer",
+      "output": "skills/core/legaldesign/assets/stacked-explainer.html",
+      "mode_markers": [
+        "name=\"stacked-explainer-build\"",
+        "id=\"diagram-host\""
+      ],
+      "required_behaviors": [
+        "direct-text-editing",
+        "portable-state",
+        "export-html",
+        "export-template",
+        "light-dark-theme",
+        "reduced-motion",
+        "source-exhibit",
+        "four-controls",
+        "pure-black-ground",
+        "underlined-links",
+        "no-motion-runtime"
+      ],
+      "human_gates": [
+        "under-ten-minutes",
+        "factual-and-citation-fidelity",
+        "client-comprehension",
+        "lawyer-last-mile-edit",
+        "template-export-reopen-and-leak-scan"
+      ]
+    },
+    "case-02-walkthrough": {
+      "mode": "walkthrough",
+      "output": "skills/core/legaldesign/assets/slide-brief.html",
+      "mode_markers": ["class=\"sb-slide\"", "data-frame=\"1\""],
+      "required_behaviors": [
+        "direct-text-editing",
+        "portable-state",
+        "export-html",
+        "export-template",
+        "light-dark-theme",
+        "reduced-motion",
+        "four-controls",
+        "pure-black-ground",
+        "underlined-links",
+        "no-motion-runtime",
+        "multiple-slides",
+        "decision-units"
+      ],
+      "human_gates": [
+        "source-fidelity",
+        "one-point-per-slide",
+        "decision-round-trip",
+        "lawyer-last-mile-edit",
+        "template-cold-read"
+      ]
+    },
+    "case-03-diligence-report": {
+      "mode": "report",
+      "output": "skills/core/legaldesign/assets/diligence-report.html",
+      "mode_markers": ["id=\"rail-handle\"", "data-frame=\"1\""],
+      "required_behaviors": [
+        "direct-text-editing",
+        "portable-state",
+        "export-html",
+        "export-template",
+        "light-dark-theme",
+        "reduced-motion",
+        "four-controls",
+        "pure-black-ground",
+        "underlined-links",
+        "no-motion-runtime",
+        "multiple-slides",
+        "report-register",
+        "diligence-report-geometry"
+      ],
+      "human_gates": [
+        "source-fidelity",
+        "dashboard-checklist-finding-comprehension",
+        "unmistakably-fictional",
+        "lawyer-last-mile-edit",
+        "template-cold-read"
+      ]
+    },
+    "case-04-method-map": {
+      "mode": "one-page",
+      "output": "skills/core/legaldesign/assets/method-map.html",
+      "mode_markers": [
+        "name=\"stacked-explainer-build\"",
+        "id=\"diagram-host\""
+      ],
+      "required_behaviors": [
+        "direct-text-editing",
+        "portable-state",
+        "export-html",
+        "export-template",
+        "light-dark-theme",
+        "reduced-motion",
+        "source-exhibit",
+        "four-controls",
+        "pure-black-ground",
+        "underlined-links",
+        "no-motion-runtime"
+      ],
+      "human_gates": [
+        "source-fidelity",
+        "first-use-comprehension",
+        "lawyer-last-mile-edit",
+        "template-cold-read"
+      ]
+    }
+  }
+}

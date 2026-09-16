@@ -1,0 +1,6 @@
+{
+  "form": "one-page",
+  "strategy": "template-import",
+  "template": "stacked-explainer",
+  "sourceAsset": "stacked-explainer.template.html"
+}

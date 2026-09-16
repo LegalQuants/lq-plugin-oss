@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://legalquants.example/schemas/definition-check-context-result-v1.json",
+  "title": "Definition Check Context Retrieval Result",
+  "type": "object",
+  "required": ["schema_version", "source", "request", "evidence", "note"],
+  "properties": {
+    "schema_version": { "const": "context-result-v1" },
+    "source": {
+      "type": "object",
+      "required": ["document_id", "sha256"],
+      "properties": {
+        "document_id": { "type": "string", "minLength": 1 },
+        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      },
+      "additionalProperties": false
+    },
+    "request": { "$ref": "context-request-schema.json" },
+    "evidence": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/evidence" }
+    },
+    "note": { "type": ["string", "null"] },
+    "view_type": { "const": "bounded_context_retrieval" },
+    "authority": { "const": "source_evidence_only" },
+    "matter_id": { "type": "string", "minLength": 1 },
+    "document_id": { "type": "string", "minLength": 1 },
+    "version_id": { "type": "string", "minLength": 1 },
+    "snapshot_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+  },
+  "allOf": [
+    {
+      "if": { "required": ["matter_id"] },
+      "then": {
+        "required": ["view_type", "authority", "matter_id", "document_id", "version_id", "snapshot_sha256"]
+      },
+      "else": {
+        "not": {
+          "anyOf": [
+            { "required": ["view_type"] },
+            { "required": ["authority"] },
+            { "required": ["document_id"] },
+            { "required": ["version_id"] },
+            { "required": ["snapshot_sha256"] }
+          ]
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "location": {
+      "type": "object",
+      "required": ["part", "block_id", "block_order", "char_start", "char_end"],
+      "properties": {
+        "part": { "type": "string", "minLength": 1 },
+        "block_id": { "type": "string", "minLength": 1 },
+        "block_order": { "type": "integer", "minimum": 0 },
+        "char_start": { "type": "integer", "minimum": 0 },
+        "char_end": { "type": "integer", "minimum": 0 },
+        "matter_id": { "type": "string", "minLength": 1 },
+        "document_id": { "type": "string", "minLength": 1 },
+        "version_id": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "evidence": {
+      "type": "object",
+      "required": ["id", "location", "excerpt", "stance", "method"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "location": { "$ref": "#/$defs/location" },
+        "excerpt": { "type": "string", "minLength": 1, "maxLength": 4000 },
+        "stance": { "enum": ["supports", "contradicts", "context"] },
+        "method": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

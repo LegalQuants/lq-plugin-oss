@@ -1,0 +1,8 @@
+interface:
+  display_name: "Definition Check"
+  short_description: "Check defined terms in contracts"
+  default_prompt: "Run a definition check on the selected contract and report coverage, findings, and evidence."
+  brand_color: "#2d2d2d"
+
+policy:
+  allow_implicit_invocation: true

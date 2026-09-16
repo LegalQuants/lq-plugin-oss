@@ -1,0 +1,8 @@
+interface:
+  display_name: "My LQ Moment"
+  short_description: "Certify and share a genuine legal-AI win — or an honest no"
+  default_prompt: "Use $my-lq-moment to check whether this session earned an LQ Moment."
+  brand_color: "#2d2d2d"
+
+policy:
+  allow_implicit_invocation: false

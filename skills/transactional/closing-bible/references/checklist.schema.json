@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "closing-bible checklist (checklist.json)",
+  "description": "PRD §4 'Expected-set reconciliation', precedence 1: a user-approved closing checklist or index. The lawyer's list of what the closing set must contain. When a checklist is supplied, its execution_expected wins over inspection's, and its order is the bible's order.",
+  "type": "object",
+  "required": ["matter", "items"],
+  "additionalProperties": false,
+  "properties": {
+    "matter": { "type": "string" },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["ref", "title", "execution_expected"],
+        "additionalProperties": false,
+        "properties": {
+          "ref": { "type": "string", "description": "The checklist's own row reference, e.g. '3.2'. Copied into closing-index items[].checklist_ref." },
+          "title": { "type": "string" },
+          "execution_expected": { "type": "boolean" },
+          "parties": { "type": "array", "items": { "type": "string" }, "description": "Optional. Copied into the index item where given." }
+        }
+      }
+    }
+  }
+}

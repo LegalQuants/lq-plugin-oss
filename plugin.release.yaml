@@ -1,0 +1,57 @@
+release:
+  version: 0.1.0
+  author:
+    name: LegalQuants
+    url: https://legalquants.com
+  homepage: https://github.com/LegalQuants/lq-plugin-oss
+  repository: https://github.com/LegalQuants/lq-plugin-oss
+  keywords:
+    - legal
+    - skills
+    - agents
+
+plugins:
+  - id: legalquants-litigation
+    display_name: LegalQuants Skills for Litigators
+    description: Source-grounded legal workflows for litigators, with shared daily-practice tools.
+    short_description: Source-grounded workflows for litigators
+    first_move: "Have a filing? $cite-check on it."
+    skill_groups:
+      - core
+      - litigation
+  - id: legalquants-transactional
+    display_name: LegalQuants Skills for Transactional Attorneys
+    description: Contract and deal workflows for transactional attorneys, with shared daily-practice tools.
+    short_description: Contract and deal workflows
+    first_move: "Have a markup? $read-redline on it."
+    skill_groups:
+      - core
+      - transactional
+  - id: legalquants-companion
+    display_name: The LegalQuants Companion
+    description: Your journey with AI as a lawyer — ask, assess, reflect, apply, connect.
+    short_description: Your journey with AI as a lawyer
+    first_move: "New here? $legalquants walks you in."
+    skill_groups:
+      - companion
+    include_skills:
+      - core/lq-start
+
+providers:
+  claude-code:
+    display_name: Claude Code
+    categories:
+      - productivity
+      - legal
+  openai:
+    display_name: LegalQuants Skills
+    categories:
+      - productivity
+      - legal
+
+compatibility:
+  required:
+    - agent-skills
+  optional:
+    - filesystem-read
+    - process-exec

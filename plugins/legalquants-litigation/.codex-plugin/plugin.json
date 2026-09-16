@@ -1,0 +1,28 @@
+{
+  "name": "legalquants-litigation",
+  "version": "0.1.0",
+  "description": "Source-grounded legal workflows for litigators, with shared daily-practice tools.",
+  "skills": "./skills/",
+  "author": {
+    "name": "LegalQuants",
+    "url": "https://legalquants.com"
+  },
+  "homepage": "https://github.com/LegalQuants/lq-plugin-oss",
+  "repository": "https://github.com/LegalQuants/lq-plugin-oss",
+  "keywords": [
+    "legal",
+    "skills",
+    "agents"
+  ],
+  "interface": {
+    "displayName": "LegalQuants Skills for Litigators",
+    "shortDescription": "Source-grounded workflows for litigators",
+    "longDescription": "Source-grounded legal workflows for litigators, with shared daily-practice tools.",
+    "developerName": "LegalQuants",
+    "category": "Productivity",
+    "logo": "./assets/lq-logo.png",
+    "composerIcon": "./assets/lq-logo.png",
+    "websiteURL": "https://github.com/LegalQuants/lq-plugin-oss"
+  },
+  "hooks": "./hooks/openai.json"
+}

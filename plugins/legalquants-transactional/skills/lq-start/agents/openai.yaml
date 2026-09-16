@@ -1,0 +1,8 @@
+interface:
+  display_name: "Start"
+  short_description: "Which skill fits your work. Same door in every LegalQuants plugin; pick any"
+  default_prompt: "Use $lq-start to tell me which skill fits: <the task in front of you, or your practice>"
+  brand_color: "#2d2d2d"
+
+policy:
+  allow_implicit_invocation: false

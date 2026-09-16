@@ -1,0 +1,43 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if [ ! -f \"${PLUGIN_ROOT}/hooks/wiki_hook.py\" ]; then exit 0; fi; python3 \"${PLUGIN_ROOT}/hooks/wiki_hook.py\" session-start",
+            "commandWindows": "if not exist \"%PLUGIN_ROOT%\\hooks\\wiki_hook.py\" (exit /b 0) else (py -3 \"%PLUGIN_ROOT%\\hooks\\wiki_hook.py\" session-start)",
+            "timeout": 5,
+            "additionalContextLimit": 240
+          }
+        ]
+      },
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if [ ! -f \"${PLUGIN_ROOT}/hooks/banner.py\" ]; then exit 0; fi; python3 \"${PLUGIN_ROOT}/hooks/banner.py\"",
+            "commandWindows": "if not exist \"%PLUGIN_ROOT%\\hooks\\banner.py\" (exit /b 0) else (py -3 \"%PLUGIN_ROOT%\\hooks\\banner.py\")",
+            "timeout": 5,
+            "additionalContextLimit": 600
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if [ ! -f \"${PLUGIN_ROOT}/hooks/wiki_hook.py\" ]; then exit 0; fi; python3 \"${PLUGIN_ROOT}/hooks/wiki_hook.py\" prompt-submit",
+            "commandWindows": "if not exist \"%PLUGIN_ROOT%\\hooks\\wiki_hook.py\" (exit /b 0) else (py -3 \"%PLUGIN_ROOT%\\hooks\\wiki_hook.py\" prompt-submit)",
+            "timeout": 5,
+            "additionalContextLimit": 900
+          }
+        ]
+      }
+    ]
+  }
+}

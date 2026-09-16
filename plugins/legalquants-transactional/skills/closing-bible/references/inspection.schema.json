@@ -1,0 +1,77 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "closing-bible inspection (inspection.json)",
+  "description": "PRD §4 'Version selection' and 'Execution evidence': for each family, the proposed selected source, a structured execution finding, the missing components, and the evidence — matching execution pages, date, version marker, completeness, checklist reference and hash. Written by the skill after it has looked at the documents; validated by the reconciliation script before anything is counted. Anything outside this shape, or a proposed_status the findings do not support (status-taxonomy.md 'Derivation'), is rejected with a named reason. Inspection proposes; reconciliation and the user decide.",
+  "type": "object",
+  "required": ["schema_version", "corpus_id", "families"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "corpus_id": { "type": "string", "description": "Must equal the manifest's corpus_id; an inspection of a different folder is refused." },
+    "families": { "type": "array", "items": { "$ref": "#/definitions/family_inspection" } }
+  },
+  "definitions": {
+    "family_inspection": {
+      "type": "object",
+      "required": ["family_id", "member_ids", "proposed_pick", "proposed_status", "execution_expected", "execution", "evidence", "missing_components", "note"],
+      "additionalProperties": false,
+      "properties": {
+        "family_id": { "type": "string", "pattern": "^fam_[0-9a-f]{12}$" },
+        "member_ids": { "type": "array", "minItems": 1, "items": { "type": "string", "pattern": "^sha256:[0-9a-f]{12}$" }, "description": "Must equal the family's members in families.json." },
+        "proposed_pick": { "type": ["string", "null"], "pattern": "^sha256:[0-9a-f]{12}$", "description": "The member proposed as the final version. null when proposed_status is version-conflict or unreadable." },
+        "proposed_status": { "enum": ["ready", "unsigned", "undated", "incomplete", "version-conflict", "unreadable"], "description": "Must equal the status the derivation table produces from execution, execution_expected and missing_components; otherwise the record is rejected." },
+        "execution_expected": { "type": "boolean", "description": "Whether the parties sign this document (agreement, deed, certificate) rather than it being a schedule, filing receipt or unsigned exhibit. When a checklist supplies this, the checklist wins." },
+        "execution": { "$ref": "#/definitions/execution_finding" },
+        "evidence": { "type": "array", "minItems": 1, "items": { "$ref": "#/definitions/evidence" } },
+        "missing_components": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["component", "referenced_at"],
+            "additionalProperties": false,
+            "properties": {
+              "component": { "type": "string", "description": "e.g. Schedule 3, Annex B, page 14" },
+              "referenced_at": { "type": "string", "description": "Where the reference was seen: a clause, a contents page, or a checklist row." }
+            }
+          }
+        },
+        "note": { "type": "string", "maxLength": 1000 }
+      }
+    },
+    "execution_finding": {
+      "type": "object",
+      "description": "PRD §4 'Execution evidence' (without a ledger, render and inspect the execution pages: appears signed / appears incomplete / unclear) and 'Execution spotlight' (apparent document date, signature-page locations). This is what the no-ledger path populates the index and overview from. When a current sigpack ledger covers the pick, reconciliation overrides these from the ledger (rule 4).",
+      "required": ["apparent_status", "dated", "document_date", "signature_pages"],
+      "additionalProperties": false,
+      "properties": {
+        "apparent_status": { "enum": ["appears-signed", "appears-incomplete", "appears-unsigned", "unclear", "not-expected", "not-inspected"], "description": "not-expected when execution_expected is false; not-inspected when the pages could not be looked at (say why in note)." },
+        "dated": { "enum": ["dated", "undated", "not-expected", "unclear"] },
+        "document_date": { "type": ["string", "null"], "description": "The date as printed on the execution page, verbatim. Never from a filename or timestamp (rule 3)." },
+        "signature_pages": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["document_id", "page"],
+            "additionalProperties": false,
+            "properties": {
+              "document_id": { "type": "string", "pattern": "^sha256:[0-9a-f]{12}$" },
+              "page": { "type": ["integer", "null"], "minimum": 1 }
+            }
+          }
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "required": ["claim", "source", "document_id", "locator", "observation"],
+      "additionalProperties": false,
+      "properties": {
+        "claim": { "enum": ["version", "execution", "date", "completeness", "identity"] },
+        "source": { "enum": ["sigpack-ledger", "visual-inspection", "text-extraction", "filename", "checklist"], "description": "sigpack-ledger and visual-inspection are the only sources that may support an execution or date claim (status-taxonomy.md rule 1)." },
+        "document_id": { "type": ["string", "null"], "pattern": "^sha256:[0-9a-f]{12}$" },
+        "locator": { "type": "string", "description": "Page, ledger page id (e.g. SPA-p13) or filename — precise enough for the lawyer to look at the same thing." },
+        "observation": { "type": "string", "maxLength": 500, "description": "What was seen. 'Seller block carries a signature and printed name.' Never 'validly executed'." }
+      }
+    }
+  }
+}

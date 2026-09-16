@@ -1,0 +1,887 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://legalquants.com/schemas/legaldesign-build-spec.schema.json",
+  "title": "LegalDesign build specification",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "enum": [
+        "legaldesign.build.v2",
+        "legaldesign.build.v3",
+        "legaldesign.build.v4"
+      ]
+    },
+    "brief": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reader": {
+          "type": "string",
+          "minLength": 1
+        },
+        "action": {
+          "type": "string",
+          "minLength": 1
+        },
+        "purpose": {
+          "enum": [
+            "decide",
+            "understand",
+            "choose",
+            "status",
+            "other"
+          ]
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1
+        },
+        "spine": {
+          "enum": [
+            "sequence",
+            "time",
+            "hierarchy",
+            "containment",
+            "comparison",
+            "convergence",
+            "feedback",
+            "priority",
+            "progression",
+            "interaction",
+            "part-of-whole",
+            "distribution",
+            "correlation",
+            "change",
+            "quantity"
+          ]
+        },
+        "situation": {
+          "enum": [
+            "laptop",
+            "phone",
+            "meeting",
+            "print"
+          ]
+        },
+        "form": {
+          "enum": [
+            "one-page",
+            "slide-brief",
+            "walkthrough",
+            "report",
+            "custom"
+          ]
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "label": {
+                "type": "string",
+                "minLength": 1
+              },
+              "status": {
+                "enum": [
+                  "supplied",
+                  "supplied-unverified",
+                  "verified",
+                  "retrieved",
+                  "unavailable"
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "label",
+              "status"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "assumptions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "gaps": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "required": [
+        "reader",
+        "action",
+        "purpose",
+        "message",
+        "spine",
+        "situation",
+        "form",
+        "sources",
+        "assumptions",
+        "gaps"
+      ],
+      "additionalProperties": false
+    },
+    "style": {
+      "type": "object",
+      "properties": {
+        "source": {
+          "enum": [
+            "loxoto",
+            "design-md",
+            "template",
+            "playbook"
+          ]
+        },
+        "ref": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "source",
+        "ref"
+      ],
+      "additionalProperties": false
+    },
+    "overview": {
+      "type": "object",
+      "properties": {
+        "sectionId": {"type": "string", "minLength": 1},
+        "contextUnitIds": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "questionUnitId": {"type": "string", "minLength": 1},
+        "answerUnitId": {"type": "string", "minLength": 1},
+        "groups": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 12,
+          "items": {
+            "type": "object",
+            "properties": {
+              "label": {"type": "string", "minLength": 1, "maxLength": 48, "pattern": "\\S"},
+              "topicUnitIds": {
+                "type": "array", "minItems": 1, "uniqueItems": true,
+                "items": {"type": "string", "minLength": 1}
+              }
+            },
+            "required": ["label", "topicUnitIds"],
+            "additionalProperties": false
+          }
+        },
+        "topics": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "unitId": {"type": "string", "minLength": 1},
+              "targetSectionId": {"type": "string", "minLength": 1}
+            },
+            "required": ["unitId", "targetSectionId"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": ["sectionId", "contextUnitIds", "questionUnitId", "answerUnitId", "topics"],
+      "additionalProperties": false
+    },
+    "composition": {
+      "type": "object",
+      "properties": {
+        "strategy": {
+          "enum": [
+            "composed",
+            "template-import"
+          ]
+        },
+        "shape": {
+          "type": "string",
+          "minLength": 1
+        },
+        "rationale": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sections": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {"type": "string", "minLength": 1},
+              "purpose": {"type": "string", "minLength": 1},
+              "indexLabel": {"type": "string", "minLength": 1, "maxLength": 48},
+              "issueLayout": {"$ref": "#/$defs/issueLayout"},
+              "unitIds": {
+                "type": "array",
+                "minItems": 1,
+                "items": {"type": "string", "minLength": 1},
+                "uniqueItems": true
+              },
+              "layout": {
+                "type": "object",
+                "properties": {
+                  "columns": {"const": 12},
+                  "placements": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "unitId": {"type": "string", "minLength": 1},
+                        "row": {"type": "integer", "minimum": 1},
+                        "rowSpan": {
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 12,
+                          "default": 1
+                        },
+                        "column": {
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 12
+                        },
+                        "span": {
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 12
+                        }
+                      },
+                      "required": ["unitId", "row", "column", "span"],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "required": ["columns", "placements"],
+                "additionalProperties": false
+              }
+            },
+            "required": ["id", "purpose", "unitIds"],
+            "anyOf": [{"required": ["layout"]}, {"required": ["issueLayout"]}],
+            "additionalProperties": false
+          }
+        },
+        "templateRef": {
+          "type": ["string", "null"]
+        }
+      },
+      "required": ["strategy", "shape", "rationale", "sections", "templateRef"],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {"properties": {"strategy": {"const": "composed"}}},
+          "then": {"properties": {"templateRef": {"const": null}}},
+          "else": {"properties": {"templateRef": {"type": "string", "minLength": 1}}}
+        }
+      ]
+    },
+    "approaches": {
+      "type": "object",
+      "properties": {
+        "a": {"$ref": "#/$defs/approach"},
+        "b": {"$ref": "#/$defs/approach"}
+      },
+      "required": ["a", "b"],
+      "additionalProperties": false
+    },
+    "claims": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "text": {"type": "string", "minLength": 1},
+          "kind": {"enum": ["material", "context"]},
+          "sourceIds": {
+            "type": "array",
+            "minItems": 1,
+            "items": {"type": "string", "minLength": 1},
+            "uniqueItems": true
+          },
+          "placement": {"enum": ["surface", "detail", "omitted"]},
+          "evidenceIds": {
+            "type": "array",
+            "items": {"type": "string", "minLength": 1},
+            "uniqueItems": true
+          },
+          "omissionReason": {"type": "string", "minLength": 1}
+        },
+        "required": ["id", "text", "kind", "sourceIds", "placement", "evidenceIds"],
+        "additionalProperties": false
+      }
+    },
+    "units": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "enum": [
+              "text",
+              "card",
+              "figure",
+              "table",
+              "evidence",
+              "decision"
+            ]
+          },
+          "role": {
+            "enum": [
+              "title",
+              "answer",
+              "summary",
+              "action",
+              "scope",
+              "finding",
+              "expected",
+              "matter"
+            ]
+          },
+          "claim": {
+            "type": "string",
+            "minLength": 1
+          },
+          "relationship": {
+            "enum": [
+              "sequence",
+              "time",
+              "hierarchy",
+              "containment",
+              "comparison",
+              "convergence",
+              "feedback",
+              "priority",
+              "progression",
+              "interaction",
+              "part-of-whole",
+              "distribution",
+              "correlation",
+              "change",
+              "quantity"
+            ]
+          },
+          "candidates": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "variants": {
+            "type": "object",
+            "properties": {
+              "a": {
+                "type": "object",
+                "properties": {
+                  "html": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "component": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "params": {
+                    "type": "object"
+                  },
+                  "axis": {
+                    "enum": [
+                      "form",
+                      "framing",
+                      "granularity",
+                      "emphasis",
+                      "layout",
+                      "register"
+                    ]
+                  },
+                  "why": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "encoding": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "axis",
+                  "why"
+                ],
+                "additionalProperties": false,
+                "oneOf": [
+                  {"not": {"anyOf": [{"required": ["html"]}, {"required": ["component"]}, {"required": ["params"]}]}},
+                  {
+                    "required": [
+                      "html"
+                    ],
+                    "not": {
+                      "required": [
+                        "component"
+                      ]
+                    }
+                  },
+                  {
+                    "required": [
+                      "component",
+                      "params"
+                    ],
+                    "not": {
+                      "required": [
+                        "html"
+                      ]
+                    }
+                  }
+                ]
+              },
+              "b": {
+                "type": "object",
+                "properties": {
+                  "html": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "component": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "params": {
+                    "type": "object"
+                  },
+                  "axis": {
+                    "enum": [
+                      "form",
+                      "framing",
+                      "granularity",
+                      "emphasis",
+                      "layout",
+                      "register"
+                    ]
+                  },
+                  "why": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "encoding": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "axis",
+                  "why"
+                ],
+                "additionalProperties": false,
+                "oneOf": [
+                  {
+                    "required": [
+                      "html"
+                    ],
+                    "not": {
+                      "required": [
+                        "component"
+                      ]
+                    }
+                  },
+                  {
+                    "required": [
+                      "component",
+                      "params"
+                    ],
+                    "not": {
+                      "required": [
+                        "html"
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            "required": [
+              "a"
+            ],
+            "additionalProperties": false
+          },
+          "placeholder": {
+            "type": "string",
+            "minLength": 1
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "detail": {
+            "type": "string",
+            "minLength": 1,
+            "description": "One purpose-specific popup opened by the whole semantic unit."
+          },
+          "detailAnchor": {
+            "type": "string", "minLength": 1, "maxLength": 64,
+            "description": "Text units only: a short exact phrase in the copy to underline as the popup link. Without it, the runtime adds a separate named detail link."
+          },
+          "sourcePreview": {"const": true, "description": "V4 evidence units only. Derive the source panel from detail's explicit excerpt or authenticated exhibit, not arbitrary HTML."},
+          "claimRefs": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "single": {
+            "type": "boolean"
+          },
+          "question": {
+            "type": "string",
+            "minLength": 1
+          },
+          "selection_mode": {
+            "enum": ["single", "multiple"]
+          },
+          "allow_custom": {
+            "type": "boolean"
+          },
+          "allow_note": {
+            "type": "boolean"
+          },
+          "options": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "type": "object",
+              "properties": {
+                "key": {"type": "string", "minLength": 1},
+                "label": {"type": "string", "minLength": 1},
+                "consequence": {"type": "string", "minLength": 1}
+              },
+              "required": ["key", "label", "consequence"],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "claim",
+          "relationship",
+          "candidates",
+          "variants",
+          "placeholder"
+        ],
+        "additionalProperties": false,
+        "allOf": [{
+          "if": {"required": ["sourcePreview"]},
+          "then": {
+            "required": ["detail"],
+            "properties": {
+              "kind": {"const": "evidence"},
+              "variants": {"properties": {"a": {"not": {"anyOf": [{"required": ["html"]}, {"required": ["component"]}, {"required": ["params"]}]}}}}
+            }
+          },
+          "else": {"properties": {"variants": {"properties": {"a": {"anyOf": [{"required": ["html"]}, {"required": ["component"]}]}}}}}
+        }]
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "cite": {
+            "type": "string",
+            "minLength": 1
+          },
+          "locator": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "enum": [
+              "supplied",
+              "supplied-unverified",
+              "verified",
+              "retrieved",
+              "unavailable"
+            ]
+          },
+          "sourceId": {"type": "string", "minLength": 1},
+          "claimRefs": {
+            "type": "array",
+            "minItems": 1,
+            "items": {"type": "string", "minLength": 1},
+            "uniqueItems": true
+          },
+          "detail": {"type": "string", "minLength": 1},
+          "excerpt": {"type": "string", "minLength": 1},
+          "exhibit": {
+            "type": "object",
+            "description": "Supplied source clip; byte integrity is checked, source authenticity is not inferred.",
+            "properties": {
+              "data": {"type": "string", "maxLength": 5600000, "pattern": "^data:image/(png|jpeg);base64,[A-Za-z0-9+/]+={0,2}$"},
+              "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+              "sourceSha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+              "locator": {"type": "string", "minLength": 1},
+              "captureMethod": {"type": "string", "minLength": 1},
+              "capturedAt": {"type": "string", "minLength": 1},
+              "alt": {"type": "string", "minLength": 1}
+            },
+            "required": ["data", "sha256", "sourceSha256", "locator", "captureMethod", "capturedAt", "alt"],
+            "additionalProperties": false
+          },
+          "popup": {
+            "type": "object",
+            "properties": {
+              "type": {"enum": ["source", "explainer", "detail"]},
+              "title": {"type": "string", "minLength": 1},
+              "lede": {"type": "string", "minLength": 1},
+              "sections": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "heading": {"type": "string", "minLength": 1},
+                    "body": {"type": "string", "minLength": 1}
+                  },
+                  "required": ["heading", "body"],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": ["type", "title", "sections"],
+            "additionalProperties": false
+          },
+          "original": {
+            "type": "object",
+            "properties": {
+              "availability": {"enum": ["linked", "unavailable"]},
+              "href": {"type": "string", "minLength": 1},
+              "label": {"type": "string", "minLength": 1}
+            },
+            "required": ["availability", "label"],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "cite",
+          "locator",
+          "status"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "brief",
+    "style",
+    "units",
+    "evidence"
+  ],
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {"schemaVersion": {"enum": ["legaldesign.build.v3", "legaldesign.build.v4"]}},
+        "required": ["schemaVersion"]
+      },
+      "then": {
+        "required": ["claims"],
+        "properties": {
+          "brief": {"required": ["title"]},
+          "units": {
+            "items": {
+              "required": ["claimRefs"],
+              "properties": {
+                "variants": {
+                  "maxProperties": 1,
+                  "not": {"required": ["b"]},
+                  "properties": {
+                    "a": {"required": ["encoding"]}
+                  }
+                }
+              },
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {"kind": {"const": "decision"}},
+                    "required": ["kind"]
+                  },
+                  "then": {
+                    "required": [
+                      "question",
+                      "selection_mode",
+                      "allow_custom",
+                      "allow_note",
+                      "options"
+                    ],
+                    "not": {"required": ["detail"]}
+                  },
+                  "else": {
+                    "not": {
+                      "anyOf": [
+                        {"required": ["question"]},
+                        {"required": ["selection_mode"]},
+                        {"required": ["allow_custom"]},
+                        {"required": ["allow_note"]},
+                        {"required": ["options"]}
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "evidence": {
+            "items": {"required": ["sourceId", "claimRefs", "detail", "original", "popup"]}
+          }
+        }
+      },
+      "else": {
+        "not": {
+          "anyOf": [
+            {"required": ["approaches"]},
+            {"required": ["claims"]}
+          ]
+        },
+        "properties": {
+          "brief": {"not": {"required": ["title"]}},
+          "units": {
+            "items": {
+              "not": {
+                "anyOf": [
+                  {"required": ["claimRefs"]},
+                  {"required": ["question"]},
+                  {"required": ["selection_mode"]},
+                  {"required": ["allow_custom"]},
+                  {"required": ["allow_note"]},
+                  {"required": ["options"]}
+                ]
+              },
+              "properties": {
+                "variants": {
+                  "properties": {
+                    "a": {"not": {"required": ["encoding"]}},
+                    "b": {"not": {"required": ["encoding"]}}
+                  }
+                }
+              },
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {"single": {"const": true}},
+                    "required": ["single"]
+                  },
+                  "then": {
+                    "properties": {
+                      "variants": {"maxProperties": 1}
+                    }
+                  },
+                  "else": {
+                    "properties": {
+                      "variants": {"required": ["a", "b"]}
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "evidence": {
+            "items": {
+              "not": {
+                "anyOf": [
+                  {"required": ["sourceId"]},
+                  {"required": ["claimRefs"]},
+                  {"required": ["detail"]},
+                  {"required": ["original"]},
+                  {"required": ["popup"]}
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"schemaVersion": {"const": "legaldesign.build.v4"}},
+        "required": ["schemaVersion"]
+      },
+      "then": {
+        "required": ["composition", "overview"],
+        "not": {"required": ["approaches"]},
+        "properties": {"brief": {"properties": {"form": {"enum": ["one-page", "slide-brief"]}}}},
+        "allOf": [{
+          "if": {"properties": {"overview": {"required": ["groups"]}}},
+          "then": {"properties": {"brief": {"properties": {"form": {"const": "slide-brief"}}}}}
+        }, {
+          "if": {"properties": {"brief": {"properties": {"form": {"const": "one-page"}}}}},
+          "then": {"properties": {"composition": {"properties": {"sections": {"maxItems": 1}}}, "overview": {"properties": {"topics": {"maxItems": 0}}}}},
+          "else": {"properties": {"composition": {"properties": {"sections": {"minItems": 2}}}, "overview": {"properties": {"topics": {"minItems": 1}}}}}
+        }]
+      },
+      "else": {
+        "not": {"anyOf": [{"required": ["composition"]}, {"required": ["overview"]}]},
+        "properties": {"brief": {"properties": {"form": {"enum": ["one-page", "walkthrough", "report", "custom"]}}}, "units": {"items": {"not": {"required": ["sourcePreview"]}}}},
+        "if": {"properties": {"schemaVersion": {"const": "legaldesign.build.v3"}}},
+        "then": {"required": ["approaches"]}
+      }
+    }
+  ]
+  ,
+  "$defs": {
+    "issueLayout": {
+      "type": "object",
+      "description": "V4 slide detail recipe. Header, finding, implication, action, supports, optional scope footer; coordinates are derived when omitted. IDs and kinds are checked semantically by the builder.",
+      "properties": {
+        "findingUnitId": {"type": "string", "minLength": 1},
+        "implicationUnitId": {"type": "string", "minLength": 1},
+        "actionUnitId": {"type": "string", "minLength": 1},
+        "supportUnitIds": {"type": "array", "minItems": 1, "maxItems": 2, "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+      },
+      "required": ["findingUnitId", "implicationUnitId", "actionUnitId", "supportUnitIds"],
+      "additionalProperties": false
+    },
+    "approach": {
+      "type": "object",
+      "properties": {
+        "label": {"type": "string", "minLength": 1},
+        "rationale": {"type": "string", "minLength": 1},
+        "composition": {"allOf": [{"$ref": "#/properties/composition"}, {"properties": {"sections": {"items": {"not": {"required": ["issueLayout"]}}}}}]}
+      },
+      "required": ["label", "rationale", "composition"],
+      "additionalProperties": false
+    }
+  }
+}

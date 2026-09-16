@@ -1,0 +1,611 @@
+{
+  "kind": "objection-review",
+  "format_version": 1,
+  "id": "alder-docx-source",
+  "title": "Bayline v. Alder \u00b7 First requests",
+  "source": {
+    "file": "served-requests.docx",
+    "sha256": "d7f9974f0f5d803a8faa00b5d5c0cab99a1cf08cb7f08744b875f13d6b831dca"
+  },
+  "library": {
+    "kind": "objection-library",
+    "format_version": 1,
+    "id": "alder-demo-library",
+    "version": 1,
+    "entries": [
+      {
+        "id": "scope",
+        "family": "scope",
+        "label": "Unrelated scope",
+        "variant": "specific scope",
+        "wording": "Responding Party objects to {{scope}} because {{reason}}.",
+        "fields": {
+          "scope": "the precise portion challenged",
+          "reason": "the request-specific reason"
+        },
+        "guidance": "Identify the unrelated category; do not object merely because a request is broad.",
+        "conditions": [
+          "The supplied claims and facts establish the lack of a relevant connection."
+        ],
+        "exclusions": [
+          "Relevant project records within the disputed transaction."
+        ],
+        "sources": [
+          {
+            "source_id": "synthetic-practice-note",
+            "locator": "scope"
+          }
+        ],
+        "status": "approved",
+        "approval": {
+          "record": "Synthetic development-fixture approval; not actual firm policy."
+        }
+      },
+      {
+        "id": "period",
+        "family": "period",
+        "label": "Unbounded period",
+        "variant": "specific scope",
+        "wording": "Responding Party objects to the portion seeking {{period}} because {{reason}}.",
+        "fields": {
+          "period": "the disputed time period",
+          "reason": "why this period is outside justified discovery"
+        },
+        "guidance": "A date restriction needs a case-specific reason; the contract date alone is not enough.",
+        "conditions": [],
+        "exclusions": [],
+        "sources": [
+          {
+            "source_id": "synthetic-practice-note",
+            "locator": "period"
+          }
+        ],
+        "status": "approved",
+        "approval": {
+          "record": "Synthetic development-fixture approval; not actual firm policy."
+        }
+      },
+      {
+        "id": "privilege",
+        "family": "privilege",
+        "label": "Attorney-client privilege",
+        "variant": "specific scope",
+        "wording": "Responding Party objects to {{scope}} to the extent it seeks confidential attorney-client communications made for legal advice. This objection does not extend to nonprivileged underlying facts or preexisting documents.",
+        "fields": {
+          "scope": "the protected category"
+        },
+        "guidance": "Check the elements and any waiver issue. Complete withholding and log treatment in the response.",
+        "conditions": [
+          "Confidential legal-advice communications are actually implicated."
+        ],
+        "exclusions": [
+          "A lawyer's presence alone does not establish privilege."
+        ],
+        "sources": [
+          {
+            "source_id": "synthetic-practice-note",
+            "locator": "privilege"
+          }
+        ],
+        "status": "approved",
+        "approval": {
+          "record": "Synthetic development-fixture approval; not actual firm policy."
+        }
+      },
+      {
+        "id": "work-product",
+        "family": "work-product",
+        "label": "Work product",
+        "variant": "specific scope",
+        "wording": "Responding Party objects to {{scope}} to the extent it seeks protected materials prepared in anticipation of litigation, including counsel's mental impressions.",
+        "fields": {
+          "scope": "the materials and protected portion"
+        },
+        "guidance": "Evaluate the factual basis, exceptions and any waiver; do not label ordinary business records work product.",
+        "conditions": [],
+        "exclusions": [],
+        "sources": [
+          {
+            "source_id": "synthetic-practice-note",
+            "locator": "work-product"
+          }
+        ],
+        "status": "approved",
+        "approval": {
+          "record": "Synthetic development-fixture approval; not actual firm policy."
+        }
+      },
+      {
+        "id": "backup",
+        "family": "backup",
+        "label": "Inaccessible ESI",
+        "variant": "specific scope",
+        "wording": "Responding Party objects to searching {{source}} because {{burden}}. The relevance and availability of the requested information from other sources require further evaluation.",
+        "fields": {
+          "source": "the identified source",
+          "burden": "the established inaccessibility facts"
+        },
+        "guidance": "Requires supported burden/access facts; age or the word backup is not enough.",
+        "conditions": [
+          "A knowledgeable person has established the access burden."
+        ],
+        "exclusions": [
+          "Do not assert quantified burden without supporting information."
+        ],
+        "sources": [
+          {
+            "source_id": "synthetic-practice-note",
+            "locator": "backup"
+          }
+        ],
+        "status": "approved",
+        "approval": {
+          "record": "Synthetic development-fixture approval; not actual firm policy."
+        }
+      },
+      {
+        "id": "privacy",
+        "family": "privacy",
+        "label": "Unrelated personal records",
+        "variant": "specific scope",
+        "wording": "Responding Party objects to {{scope}} because {{reason}}. This objection is limited to the unrelated personal information identified here.",
+        "fields": {
+          "scope": "the affected records",
+          "reason": "their lack of relevance and the concrete concern"
+        },
+        "guidance": "Distinguish unrelated personal details from discoverable employment information; consider narrower treatment.",
+        "conditions": [],
+        "exclusions": [],
+        "sources": [
+          {
+            "source_id": "synthetic-practice-note",
+            "locator": "privacy"
+          }
+        ],
+        "status": "approved",
+        "approval": {
+          "record": "Synthetic development-fixture approval; not actual firm policy."
+        }
+      },
+      {
+        "id": "ambiguous",
+        "family": "ambiguous",
+        "label": "Unclear category",
+        "variant": "specific scope",
+        "wording": "Responding Party objects to the phrase \"{{phrase}}\" because {{ambiguity}}.",
+        "fields": {
+          "phrase": "the unclear request phrase",
+          "ambiguity": "the competing meanings or missing definition"
+        },
+        "guidance": "Use only if supplied definitions and context do not resolve the uncertainty.",
+        "conditions": [],
+        "exclusions": [],
+        "sources": [
+          {
+            "source_id": "synthetic-practice-note",
+            "locator": "ambiguous"
+          }
+        ],
+        "status": "approved",
+        "approval": {
+          "record": "Synthetic development-fixture approval; not actual firm policy."
+        }
+      },
+      {
+        "id": "new-record",
+        "family": "new-record",
+        "label": "New record requested",
+        "variant": "specific scope",
+        "wording": "Responding Party objects to the demand to create {{record}} rather than produce existing responsive documents or electronically stored information.",
+        "fields": {
+          "record": "the new record demanded"
+        },
+        "guidance": "Distinguish creation of a new analysis from extracting or producing existing ESI in a usable form.",
+        "conditions": [],
+        "exclusions": [
+          "Existing spreadsheets, data exports and ordinary ESI processing are not categorically excluded."
+        ],
+        "sources": [
+          {
+            "source_id": "synthetic-practice-note",
+            "locator": "new-record"
+          }
+        ],
+        "status": "approved",
+        "approval": {
+          "record": "Synthetic development-fixture approval; not actual firm policy."
+        }
+      },
+      {
+        "id": "duplicate",
+        "family": "duplicate",
+        "label": "Duplicative production",
+        "variant": "specific scope",
+        "wording": "Responding Party objects only to reproducing the identical documents identified as {{prior}}. This objection does not encompass different versions or newly located responsive material.",
+        "fields": {
+          "prior": "the verified prior production"
+        },
+        "guidance": "Verify the prior production and whether repeat delivery imposes a meaningful burden.",
+        "conditions": [
+          "The earlier production and duplication burden are established."
+        ],
+        "exclusions": [],
+        "sources": [
+          {
+            "source_id": "synthetic-practice-note",
+            "locator": "duplicate"
+          }
+        ],
+        "status": "approved",
+        "approval": {
+          "record": "Synthetic development-fixture approval; not actual firm policy."
+        }
+      },
+      {
+        "id": "scope-narrow",
+        "family": "scope",
+        "label": "Unrelated scope",
+        "variant": "specific scope",
+        "wording": "Responding Party objects only to {{scope}}. {{reason}}",
+        "fields": {
+          "scope": "the precise portion challenged",
+          "reason": "the reason for limiting this category"
+        },
+        "guidance": "Alternative wording for a clearly separable category; use one scope variant unless a distinct reason requires both.",
+        "conditions": [],
+        "exclusions": [],
+        "sources": [
+          {
+            "source_id": "synthetic-practice-note",
+            "locator": "scope-narrow"
+          }
+        ],
+        "status": "approved",
+        "approval": {
+          "record": "Synthetic development-fixture approval; not actual firm policy."
+        }
+      }
+    ],
+    "applied_batches": []
+  },
+  "context": [
+    {
+      "id": "definitions",
+      "title": "Served definitions and instructions",
+      "locator": "served-requests.md, introductory text",
+      "text": "Harbor means the sensor project governed by the March 2024 supply agreement. Alder means Alder Instruments. Documents includes existing ESI and attachments. The default period is January 1, 2024 through December 31, 2025 unless a request states otherwise. Original numbering is retained, including the repeated 8 and omitted 9 and 15."
+    },
+    {
+      "id": "facts",
+      "title": "Supplied case context",
+      "locator": "context.md, fictional facts",
+      "text": "Bayline Labs alleges June 2025 Harbor sensors failed the agreed inspection criteria. Alder disputes the failures and causation. The only transactions pleaded concern Harbor, a product first designed in 2024. No other product or earlier design is alleged to be relevant. No employee-health or compensation issue is pleaded. Litigation counsel's legal-advice communications are confidential; no waiver is reported. Counsel interview memoranda were prepared after this dispute arose. The cost and accessibility of the backup tapes, prior-production identifiers, and any duplication burden have not been established. No search, production or withholding decisions have been supplied."
+    },
+    {
+      "id": "authority",
+      "title": "Supplied governing-source packet and limits",
+      "locator": "authority.md; FRCP 26(b), 34(b)(2)",
+      "text": "Federal rules supply a relevance/proportionality framework, protection for qualifying privileged and trial-preparation material, and item-specific response requirements. Rule 34 requires specific reasons, the extent of a partial objection, and disclosure of withholding. The objection draft leaves actual response and withholding positions to counsel. This is a synthetic federal RFP exercise. No real district or judge is assigned, and no local-order or circuit-law verification is claimed."
+    }
+  ],
+  "requests": [
+    {
+      "id": "alder-1-r01",
+      "label": "RFP 1",
+      "text": "Produce the executed supply agreement for the Harbor sensor project and all amendments.",
+      "locator": "served-requests.docx, occurrence 1, printed RFP 1",
+      "context_ids": ["definitions", "facts", "authority"],
+      "suggestions": []
+    },
+    {
+      "id": "alder-1-r02",
+      "label": "RFP 2",
+      "text": "Produce all communications about every product sold by Alder Instruments from January 1, 2000 to the present.",
+      "locator": "served-requests.docx, occurrence 2, printed RFP 2",
+      "context_ids": ["definitions", "facts", "authority"],
+      "suggestions": [
+        {
+          "entry_id": "scope",
+          "params": {
+            "scope": "communications about products other than Harbor",
+            "reason": "the pleaded delivery and inspection dispute concerns only Harbor sensors"
+          },
+          "rationale": "The demand reaches every product; the supplied facts identify no connection between other products and the Harbor dispute.",
+          "basis": [
+            "Supplied case context",
+            "Approved synthetic library guidance",
+            "FRCP 26(b) / 34(b)(2); local checks incomplete"
+          ],
+          "missing": [],
+          "preselected": true
+        }
+      ]
+    },
+    {
+      "id": "alder-1-r03",
+      "label": "RFP 3",
+      "text": "Produce communications between the parties about the Harbor sensor delivery schedule from January 1, 2024 through December 31, 2025.",
+      "locator": "served-requests.docx, occurrence 3, printed RFP 3",
+      "context_ids": ["definitions", "facts", "authority"],
+      "suggestions": []
+    },
+    {
+      "id": "alder-1-r04",
+      "label": "RFP 4",
+      "text": "Produce all confidential communications with your litigation counsel seeking or providing legal advice about this lawsuit.",
+      "locator": "served-requests.docx, occurrence 4, printed RFP 4",
+      "context_ids": ["definitions", "facts", "authority"],
+      "suggestions": [
+        {
+          "entry_id": "privilege",
+          "params": {
+            "scope": "the requested confidential litigation-counsel communications"
+          },
+          "rationale": "The request expressly targets confidential legal advice and the supplied facts support that description. Counsel must still assess individual materials and complete the response position.",
+          "basis": [
+            "Supplied case context",
+            "Approved synthetic library guidance",
+            "FRCP 26(b) / 34(b)(2); local checks incomplete"
+          ],
+          "missing": [],
+          "preselected": true
+        }
+      ]
+    },
+    {
+      "id": "alder-1-r05",
+      "label": "RFP 5",
+      "text": "Produce all communications with your litigation counsel about this lawsuit, including copies of preexisting purchase orders attached to those communications.",
+      "locator": "served-requests.docx, occurrence 5, printed RFP 5",
+      "context_ids": ["definitions", "facts", "authority"],
+      "suggestions": [
+        {
+          "entry_id": "privilege",
+          "params": {
+            "scope": "confidential legal-advice communications within this request"
+          },
+          "rationale": "A partial objection fits the advice communications. The attached preexisting orders do not become privileged by attachment.",
+          "basis": [
+            "Supplied case context",
+            "Approved synthetic library guidance",
+            "FRCP 26(b) / 34(b)(2); local checks incomplete"
+          ],
+          "missing": [],
+          "preselected": true
+        }
+      ]
+    },
+    {
+      "id": "alder-1-r06",
+      "label": "RFP 6",
+      "text": "Produce all Harbor project messages stored on legacy backup tapes created during 2024 and 2025.",
+      "locator": "served-requests.docx, occurrence 6, printed RFP 6",
+      "context_ids": ["definitions", "facts", "authority"],
+      "suggestions": [
+        {
+          "entry_id": "backup",
+          "params": {
+            "source": "the legacy backup tapes",
+            "burden": "[Establish actual access burden]"
+          },
+          "rationale": "The request identifies backup tapes, but the record does not establish inaccessibility. Keep this conditional and unchecked.",
+          "basis": [
+            "Supplied case context",
+            "Approved synthetic library guidance",
+            "FRCP 26(b) / 34(b)(2); local checks incomplete"
+          ],
+          "missing": [
+            "Actual accessibility, restoration burden and alternative sources"
+          ],
+          "preselected": false
+        }
+      ]
+    },
+    {
+      "id": "alder-1-r07",
+      "label": "RFP 7",
+      "text": "Produce every employee's complete medical and payroll records, whether or not the employee worked on the Harbor project.",
+      "locator": "served-requests.docx, occurrence 7, printed RFP 7",
+      "context_ids": ["definitions", "facts", "authority"],
+      "suggestions": [
+        {
+          "entry_id": "privacy",
+          "params": {
+            "scope": "complete medical and payroll records unrelated to the Harbor dispute",
+            "reason": "the claims concern sensor inspection and identify no employee-health or compensation issue"
+          },
+          "rationale": "The full personnel-record demand reaches unrelated personal matters. Any relevant subset needs separate treatment.",
+          "basis": [
+            "Supplied case context",
+            "Approved synthetic library guidance",
+            "FRCP 26(b) / 34(b)(2); local checks incomplete"
+          ],
+          "missing": [],
+          "preselected": true
+        }
+      ]
+    },
+    {
+      "id": "alder-1-r08",
+      "label": "RFP 8",
+      "text": "Produce all documents concerning the operational alignment of the Harbor project.",
+      "locator": "served-requests.docx, occurrence 8, printed RFP 8",
+      "context_ids": ["definitions", "facts", "authority"],
+      "suggestions": [
+        {
+          "entry_id": "ambiguous",
+          "params": {
+            "phrase": "operational alignment",
+            "ambiguity": "neither the definitions nor the supplied project context identifies what category of documents that phrase describes"
+          },
+          "rationale": "The phrase is undefined and does not identify an intelligible category on this record.",
+          "basis": [
+            "Supplied case context",
+            "Approved synthetic library guidance",
+            "FRCP 26(b) / 34(b)(2); local checks incomplete"
+          ],
+          "missing": [],
+          "preselected": true
+        }
+      ]
+    },
+    {
+      "id": "alder-1-r09",
+      "label": "RFP 8",
+      "text": "Produce the Harbor quality-control test logs for units shipped in June 2025.",
+      "locator": "served-requests.docx, occurrence 9, printed RFP 8",
+      "context_ids": ["definitions", "facts", "authority"],
+      "suggestions": []
+    },
+    {
+      "id": "alder-1-r10",
+      "label": "RFP 10",
+      "text": "Produce all documents concerning the Harbor project since January 1, 2000, including design changes unrelated to the alleged failures.",
+      "locator": "served-requests.docx, occurrence 10, printed RFP 10",
+      "context_ids": ["definitions", "facts", "authority"],
+      "suggestions": [
+        {
+          "entry_id": "period",
+          "params": {
+            "period": "records before January 1, 2024",
+            "reason": "Harbor was first designed in 2024 and no earlier design or transaction is implicated by the supplied claims"
+          },
+          "rationale": "The start date predates the product on the supplied facts. Revisit if an earlier design or notice theory is identified.",
+          "basis": [
+            "Supplied case context",
+            "Approved synthetic library guidance",
+            "FRCP 26(b) / 34(b)(2); local checks incomplete"
+          ],
+          "missing": [],
+          "preselected": true
+        }
+      ]
+    },
+    {
+      "id": "alder-1-r11",
+      "label": "RFP 11",
+      "text": "Produce the native Harbor inspection spreadsheets with their existing formulas and cell comments.",
+      "locator": "served-requests.docx, occurrence 11, printed RFP 11",
+      "context_ids": ["definitions", "facts", "authority"],
+      "suggestions": []
+    },
+    {
+      "id": "alder-1-r12",
+      "label": "RFP 12",
+      "text": "Produce a new spreadsheet calculating daily Harbor project profitability by employee, including estimates where source data is absent.",
+      "locator": "served-requests.docx, occurrence 12, printed RFP 12",
+      "context_ids": ["definitions", "facts", "authority"],
+      "suggestions": [
+        {
+          "entry_id": "new-record",
+          "params": {
+            "record": "a daily profitability analysis by employee with estimates for absent data"
+          },
+          "rationale": "The demand expressly asks for a new estimated analysis. Confirm that an existing equivalent report is not being overlooked.",
+          "basis": [
+            "Supplied case context",
+            "Approved synthetic library guidance",
+            "FRCP 26(b) / 34(b)(2); local checks incomplete"
+          ],
+          "missing": [],
+          "preselected": true
+        }
+      ]
+    },
+    {
+      "id": "alder-1-r13",
+      "label": "RFP 13",
+      "text": "Produce: (a) emails between the parties about the June 2025 Harbor shipment; (b) internal technical assessments of that shipment; (c) litigation counsel's interview memoranda prepared in anticipation of this lawsuit; and (d) all communications, including nonproject communications, between any Alder employee and any customer from 2000 to the present. For each subpart include attachments and existing versions, preserve the relationship between messages and attachments, and identify the subpart to which each item is responsive. Do not interpret any subpart as excluding records otherwise responsive to another subpart.",
+      "locator": "served-requests.docx, occurrence 13, printed RFP 13",
+      "context_ids": ["definitions", "facts", "authority"],
+      "suggestions": [
+        {
+          "entry_id": "work-product",
+          "params": {
+            "scope": "subpart (c)'s litigation-counsel interview memoranda"
+          },
+          "rationale": "Subpart (c) and the supplied preparation context support considering work-product protection, subject to exceptions and waiver.",
+          "basis": [
+            "Supplied case context",
+            "Approved synthetic library guidance",
+            "FRCP 26(b) / 34(b)(2); local checks incomplete"
+          ],
+          "missing": [],
+          "preselected": true
+        },
+        {
+          "entry_id": "scope",
+          "params": {
+            "scope": "subpart (d)'s non-Harbor customer communications",
+            "reason": "no connection to the Harbor delivery and inspection claims is supplied"
+          },
+          "rationale": "The objection should target the unrelated customer category and leave the project-related subparts for a response.",
+          "basis": [
+            "Supplied case context",
+            "Approved synthetic library guidance",
+            "FRCP 26(b) / 34(b)(2); local checks incomplete"
+          ],
+          "missing": [],
+          "preselected": true
+        }
+      ]
+    },
+    {
+      "id": "alder-1-r14",
+      "label": "RFP 14",
+      "text": "Produce the Harbor purchase orders previously delivered under RFP 1 of the preliminary exchange, together with any different versions not previously delivered.",
+      "locator": "served-requests.docx, occurrence 14, printed RFP 14",
+      "context_ids": ["definitions", "facts", "authority"],
+      "suggestions": [
+        {
+          "entry_id": "duplicate",
+          "params": {
+            "prior": "[Verify production identifiers and duplication burden]"
+          },
+          "rationale": "Earlier delivery is alleged by the request, but matching documents and a meaningful duplication burden are unverified.",
+          "basis": [
+            "Supplied case context",
+            "Approved synthetic library guidance",
+            "FRCP 26(b) / 34(b)(2); local checks incomplete"
+          ],
+          "missing": [
+            "Prior production identifiers and actual duplication burden"
+          ],
+          "preselected": false
+        }
+      ]
+    },
+    {
+      "id": "alder-1-r15",
+      "label": "RFP 16",
+      "text": "Produce all personal text messages on the privately owned phones of employees with no role in the Harbor project.",
+      "locator": "served-requests.docx, occurrence 15, printed RFP 16",
+      "context_ids": ["definitions", "facts", "authority"],
+      "suggestions": [
+        {
+          "entry_id": "scope",
+          "params": {
+            "scope": "personal messages of employees with no Harbor role",
+            "reason": "no connection between these messages and the pleaded sensor dispute is identified"
+          },
+          "rationale": "The request itself excludes project participants; the supplied facts provide no alternative relevance theory.",
+          "basis": [
+            "Supplied case context",
+            "Approved synthetic library guidance",
+            "FRCP 26(b) / 34(b)(2); local checks incomplete"
+          ],
+          "missing": [],
+          "preselected": true
+        }
+      ]
+    },
+    {
+      "id": "alder-1-r16",
+      "label": "RFP 17",
+      "text": "Produce source files containing the literal test marker </script><img src=x onerror=alert('fixture')> used in the Harbor user-interface tests.",
+      "locator": "served-requests.docx, occurrence 16, printed RFP 17",
+      "context_ids": ["definitions", "facts", "authority"],
+      "suggestions": []
+    }
+  ]
+}

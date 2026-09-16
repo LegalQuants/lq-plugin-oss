@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://legalquants.com/schemas/legaldesign-design-authority.schema.json",
+  "title": "LegalDesign design authority front matter",
+  "type": "object",
+  "properties": {
+    "legaldesign": {
+      "const": "design-authority"
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "status": {
+      "enum": [
+        "unconfigured",
+        "configured"
+      ]
+    },
+    "system": {
+      "const": "Loxoto"
+    },
+    "scope": {
+      "const": "palette-only"
+    },
+    "palette_name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "set_up": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "type": "string"
+          },
+          "ref": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          },
+          "observed": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "inferred": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "ref",
+          "date"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "legaldesign",
+    "version",
+    "status",
+    "system",
+    "scope",
+    "palette_name",
+    "set_up",
+    "sources"
+  ],
+  "additionalProperties": false
+}

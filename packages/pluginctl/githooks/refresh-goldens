@@ -1,0 +1,55 @@
+#!/usr/bin/env sh
+# Keep the committed plugin bundles derived from canonical sources.
+# Regeneration never stages files: a changed package stops the commit so the
+# contributor can review and stage it explicitly.
+set -eu
+
+root="$(git rev-parse --show-toplevel)"
+cd "$root"
+
+plugin_roots='^plugins/(legalquants-litigation|legalquants-transactional|legalquants-companion)/'
+generator_inputs='^(skills/|AGENTS\.md$|packages/pluginctl/(src|assets|hooks)/|plugin\.release\.yaml$|\.claude-plugin/marketplace\.json$|\.agents/plugins/marketplace\.json$)'
+staged_files="$(git diff --cached --name-only --diff-filter=ACMRD)"
+
+if ! printf '%s\n' "$staged_files" | grep -Eq "$generator_inputs|$plugin_roots"; then
+  exit 0
+fi
+
+unstaged_inputs="$({
+  git diff --name-only --diff-filter=ACMRD
+  git ls-files --others --exclude-standard
+} | grep -E "$generator_inputs" || true)"
+
+if [ -n "$unstaged_inputs" ]; then
+  echo "Cannot validate or regenerate the plugin bundles from partially staged inputs:" >&2
+  printf '%s\n' "$unstaged_inputs" >&2
+  echo "Stage or set aside those source changes, then retry the commit." >&2
+  exit 1
+fi
+
+if printf '%s\n' "$staged_files" | grep -Eq "$plugin_roots"; then
+  if ! git diff --quiet -- plugins/legalquants-litigation plugins/legalquants-transactional plugins/legalquants-companion; then
+    echo "plugin bundles has both staged and unstaged changes." >&2
+    echo "Finish staging or reviewing plugins/legalquants-*, then retry the commit." >&2
+    exit 1
+  fi
+
+  pnpm plugin-pack:check
+  exit 0
+fi
+
+if [ -n "$(git status --porcelain --untracked-files=all --ignored -- plugins/legalquants-litigation plugins/legalquants-transactional plugins/legalquants-companion)" ]; then
+  echo "plugins/legalquants-* already has unstaged changes; refusing to overwrite them." >&2
+  echo "Review and stage those changes, then retry the commit." >&2
+  exit 1
+fi
+
+pnpm plugin-pack
+
+if [ -n "$(git status --porcelain --untracked-files=all --ignored -- plugins/legalquants-litigation plugins/legalquants-transactional plugins/legalquants-companion)" ]; then
+  echo "plugin bundles regenerated from the staged canonical sources." >&2
+  echo "Review and stage plugins/legalquants-*, then retry the commit." >&2
+  exit 1
+fi
+
+pnpm plugin-pack:check

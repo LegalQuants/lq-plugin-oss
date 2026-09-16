@@ -1,0 +1,562 @@
+{
+  "schemaVersion": "legaldesign.build.v3",
+  "brief": {
+    "title": "Customer contract transfer (fictional example)",
+    "reader": "The buyer's CFO and COO, familiar with the asset purchase but not assignment or novation.",
+    "action": "Choose the £18,000 transition arrangement or defer asset closing; do not assume consent is complete.",
+    "purpose": "choose",
+    "message": "Consent is still outstanding. The team can pay £18,000 to close assets as planned while the seller temporarily serves the customer, or defer closing without a transition fee; the seller remains liable until novation.",
+    "spine": "comparison",
+    "situation": "meeting",
+    "form": "one-page",
+    "sources": [
+      {
+        "id": "counsel-brief",
+        "label": "Supplied counsel conclusions — fictional evaluation",
+        "status": "supplied-unverified"
+      }
+    ],
+    "assumptions": [
+      "The supplied counsel conclusions are the completed legal work; no independent legal research is authorized.",
+      "The user has already chosen the default palette."
+    ],
+    "gaps": [
+      "Underlying customer contract and correspondence not supplied.",
+      "Consent and novation completion date unknown.",
+      "Responsive window and phone fit remain unverified until the plan is built and inspected."
+    ]
+  },
+  "style": {
+    "source": "loxoto",
+    "ref": null
+  },
+  "approaches": {
+    "a": {
+      "label": "Compare options",
+      "rationale": "Lead with the shared consent condition, align each option against the same commercial criteria, and close with the common liability condition beside the decision.",
+      "composition": {
+        "strategy": "composed",
+        "shape": "full-width criteria comparison with shared closing conditions",
+        "rationale": "The CFO can compare date, service and cost directly on the same rows; the common liability condition and decision sit below, without suggesting that liability differs by option.",
+        "sections": [
+          {
+            "id": "a-decision-page",
+            "purpose": "Compare the closing arrangements and choose one.",
+            "unitIds": [
+              "a-title",
+              "a-status",
+              "a-options",
+              "a-liability",
+              "a-action"
+            ],
+            "layout": {
+              "columns": 12,
+              "placements": [
+                {
+                  "unitId": "a-title",
+                  "row": 1,
+                  "column": 1,
+                  "span": 12
+                },
+                {
+                  "unitId": "a-status",
+                  "row": 2,
+                  "column": 1,
+                  "span": 12
+                },
+                {
+                  "unitId": "a-options",
+                  "row": 3,
+                  "column": 1,
+                  "span": 12
+                },
+                {
+                  "unitId": "a-liability",
+                  "row": 4,
+                  "column": 1,
+                  "span": 4
+                },
+                {
+                  "unitId": "a-action",
+                  "row": 4,
+                  "column": 5,
+                  "span": 8
+                }
+              ]
+            }
+          }
+        ],
+        "templateRef": null
+      }
+    },
+    "b": {
+      "label": "Transfer requirements",
+      "rationale": "Lead with the prerequisite path, then position the two service/closing arrangements below it as alternatives while the contract remains with the seller.",
+      "composition": {
+        "strategy": "composed",
+        "shape": "prerequisite sequence above two interim arrangements",
+        "rationale": "The COO first sees what controls contract transfer; side-by-side arrangements then answer what happens until that path is complete without implying that closing assets itself transfers the contract.",
+        "sections": [
+          {
+            "id": "b-transfer-page",
+            "purpose": "Understand the transfer prerequisites, then choose the interim arrangement.",
+            "unitIds": [
+              "b-title",
+              "b-transfer",
+              "b-close",
+              "b-wait",
+              "b-action"
+            ],
+            "layout": {
+              "columns": 12,
+              "placements": [
+                {
+                  "unitId": "b-title",
+                  "row": 1,
+                  "column": 1,
+                  "span": 12
+                },
+                {
+                  "unitId": "b-transfer",
+                  "row": 2,
+                  "column": 1,
+                  "span": 12
+                },
+                {
+                  "unitId": "b-close",
+                  "row": 3,
+                  "column": 1,
+                  "span": 6
+                },
+                {
+                  "unitId": "b-wait",
+                  "row": 3,
+                  "column": 7,
+                  "span": 6
+                },
+                {
+                  "unitId": "b-action",
+                  "row": 4,
+                  "column": 1,
+                  "span": 12
+                }
+              ]
+            }
+          }
+        ],
+        "templateRef": null
+      }
+    }
+  },
+  "claims": [
+    {
+      "id": "c-context",
+      "text": "The CFO and COO must decide how to handle the customer contract in the asset purchase.",
+      "kind": "context",
+      "sourceIds": ["counsel-brief"],
+      "placement": "surface",
+      "evidenceIds": []
+    },
+    {
+      "id": "c-timing",
+      "text": "Asset closing is planned for 1 October; customer consent is outstanding and there is no reliable completion date.",
+      "kind": "material",
+      "sourceIds": ["counsel-brief"],
+      "placement": "surface",
+      "evidenceIds": ["gate"]
+    },
+    {
+      "id": "c-gate",
+      "text": "Written customer consent and signed novation are required before contract transfer; novation replaces the seller with the buyer.",
+      "kind": "material",
+      "sourceIds": ["counsel-brief"],
+      "placement": "surface",
+      "evidenceIds": ["gate"]
+    },
+    {
+      "id": "c-transition",
+      "text": "Closing on 1 October leaves the contract and service with the seller for up to 30 days at an agreed £18,000 fee paid by the buyer.",
+      "kind": "material",
+      "sourceIds": ["counsel-brief"],
+      "placement": "surface",
+      "evidenceIds": ["transition"]
+    },
+    {
+      "id": "c-defer",
+      "text": "Deferring closing until consent and novation are complete means no transition fee but uncertain closing timing; the seller serves the customer until then.",
+      "kind": "material",
+      "sourceIds": ["counsel-brief"],
+      "placement": "surface",
+      "evidenceIds": ["defer"]
+    },
+    {
+      "id": "c-liability",
+      "text": "Under both options, the seller remains the contracting party and liable to the customer until novation takes effect.",
+      "kind": "material",
+      "sourceIds": ["counsel-brief"],
+      "placement": "surface",
+      "evidenceIds": ["gate"]
+    },
+    {
+      "id": "c-continuity",
+      "text": "Both options preserve customer service.",
+      "kind": "material",
+      "sourceIds": ["counsel-brief"],
+      "placement": "surface",
+      "evidenceIds": ["transition", "defer"]
+    },
+    {
+      "id": "c-choice",
+      "text": "The team must choose between paying £18,000 to preserve the planned asset closing and deferring closing without a transition fee; counsel recommends neither.",
+      "kind": "material",
+      "sourceIds": ["counsel-brief"],
+      "placement": "surface",
+      "evidenceIds": ["transition", "defer"]
+    }
+  ],
+  "units": [
+    {
+      "id": "a-title",
+      "kind": "text",
+      "role": "title",
+      "claim": "Customer contract transfer",
+      "relationship": "comparison",
+      "claimRefs": ["c-context"],
+      "candidates": ["descriptive section title"],
+      "variants": {
+        "a": {
+          "html": "<h1>Customer contract transfer (fictional example)</h1>",
+          "axis": "framing",
+          "encoding": "The title leads the single page and spans all twelve columns.",
+          "why": "A descriptive subject lets the meeting start with the issue rather than a slogan."
+        }
+      },
+      "placeholder": "Describe the relevant contract condition, option or action.",
+      "evidence": []
+    },
+    {
+      "id": "a-status",
+      "kind": "text",
+      "role": "summary",
+      "claim": "Consent is outstanding",
+      "relationship": "sequence",
+      "claimRefs": ["c-timing", "c-gate"],
+      "candidates": ["plain sentence", "structured card"],
+      "variants": {
+        "a": {
+          "html": "<p>Consent is outstanding; timing is uncertain. The contract transfers only after consent and a signed novation.</p>",
+          "axis": "framing",
+          "encoding": "The shared legal condition appears above both alternatives, so neither is mistaken for permission to bypass it.",
+          "why": "The non-lawyer reader needs the gating condition before comparing costs."
+        }
+      },
+      "placeholder": "Describe the relevant contract condition, option or action.",
+      "evidence": ["gate"],
+      "detail": "gate"
+    },
+    {
+      "id": "a-options",
+      "kind": "figure",
+      "claim": "Compare the closing options",
+      "relationship": "comparison",
+      "claimRefs": ["c-transition", "c-defer", "c-continuity", "c-choice"],
+      "candidates": [
+        "compareTwo",
+        "two text cards",
+        "plain comparison paragraph"
+      ],
+      "variants": {
+        "a": {
+          "component": "compareTwo",
+          "params": {
+            "a": "Close on 1 October",
+            "b": "Defer closing",
+            "aDetail": "transition",
+            "bDetail": "defer",
+            "highlight": "none",
+            "rows": [
+              {
+                "label": "Asset closing",
+                "a": "1 October",
+                "b": "After consent + novation",
+                "winner": "none"
+              },
+              {
+                "label": "Customer service",
+                "a": "Seller: up to 30 days",
+                "b": "Seller: until closing",
+                "winner": "none"
+              },
+              {
+                "label": "Transition fee",
+                "a": "£18,000 paid by buyer",
+                "b": "No transition fee",
+                "winner": "none"
+              }
+            ]
+          },
+          "axis": "form",
+          "encoding": "The columns are the two alternatives; each row compares the same criterion. No option is highlighted because counsel has not recommended one.",
+          "why": "Aligned criteria support the CFO's cost-versus-timing choice without inventing a preferred option."
+        }
+      },
+      "placeholder": "Show the options or required steps using the actual terms and conditions.",
+      "evidence": ["transition", "defer"]
+    },
+    {
+      "id": "a-liability",
+      "kind": "card",
+      "role": "scope",
+      "claim": "Seller stays liable",
+      "relationship": "sequence",
+      "claimRefs": ["c-liability", "c-gate"],
+      "candidates": ["plain sentence", "structured card"],
+      "variants": {
+        "a": {
+          "html": "<h2>Seller stays liable</h2><p>Until novation takes effect, under either option.</p>",
+          "axis": "framing",
+          "encoding": "One common-condition card below the comparison applies to both options instead of being duplicated as if liability differed.",
+          "why": "The liability qualification is visible, not hidden in the cost comparison."
+        }
+      },
+      "placeholder": "Describe the relevant contract condition, option or action.",
+      "evidence": ["gate"],
+      "detail": "gate"
+    },
+    {
+      "id": "a-action",
+      "kind": "text",
+      "role": "action",
+      "claim": "Choose the closing arrangement",
+      "relationship": "comparison",
+      "claimRefs": ["c-choice", "c-transition", "c-defer"],
+      "candidates": ["plain sentence", "structured card"],
+      "variants": {
+        "a": {
+          "html": "<p>Choose: pay £18,000 to keep the planned closing, or defer closing with no transition fee. Neither option is recommended here.</p>",
+          "axis": "framing",
+          "encoding": "The action follows the comparison, naming the commercial choice rather than assuming approval.",
+          "why": "This is a meeting decision aid, not a preselected recommendation."
+        }
+      },
+      "placeholder": "Describe the relevant contract condition, option or action.",
+      "evidence": ["transition", "defer"]
+    },
+    {
+      "id": "b-title",
+      "kind": "text",
+      "role": "title",
+      "claim": "Customer contract transfer",
+      "relationship": "sequence",
+      "claimRefs": ["c-context"],
+      "candidates": ["descriptive section title"],
+      "variants": {
+        "a": {
+          "html": "<h1>Customer contract transfer (fictional example)</h1>",
+          "axis": "framing",
+          "encoding": "The title spans all twelve columns before the prerequisite sequence.",
+          "why": "Keep the subject stable while changing the organization."
+        }
+      },
+      "placeholder": "Describe the relevant contract condition, option or action.",
+      "evidence": []
+    },
+    {
+      "id": "b-transfer",
+      "kind": "figure",
+      "claim": "What must happen before transfer",
+      "relationship": "sequence",
+      "claimRefs": ["c-timing", "c-gate", "c-liability"],
+      "candidates": ["flow", "numbered rows", "plain dependency sentence"],
+      "variants": {
+        "a": {
+          "component": "flow",
+          "params": {
+            "stages": [
+              {
+                "title": "Customer consent",
+                "sub": "Requested; not received",
+                "detail": "gate",
+                "accentRole": "open"
+              },
+              {
+                "title": "Signed novation",
+                "sub": "Buyer replaces seller",
+                "detail": "gate"
+              },
+              {
+                "title": "Contract transfer",
+                "sub": "Seller released",
+                "detail": "gate"
+              }
+            ],
+            "edges": ["then sign", "then transfer"]
+          },
+          "axis": "form",
+          "encoding": "Left-to-right arrows represent counsel's stated order: obtain consent, sign novation, then transfer. Equal stage spacing conveys order, not elapsed time.",
+          "why": "The COO sees the unresolved dependency before considering how service continues in the meantime."
+        }
+      },
+      "placeholder": "Show the options or required steps using the actual terms and conditions.",
+      "evidence": ["gate"]
+    },
+    {
+      "id": "b-close",
+      "kind": "card",
+      "role": "finding",
+      "claim": "Close the assets on 1 October",
+      "relationship": "comparison",
+      "claimRefs": ["c-transition", "c-liability"],
+      "candidates": ["plain sentence", "structured card"],
+      "variants": {
+        "a": {
+          "html": "<h2>Close on 1 October</h2><p>Seller serves for up to 30 days. Buyer pays £18,000. Seller stays liable until novation.</p>",
+          "axis": "framing",
+          "encoding": "This interim arrangement sits beside, not inside, the transfer sequence: closing assets does not bypass its prerequisites.",
+          "why": "The option explains continuity while the contract remains with the seller."
+        }
+      },
+      "placeholder": "Describe the relevant contract condition, option or action.",
+      "evidence": ["transition", "gate"],
+      "detail": "transition"
+    },
+    {
+      "id": "b-wait",
+      "kind": "card",
+      "role": "finding",
+      "claim": "Wait for consent and novation",
+      "relationship": "comparison",
+      "claimRefs": ["c-defer", "c-timing", "c-liability"],
+      "candidates": ["plain sentence", "structured card"],
+      "variants": {
+        "a": {
+          "html": "<h2>Wait to close</h2><p>No transition fee. Closing date uncertain. Seller serves and stays liable until novation.</p>",
+          "axis": "framing",
+          "encoding": "The second interim arrangement is a peer to the first under the shared transfer sequence, without an arrow falsely making one option lead to the other.",
+          "why": "Peer cards represent alternatives for the same unresolved period."
+        }
+      },
+      "placeholder": "Describe the relevant contract condition, option or action.",
+      "evidence": ["defer", "gate"],
+      "detail": "defer"
+    },
+    {
+      "id": "b-action",
+      "kind": "text",
+      "role": "action",
+      "claim": "Choose how to handle the period before transfer",
+      "relationship": "comparison",
+      "claimRefs": ["c-choice", "c-transition", "c-defer", "c-continuity"],
+      "candidates": ["plain sentence", "structured card"],
+      "variants": {
+        "a": {
+          "html": "<p>Both preserve service. Choose the £18,000 transition arrangement or defer closing; neither is recommended here.</p>",
+          "axis": "framing",
+          "encoding": "The final action names the decision after the prerequisite path and the two interim arrangements.",
+          "why": "This structure prioritizes operational dependency instead of a criteria table."
+        }
+      },
+      "placeholder": "Describe the relevant contract condition, option or action.",
+      "evidence": ["transition", "defer"]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "gate",
+      "sourceId": "counsel-brief",
+      "claimRefs": ["c-gate", "c-timing", "c-liability"],
+      "cite": "Supplied counsel brief (fictional evaluation)",
+      "locator": "¶¶1–2, 5–6",
+      "status": "supplied-unverified",
+      "detail": "The customer must give written consent, and the parties must sign a novation. A novation replaces the seller with the buyer as the contracting party. Consent has been requested but not received. There is no reliable completion date. Closing the other assets does not transfer this customer contract. The seller remains the contracting party and liable to the customer until the novation takes effect. These are the supplied counsel conclusions in an invented evaluation brief. The contract and correspondence were not supplied or independently verified.",
+      "popup": {
+        "type": "source",
+        "title": "Consent, novation and the seller's liability",
+        "sections": [
+          {
+            "heading": "Required before transfer",
+            "body": "The customer must give written consent, and the parties must sign a novation. A novation replaces the seller with the buyer as the contracting party."
+          },
+          {
+            "heading": "Current position",
+            "body": "Consent has been requested but not received. There is no reliable completion date. Closing the other assets does not transfer this customer contract."
+          },
+          {
+            "heading": "Seller's liability",
+            "body": "The seller remains the contracting party and liable to the customer until the novation takes effect."
+          },
+          {
+            "heading": "Source limitation",
+            "body": "These are the supplied counsel conclusions in an invented evaluation brief. The contract and correspondence were not supplied or independently verified."
+          }
+        ]
+      },
+      "original": {
+        "availability": "unavailable",
+        "label": "Underlying contract and correspondence not supplied"
+      }
+    },
+    {
+      "id": "transition",
+      "sourceId": "counsel-brief",
+      "claimRefs": ["c-transition", "c-continuity", "c-choice"],
+      "cite": "Supplied counsel brief (fictional evaluation)",
+      "locator": "¶¶3, 5–6",
+      "status": "supplied-unverified",
+      "detail": "Close the asset purchase on 1 October. The seller keeps this customer contract and provides the service for up to 30 days. The buyer pays the agreed £18,000 transition fee. The customer contract still transfers only after written consent and the signed novation. Until then the seller remains liable to the customer. The CFO and COO decide whether keeping the planned closing is worth the £18,000 transition fee. Counsel has not recommended an option.",
+      "popup": {
+        "type": "source",
+        "title": "Close on 1 October with temporary service",
+        "sections": [
+          {
+            "heading": "Commercial terms",
+            "body": "Close the asset purchase on 1 October. The seller keeps this customer contract and provides the service for up to 30 days. The buyer pays the agreed £18,000 transition fee."
+          },
+          {
+            "heading": "Transfer condition",
+            "body": "The customer contract still transfers only after written consent and the signed novation. Until then the seller remains liable to the customer."
+          },
+          {
+            "heading": "What the team decides",
+            "body": "The CFO and COO decide whether keeping the planned closing is worth the £18,000 transition fee. Counsel has not recommended an option."
+          }
+        ]
+      },
+      "original": {
+        "availability": "unavailable",
+        "label": "Underlying contract and correspondence not supplied"
+      }
+    },
+    {
+      "id": "defer",
+      "sourceId": "counsel-brief",
+      "claimRefs": ["c-defer", "c-continuity", "c-choice"],
+      "cite": "Supplied counsel brief (fictional evaluation)",
+      "locator": "¶¶2, 4–6",
+      "status": "supplied-unverified",
+      "detail": "Defer the asset closing until consent and novation are complete. The seller continues ordinary customer service until closing. There is no transition fee, but the closing date is uncertain. The record supplies no reliable date for completing consent and novation. The CFO and COO decide whether avoiding the transition fee is worth deferring closing. Counsel has not recommended an option.",
+      "popup": {
+        "type": "source",
+        "title": "Defer closing until the transfer is ready",
+        "sections": [
+          {
+            "heading": "Closing and service",
+            "body": "Defer the asset closing until consent and novation are complete. The seller continues ordinary customer service until closing."
+          },
+          {
+            "heading": "Cost and timing",
+            "body": "There is no transition fee, but the closing date is uncertain. The record supplies no reliable date for completing consent and novation."
+          },
+          {
+            "heading": "What the team decides",
+            "body": "The CFO and COO decide whether avoiding the transition fee is worth deferring closing. Counsel has not recommended an option."
+          }
+        ]
+      },
+      "original": {
+        "availability": "unavailable",
+        "label": "Underlying contract and correspondence not supplied"
+      }
+    }
+  ]
+}

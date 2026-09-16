@@ -1,0 +1,35 @@
+{
+  "name": "lq-plugin-oss",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "packageManager": "pnpm@11.21.0",
+  "engines": {
+    "node": ">=22.19.0"
+  },
+  "scripts": {
+    "pluginctl": "pnpm --filter @lq/pluginctl start",
+    "check": "pnpm lint && pnpm lint:py && pnpm typecheck && pnpm typecheck:py && pnpm test && pnpm test:browser && pnpm assets:check && pnpm validate",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "lint:py": "uv run ruff format --check skills packages && uv run ruff check skills packages",
+    "format": "biome format --write .",
+    "hooks:install": "node packages/pluginctl/scripts/install-git-hooks.mjs",
+    "typecheck": "pnpm --filter @lq/pluginctl typecheck",
+    "typecheck:py": "sh packages/pluginctl/scripts/typecheck-py.sh",
+    "test": "pnpm test:js && pnpm test:py",
+    "test:js": "pnpm --filter @lq/pluginctl test",
+    "test:browser": "node packages/legaldesign/browser/run.mjs && node packages/legaldesign/browser/fixed-pages.spec.mjs && node packages/legaldesign/browser/forward-design.spec.mjs && node packages/legaldesign/browser/export-files.spec.mjs && node packages/legaldesign/browser/first-paint.spec.mjs && node packages/legaldesign/browser/row-span.spec.mjs && node packages/legaldesign/browser/client-copy-layout.spec.mjs && node packages/legaldesign/browser/dense-diligence.spec.mjs && node packages/legaldesign/browser/reading-width.spec.mjs && node packages/legaldesign/browser/detail-targets.spec.mjs && node packages/legaldesign/browser/single-composition.spec.mjs && node packages/legaldesign/browser/pinch-zoom.spec.mjs && node packages/legaldesign/browser/grouped-overview.spec.mjs && node packages/legaldesign/browser/grouped-card-width.spec.mjs && node packages/legaldesign/browser/grouped-index.spec.mjs && node packages/legaldesign/browser/hub-direction.spec.mjs && node packages/legaldesign/browser/issue-layout.spec.mjs && pnpm test:browser:discovery",
+    "plugin-pack": "pnpm --filter @lq/pluginctl start pack",
+    "plugin-pack:check": "pnpm --filter @lq/pluginctl start pack --check",
+    "validate": "pnpm --filter @lq/pluginctl start validate",
+    "test:browser:discovery": "node packages/document-discovery/browser/run.mjs && node packages/document-discovery/browser/contract-views.mjs && node packages/document-discovery/browser/library-curation.mjs && node packages/document-discovery/browser/review-state.mjs && node packages/document-discovery/browser/compact-choices.mjs && node packages/document-discovery/browser/surfaced-candidates.mjs",
+    "test:py": "uv run pytest -q -rs",
+    "assets:check": "node packages/legaldesign/build-assets.mjs --check",
+    "release:archives": "pnpm plugin-pack && uv run python packages/pluginctl/scripts/build_archives.py"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.5.8",
+    "@playwright/test": "1.62.0"
+  }
+}

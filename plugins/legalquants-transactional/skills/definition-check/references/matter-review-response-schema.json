@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://legalquants.example/schemas/definition-check-matter-review-response-v1.json",
+  "title": "Definition Check Matter Review Response",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "packet_sha256",
+    "authority",
+    "matter_id",
+    "document_id",
+    "version_id",
+    "comparison_version_id",
+    "proposals"
+  ],
+  "properties": {
+    "schema_version": { "const": "matter-review-response-v1" },
+    "packet_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "authority": { "const": "proposal_only" },
+    "matter_id": { "type": "string", "minLength": 1 },
+    "document_id": { "type": "string", "minLength": 1 },
+    "version_id": { "type": "string", "minLength": 1 },
+    "comparison_version_id": { "type": ["string", "null"] },
+    "proposals": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["item_ordinal", "decision", "evidence", "reviewer_note"],
+        "properties": {
+          "item_ordinal": { "type": "integer", "minimum": 1 },
+          "decision": { "type": "string", "minLength": 1 },
+          "evidence": {
+            "type": "array",
+            "items": { "$ref": "#/$defs/location" },
+            "uniqueItems": true
+          },
+          "reviewer_note": { "type": "string", "minLength": 1, "maxLength": 2000 }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "$defs": {
+    "location": {
+      "type": "object",
+      "required": ["matter_id", "document_id", "version_id", "part", "block_id", "block_order", "char_start", "char_end"],
+      "properties": {
+        "matter_id": { "type": "string", "minLength": 1 },
+        "document_id": { "type": "string", "minLength": 1 },
+        "version_id": { "type": "string", "minLength": 1 },
+        "part": { "type": "string", "minLength": 1 },
+        "block_id": { "type": "string", "minLength": 1 },
+        "block_order": { "type": "integer", "minimum": 0 },
+        "char_start": { "type": "integer", "minimum": 0 },
+        "char_end": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

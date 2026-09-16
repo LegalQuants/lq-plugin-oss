@@ -1,0 +1,28 @@
+{
+  "name": "legalquants-companion",
+  "version": "0.1.0",
+  "description": "Your journey with AI as a lawyer — ask, assess, reflect, apply, connect.",
+  "skills": "./skills/",
+  "author": {
+    "name": "LegalQuants",
+    "url": "https://legalquants.com"
+  },
+  "homepage": "https://github.com/LegalQuants/lq-plugin-oss",
+  "repository": "https://github.com/LegalQuants/lq-plugin-oss",
+  "keywords": [
+    "legal",
+    "skills",
+    "agents"
+  ],
+  "interface": {
+    "displayName": "The LegalQuants Companion",
+    "shortDescription": "Your journey with AI as a lawyer",
+    "longDescription": "Your journey with AI as a lawyer — ask, assess, reflect, apply, connect.",
+    "developerName": "LegalQuants",
+    "category": "Productivity",
+    "logo": "./assets/lq-logo.png",
+    "composerIcon": "./assets/lq-logo.png",
+    "websiteURL": "https://github.com/LegalQuants/lq-plugin-oss"
+  },
+  "hooks": "./hooks/openai.json"
+}

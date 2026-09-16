@@ -1,0 +1,1565 @@
+{
+  "schemaVersion": "legaldesign.components.v2",
+  "components": {
+    "flow": {
+      "kind": "diagram",
+      "relationships": [
+        "sequence"
+      ],
+      "parameters": {
+        "stages": {
+          "type": "list",
+          "required": true,
+          "minItems": 2,
+          "maxItems": 6,
+          "itemFields": [
+            "title",
+            "sub",
+            "detail",
+            "accentRole"
+          ],
+          "itemRequired": [
+            "title"
+          ],
+          "itemChoices": {
+            "accentRole": [
+              "open",
+              "incomplete",
+              "uncovered",
+              "recommendation",
+              "action",
+              "decision",
+              "active"
+            ]
+          }
+        },
+        "edges": {
+          "type": "strings",
+          "required": true,
+          "minItems": 1,
+          "maxItems": 5,
+          "countFrom": {
+            "parameter": "stages",
+            "offset": -1
+          }
+        }
+      },
+      "capacity": "2–6 stages",
+      "labels": {
+        "axisTitle": "none",
+        "unit": "none",
+        "dataLabels": "none",
+        "sourceNote": "slot"
+      },
+      "detail": true,
+      "deterministic": true,
+      "recommended": true
+    },
+    "timeline": {
+      "kind": "diagram",
+      "relationships": [
+        "time"
+      ],
+      "parameters": {
+        "marks": {
+          "type": "list",
+          "required": true,
+          "minItems": 3,
+          "maxItems": 5,
+          "itemFields": [
+            "when",
+            "title",
+            "sub",
+            "detail"
+          ],
+          "itemRequired": [
+            "when",
+            "title"
+          ]
+        },
+        "nowAt": {
+          "type": "index",
+          "required": false,
+          "minValue": 0,
+          "maxFrom": "marks"
+        },
+        "orientation": {
+          "type": "choice",
+          "required": false,
+          "choices": [
+            "horizontal",
+            "vertical"
+          ]
+        }
+      },
+      "capacity": "3–5 marks",
+      "labels": {
+        "axisTitle": "time labels",
+        "unit": "in labels",
+        "dataLabels": "marks",
+        "sourceNote": "slot"
+      },
+      "detail": true,
+      "deterministic": true,
+      "recommended": true
+    },
+    "hierarchy": {
+      "kind": "diagram",
+      "relationships": [
+        "hierarchy",
+        "containment"
+      ],
+      "parameters": {
+        "root": {
+          "type": "text",
+          "required": true
+        },
+        "rootSub": {
+          "type": "text",
+          "required": false
+        },
+        "rootDetail": {
+          "type": "text",
+          "required": false
+        },
+        "branches": {
+          "type": "list",
+          "required": true,
+          "minItems": 2,
+          "maxItems": 4,
+          "itemFields": [
+            "title",
+            "sub",
+            "detail",
+            "accentRole",
+            "edge",
+            "leaves"
+          ],
+          "itemRequired": [
+            "title",
+            "edge"
+          ],
+          "itemChoices": {
+            "accentRole": [
+              "open",
+              "incomplete",
+              "uncovered",
+              "recommendation",
+              "action",
+              "decision",
+              "active"
+            ]
+          }
+        }
+      },
+      "capacity": "2–4 branches; 1–2 leaves per branch",
+      "labels": {
+        "axisTitle": "none",
+        "unit": "none",
+        "dataLabels": "nodes",
+        "sourceNote": "slot"
+      },
+      "detail": true,
+      "deterministic": true,
+      "recommended": true
+    },
+    "zones": {
+      "kind": "diagram",
+      "relationships": [
+        "containment"
+      ],
+      "parameters": {
+        "zoneA": {
+          "type": "text",
+          "required": true
+        },
+        "itemsA": {
+          "type": "list",
+          "required": true,
+          "minItems": 1,
+          "maxItems": 3,
+          "itemFields": [
+            "title",
+            "sub",
+            "detail"
+          ],
+          "itemRequired": [
+            "title"
+          ]
+        },
+        "zoneB": {
+          "type": "text",
+          "required": true
+        },
+        "itemsB": {
+          "type": "list",
+          "required": true,
+          "minItems": 1,
+          "maxItems": 3,
+          "itemFields": [
+            "title",
+            "sub",
+            "detail"
+          ],
+          "itemRequired": [
+            "title"
+          ]
+        },
+        "crossing": {
+          "type": "text",
+          "required": true
+        }
+      },
+      "capacity": "1–3 items in each of 2 zones",
+      "labels": {
+        "axisTitle": "none",
+        "unit": "none",
+        "dataLabels": "nodes",
+        "sourceNote": "slot"
+      },
+      "detail": true,
+      "deterministic": true,
+      "recommended": true
+    },
+    "beforeAfter": {
+      "kind": "diagram",
+      "relationships": [
+        "change"
+      ],
+      "parameters": {
+        "orientation": {
+          "type": "choice",
+          "required": false,
+          "choices": [
+            "vertical",
+            "horizontal"
+          ]
+        },
+        "beforeLabel": {
+          "type": "text",
+          "required": true
+        },
+        "beforeSub": {
+          "type": "text",
+          "required": true
+        },
+        "edge": {
+          "type": "text",
+          "required": true
+        },
+        "afterLabel": {
+          "type": "text",
+          "required": true
+        },
+        "afterSub": {
+          "type": "text",
+          "required": true
+        }
+      },
+      "capacity": "2 states",
+      "labels": {
+        "axisTitle": "none",
+        "unit": "none",
+        "dataLabels": "states",
+        "sourceNote": "slot"
+      },
+      "detail": false,
+      "deterministic": true,
+      "recommended": true
+    },
+    "hub": {
+      "kind": "diagram",
+      "relationships": [
+        "interaction",
+        "convergence"
+      ],
+      "parameters": {
+        "centre": {
+          "type": "text",
+          "required": true
+        },
+        "spokes": {
+          "type": "list",
+          "required": true,
+          "minItems": 3,
+          "maxItems": 6,
+          "itemFields": [
+            "title",
+            "edge",
+            "detail"
+          ],
+          "itemRequired": [
+            "title",
+            "edge"
+          ]
+        },
+        "toward": {
+          "type": "choice",
+          "required": true,
+          "choices": [
+            "centre",
+            "satellites"
+          ]
+        }
+      },
+      "capacity": "3–6 spokes",
+      "labels": {
+        "axisTitle": "none",
+        "unit": "none",
+        "dataLabels": "nodes",
+        "sourceNote": "slot"
+      },
+      "detail": true,
+      "deterministic": true,
+      "recommended": true
+    },
+    "compareTwo": {
+      "kind": "diagram",
+      "relationships": [
+        "comparison"
+      ],
+      "parameters": {
+        "a": {
+          "type": "text",
+          "required": true
+        },
+        "b": {
+          "type": "text",
+          "required": true
+        },
+        "aDetail": {
+          "type": "text",
+          "required": false
+        },
+        "bDetail": {
+          "type": "text",
+          "required": false
+        },
+        "highlight": {
+          "type": "choice",
+          "required": true,
+          "choices": [
+            "a",
+            "b",
+            "none"
+          ]
+        },
+        "rows": {
+          "type": "list",
+          "required": true,
+          "minItems": 2,
+          "maxItems": 4,
+          "itemFields": [
+            "label",
+            "a",
+            "b",
+            "winner"
+          ],
+          "itemRequired": [
+            "label",
+            "a",
+            "b",
+            "winner"
+          ],
+          "itemChoices": {
+            "winner": [
+              "a",
+              "b",
+              "none"
+            ]
+          }
+        }
+      },
+      "capacity": "2 options across 2–4 rows",
+      "labels": {
+        "axisTitle": "criteria labels",
+        "unit": "in values",
+        "dataLabels": "cells",
+        "sourceNote": "slot"
+      },
+      "detail": true,
+      "deterministic": true,
+      "recommended": true
+    },
+    "funnel": {
+      "kind": "diagram",
+      "relationships": [
+        "convergence"
+      ],
+      "parameters": {
+        "tiers": {
+          "type": "list",
+          "required": true,
+          "minItems": 2,
+          "maxItems": 3,
+          "itemFields": [
+            "title",
+            "sub",
+            "detail"
+          ],
+          "itemRequired": [
+            "title"
+          ]
+        },
+        "edges": {
+          "type": "strings",
+          "required": true,
+          "minItems": 1,
+          "maxItems": 2,
+          "countFrom": {
+            "parameter": "tiers",
+            "offset": -1
+          }
+        },
+        "outcome": {
+          "type": "text",
+          "required": true
+        }
+      },
+      "capacity": "2–3 tiers",
+      "labels": {
+        "axisTitle": "none",
+        "unit": "none",
+        "dataLabels": "tiers",
+        "sourceNote": "slot"
+      },
+      "detail": true,
+      "deterministic": true,
+      "recommended": false
+    },
+    "loop": {
+      "kind": "diagram",
+      "relationships": [
+        "feedback"
+      ],
+      "parameters": {
+        "centre": {
+          "type": "text",
+          "required": true
+        },
+        "steps": {
+          "type": "list",
+          "required": true,
+          "minItems": 3,
+          "maxItems": 4,
+          "itemFields": [
+            "title",
+            "edge",
+            "detail"
+          ],
+          "itemRequired": [
+            "title",
+            "edge"
+          ]
+        }
+      },
+      "capacity": "3–4 steps",
+      "labels": {
+        "axisTitle": "none",
+        "unit": "none",
+        "dataLabels": "steps",
+        "sourceNote": "slot"
+      },
+      "detail": true,
+      "deterministic": true,
+      "recommended": false
+    },
+    "matrix": {
+      "kind": "diagram",
+      "relationships": [
+        "priority",
+        "comparison"
+      ],
+      "parameters": {
+        "xAxis": {
+          "type": "text",
+          "required": true
+        },
+        "yAxis": {
+          "type": "text",
+          "required": true
+        },
+        "quads": {
+          "type": "list",
+          "required": true,
+          "minItems": 4,
+          "maxItems": 4,
+          "itemFields": [
+            "title",
+            "sub",
+            "detail"
+          ],
+          "itemRequired": [
+            "title"
+          ]
+        },
+        "markAt": {
+          "type": "index",
+          "required": true,
+          "minValue": 0,
+          "maxValue": 3
+        }
+      },
+      "capacity": "4 quadrants",
+      "labels": {
+        "axisTitle": "parameters",
+        "unit": "in axis titles",
+        "dataLabels": "quadrants",
+        "sourceNote": "slot"
+      },
+      "detail": true,
+      "deterministic": true,
+      "recommended": false
+    },
+    "figurePath": {
+      "kind": "diagram",
+      "relationships": [
+        "convergence",
+        "progression"
+      ],
+      "parameters": {
+        "marks": {
+          "type": "strings",
+          "required": true,
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "goal": {
+          "type": "text",
+          "required": true
+        },
+        "caption": {
+          "type": "text",
+          "required": true
+        }
+      },
+      "capacity": "3 marks and 1 goal",
+      "labels": {
+        "axisTitle": "none",
+        "unit": "none",
+        "dataLabels": "marks",
+        "sourceNote": "caption"
+      },
+      "detail": false,
+      "deterministic": true,
+      "recommended": false
+    },
+    "stairSteps": {
+      "kind": "diagram",
+      "relationships": [
+        "sequence",
+        "progression"
+      ],
+      "parameters": {
+        "steps": {
+          "type": "list",
+          "required": true,
+          "minItems": 3,
+          "maxItems": 6,
+          "itemFields": [
+            "title",
+            "sub"
+          ],
+          "itemRequired": [
+            "title"
+          ]
+        },
+        "caption": {
+          "type": "text",
+          "required": false
+        }
+      },
+      "capacity": "3–6 steps",
+      "labels": {
+        "axisTitle": "none",
+        "unit": "none",
+        "dataLabels": "steps",
+        "sourceNote": "caption"
+      },
+      "detail": false,
+      "deterministic": true,
+      "recommended": false
+    },
+    "pyramid": {
+      "kind": "diagram",
+      "relationships": [
+        "hierarchy",
+        "priority"
+      ],
+      "parameters": {
+        "blocks": {
+          "type": "list",
+          "required": true,
+          "minItems": 6,
+          "maxItems": 6,
+          "itemFields": [
+            "title",
+            "sub"
+          ],
+          "itemRequired": [
+            "title"
+          ]
+        },
+        "caption": {
+          "type": "text",
+          "required": false
+        }
+      },
+      "capacity": "6 blocks",
+      "labels": {
+        "axisTitle": "none",
+        "unit": "none",
+        "dataLabels": "blocks",
+        "sourceNote": "caption"
+      },
+      "detail": false,
+      "deterministic": true,
+      "recommended": false
+    },
+    "gears": {
+      "kind": "diagram",
+      "relationships": [
+        "interaction",
+        "feedback"
+      ],
+      "parameters": {
+        "labels": {
+          "type": "strings",
+          "required": true,
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "caption": {
+          "type": "text",
+          "required": false
+        }
+      },
+      "capacity": "3 labels",
+      "labels": {
+        "axisTitle": "none",
+        "unit": "none",
+        "dataLabels": "parts",
+        "sourceNote": "caption"
+      },
+      "detail": false,
+      "deterministic": true,
+      "recommended": false
+    },
+    "rungBars": {
+      "kind": "chart",
+      "relationships": [
+        "comparison",
+        "quantity"
+      ],
+      "parameters": {
+        "items": {
+          "type": "list",
+          "required": true,
+          "minItems": 2,
+          "maxItems": 8,
+          "itemFields": [
+            "label",
+            "value",
+            "open",
+            "detail"
+          ],
+          "itemRequired": [
+            "label",
+            "value"
+          ]
+        },
+        "unit": {
+          "type": "text",
+          "required": true
+        },
+        "yAxisTitle": {
+          "type": "text",
+          "required": true
+        },
+        "sourceNote": {
+          "type": "text",
+          "required": true
+        }
+      },
+      "capacity": "2–8 bars",
+      "labels": {
+        "axisTitle": "required",
+        "unit": "required",
+        "dataLabels": "auto<=12",
+        "sourceNote": "slot"
+      },
+      "detail": true,
+      "deterministic": true,
+      "recommended": true
+    },
+    "hairlineLine": {
+      "kind": "chart",
+      "relationships": [
+        "time",
+        "change"
+      ],
+      "parameters": {
+        "points": {
+          "type": "list",
+          "required": true,
+          "minItems": 3,
+          "maxItems": 30,
+          "itemFields": [
+            "x",
+            "y",
+            "label",
+            "open",
+            "detail"
+          ],
+          "itemRequired": [
+            "x",
+            "y"
+          ]
+        },
+        "xLabels": {
+          "type": "strings",
+          "required": true,
+          "minItems": 3,
+          "maxItems": 30,
+          "countFrom": {
+            "parameter": "points",
+            "offset": 0
+          }
+        },
+        "xAxisTitle": {
+          "type": "text",
+          "required": true
+        },
+        "yAxisTitle": {
+          "type": "text",
+          "required": true
+        },
+        "unit": {
+          "type": "text",
+          "required": true
+        },
+        "baselineZero": {
+          "type": "choice",
+          "required": false,
+          "choices": [
+            "yes",
+            "no"
+          ],
+          "note": "default yes; 'no' must be disclosed in the source note"
+        },
+        "sourceNote": {
+          "type": "text",
+          "required": true
+        }
+      },
+      "capacity": "3–30 points",
+      "labels": {
+        "axisTitle": "required",
+        "unit": "required",
+        "dataLabels": "auto<=12",
+        "sourceNote": "slot"
+      },
+      "detail": true,
+      "deterministic": true,
+      "recommended": true
+    },
+    "hairlineArea": {
+      "kind": "chart",
+      "relationships": [
+        "time",
+        "quantity"
+      ],
+      "parameters": {
+        "points": {
+          "type": "list",
+          "required": true,
+          "minItems": 5,
+          "maxItems": 60,
+          "itemFields": [
+            "x",
+            "y",
+            "label",
+            "open"
+          ],
+          "itemRequired": [
+            "x",
+            "y"
+          ]
+        },
+        "xLabels": {
+          "type": "strings",
+          "required": true,
+          "minItems": 2,
+          "maxItems": 12,
+          "note": "labels for the ticks the renderer places, not one per point"
+        },
+        "xAxisTitle": {
+          "type": "text",
+          "required": true
+        },
+        "yAxisTitle": {
+          "type": "text",
+          "required": true
+        },
+        "unit": {
+          "type": "text",
+          "required": true
+        },
+        "sourceNote": {
+          "type": "text",
+          "required": true
+        }
+      },
+      "capacity": "5–60 points",
+      "labels": {
+        "axisTitle": "required",
+        "unit": "required",
+        "dataLabels": "endpoints and peak",
+        "sourceNote": "slot"
+      },
+      "detail": false,
+      "deterministic": true,
+      "recommended": false
+    },
+    "tickDonut": {
+      "kind": "chart",
+      "relationships": [
+        "part-of-whole"
+      ],
+      "parameters": {
+        "parts": {
+          "type": "list",
+          "required": true,
+          "minItems": 2,
+          "maxItems": 6,
+          "itemFields": [
+            "label",
+            "value",
+            "open",
+            "detail"
+          ],
+          "itemRequired": [
+            "label",
+            "value"
+          ]
+        },
+        "unit": {
+          "type": "text",
+          "required": true,
+          "note": "what one tick is, e.g. 'one contract'"
+        },
+        "total": {
+          "type": "text",
+          "required": false,
+          "note": "rendered in the centre, e.g. '48 contracts'"
+        },
+        "sourceNote": {
+          "type": "text",
+          "required": true
+        }
+      },
+      "capacity": "2–6 parts, up to 120 ticks",
+      "labels": {
+        "axisTitle": "none",
+        "unit": "required",
+        "dataLabels": "every part",
+        "sourceNote": "slot"
+      },
+      "detail": true,
+      "deterministic": true,
+      "recommended": false
+    },
+    "tickRows": {
+      "kind": "chart",
+      "relationships": [
+        "comparison",
+        "quantity"
+      ],
+      "parameters": {
+        "items": {
+          "type": "list",
+          "required": true,
+          "minItems": 2,
+          "maxItems": 8,
+          "itemFields": [
+            "label",
+            "value",
+            "open",
+            "detail"
+          ],
+          "itemRequired": [
+            "label",
+            "value"
+          ]
+        },
+        "unit": {
+          "type": "text",
+          "required": true
+        },
+        "xAxisTitle": {
+          "type": "text",
+          "required": true
+        },
+        "sourceNote": {
+          "type": "text",
+          "required": true
+        }
+      },
+      "capacity": "2–8 rows, up to 40 ticks per row",
+      "labels": {
+        "axisTitle": "required",
+        "unit": "required",
+        "dataLabels": "every row",
+        "sourceNote": "slot"
+      },
+      "detail": true,
+      "deterministic": true,
+      "recommended": false
+    },
+    "pairedRungs": {
+      "kind": "chart",
+      "relationships": [
+        "comparison",
+        "change"
+      ],
+      "parameters": {
+        "aLabel": {
+          "type": "text",
+          "required": true
+        },
+        "bLabel": {
+          "type": "text",
+          "required": true
+        },
+        "items": {
+          "type": "list",
+          "required": true,
+          "minItems": 2,
+          "maxItems": 6,
+          "itemFields": [
+            "label",
+            "a",
+            "b",
+            "open",
+            "detail"
+          ],
+          "itemRequired": [
+            "label",
+            "a",
+            "b"
+          ]
+        },
+        "unit": {
+          "type": "text",
+          "required": true
+        },
+        "xAxisTitle": {
+          "type": "text",
+          "required": true
+        },
+        "sourceNote": {
+          "type": "text",
+          "required": true
+        }
+      },
+      "capacity": "2–6 categories",
+      "labels": {
+        "axisTitle": "required",
+        "unit": "required",
+        "dataLabels": "auto<=12",
+        "sourceNote": "slot"
+      },
+      "detail": true,
+      "deterministic": true,
+      "recommended": false
+    },
+    "stackedRungs": {
+      "kind": "chart",
+      "relationships": [
+        "part-of-whole",
+        "comparison"
+      ],
+      "parameters": {
+        "partLabels": {
+          "type": "strings",
+          "required": true,
+          "minItems": 2,
+          "maxItems": 4
+        },
+        "items": {
+          "type": "list",
+          "required": true,
+          "minItems": 2,
+          "maxItems": 6,
+          "itemFields": [
+            "label",
+            "parts",
+            "open",
+            "detail"
+          ],
+          "itemRequired": [
+            "label",
+            "parts"
+          ],
+          "note": "parts is a number array matching partLabels"
+        },
+        "unit": {
+          "type": "text",
+          "required": true
+        },
+        "xAxisTitle": {
+          "type": "text",
+          "required": true
+        },
+        "sourceNote": {
+          "type": "text",
+          "required": true
+        }
+      },
+      "capacity": "2–6 bars × 2–4 parts",
+      "labels": {
+        "axisTitle": "required",
+        "unit": "required",
+        "dataLabels": "segment values when 12 or fewer segments; the total at the bar end",
+        "sourceNote": "slot"
+      },
+      "detail": true,
+      "deterministic": true,
+      "recommended": true
+    },
+    "plumbScatter": {
+      "kind": "chart",
+      "relationships": [
+        "correlation"
+      ],
+      "parameters": {
+        "points": {
+          "type": "list",
+          "required": true,
+          "minItems": 3,
+          "maxItems": 20,
+          "itemFields": [
+            "x",
+            "y",
+            "label",
+            "open",
+            "detail"
+          ],
+          "itemRequired": [
+            "x",
+            "y",
+            "label"
+          ]
+        },
+        "xAxisTitle": {
+          "type": "text",
+          "required": true
+        },
+        "yAxisTitle": {
+          "type": "text",
+          "required": true
+        },
+        "xUnit": {
+          "type": "text",
+          "required": true
+        },
+        "yUnit": {
+          "type": "text",
+          "required": true
+        },
+        "sourceNote": {
+          "type": "text",
+          "required": true
+        }
+      },
+      "capacity": "3–20 points",
+      "labels": {
+        "axisTitle": "required",
+        "unit": "required",
+        "dataLabels": "every point",
+        "sourceNote": "slot"
+      },
+      "detail": true,
+      "deterministic": true,
+      "recommended": false
+    },
+    "rungWaterfall": {
+      "kind": "chart",
+      "relationships": [
+        "change",
+        "sequence"
+      ],
+      "parameters": {
+        "start": {
+          "type": "number",
+          "required": true
+        },
+        "startLabel": {
+          "type": "text",
+          "required": true
+        },
+        "steps": {
+          "type": "list",
+          "required": true,
+          "minItems": 2,
+          "maxItems": 6,
+          "itemFields": [
+            "label",
+            "delta",
+            "open",
+            "detail"
+          ],
+          "itemRequired": [
+            "label",
+            "delta"
+          ]
+        },
+        "endLabel": {
+          "type": "text",
+          "required": true
+        },
+        "unit": {
+          "type": "text",
+          "required": true
+        },
+        "yAxisTitle": {
+          "type": "text",
+          "required": true
+        },
+        "sourceNote": {
+          "type": "text",
+          "required": true
+        }
+      },
+      "capacity": "2–6 steps",
+      "labels": {
+        "axisTitle": "required",
+        "unit": "required",
+        "dataLabels": "every step and both ends",
+        "sourceNote": "slot"
+      },
+      "detail": true,
+      "deterministic": true,
+      "recommended": false
+    },
+    "dotHeat": {
+      "kind": "chart",
+      "relationships": [
+        "distribution",
+        "interaction"
+      ],
+      "parameters": {
+        "rows": {
+          "type": "strings",
+          "required": true,
+          "minItems": 2,
+          "maxItems": 8
+        },
+        "cols": {
+          "type": "strings",
+          "required": true,
+          "minItems": 2,
+          "maxItems": 12
+        },
+        "values": {
+          "type": "matrix",
+          "required": true,
+          "note": "rows × cols numbers ≥ 0"
+        },
+        "rowAxisTitle": {
+          "type": "text",
+          "required": true
+        },
+        "colAxisTitle": {
+          "type": "text",
+          "required": true
+        },
+        "unit": {
+          "type": "text",
+          "required": true
+        },
+        "sourceNote": {
+          "type": "text",
+          "required": true
+        }
+      },
+      "capacity": "up to 8 × 12 cells",
+      "labels": {
+        "axisTitle": "required",
+        "unit": "required",
+        "dataLabels": "the maximum cell and any cell marked open",
+        "sourceNote": "slot"
+      },
+      "detail": false,
+      "deterministic": true,
+      "recommended": false
+    },
+    "tickGauge": {
+      "kind": "chart",
+      "relationships": [
+        "quantity",
+        "progression"
+      ],
+      "parameters": {
+        "value": {
+          "type": "number",
+          "required": true
+        },
+        "max": {
+          "type": "number",
+          "required": true
+        },
+        "label": {
+          "type": "text",
+          "required": true
+        },
+        "unit": {
+          "type": "text",
+          "required": true
+        },
+        "open": {
+          "type": "choice",
+          "required": false,
+          "choices": [
+            "yes",
+            "no"
+          ]
+        },
+        "sourceNote": {
+          "type": "text",
+          "required": true
+        }
+      },
+      "capacity": "one value against one bound (max ≤ 100 ticks)",
+      "labels": {
+        "axisTitle": "none",
+        "unit": "required",
+        "dataLabels": "the value and the bound",
+        "sourceNote": "slot"
+      },
+      "detail": false,
+      "deterministic": true,
+      "recommended": false
+    },
+    "dumbbell": {
+      "kind": "chart",
+      "relationships": [
+        "change",
+        "comparison"
+      ],
+      "parameters": {
+        "beforeLabel": {
+          "type": "text",
+          "required": true
+        },
+        "afterLabel": {
+          "type": "text",
+          "required": true
+        },
+        "items": {
+          "type": "list",
+          "required": true,
+          "minItems": 2,
+          "maxItems": 6,
+          "itemFields": [
+            "label",
+            "before",
+            "after",
+            "open",
+            "detail"
+          ],
+          "itemRequired": [
+            "label",
+            "before",
+            "after"
+          ]
+        },
+        "unit": {
+          "type": "text",
+          "required": true
+        },
+        "xAxisTitle": {
+          "type": "text",
+          "required": true
+        },
+        "sourceNote": {
+          "type": "text",
+          "required": true
+        }
+      },
+      "capacity": "2–6 categories",
+      "labels": {
+        "axisTitle": "required",
+        "unit": "required",
+        "dataLabels": "both ends of every dumbbell",
+        "sourceNote": "slot"
+      },
+      "detail": true,
+      "deterministic": true,
+      "recommended": false
+    },
+    "treemap": {
+      "kind": "chart",
+      "relationships": [
+        "part-of-whole",
+        "hierarchy"
+      ],
+      "parameters": {
+        "items": {
+          "type": "list",
+          "required": true,
+          "minItems": 2,
+          "maxItems": 8,
+          "itemFields": [
+            "label",
+            "value",
+            "children",
+            "open",
+            "detail"
+          ],
+          "itemRequired": [
+            "label",
+            "value"
+          ],
+          "note": "children is a nested list of the same shape, at most one level deep, at most 6 per parent"
+        },
+        "unit": {
+          "type": "text",
+          "required": true
+        },
+        "total": {
+          "type": "text",
+          "required": false
+        },
+        "sourceNote": {
+          "type": "text",
+          "required": true
+        }
+      },
+      "capacity": "2–8 items, one nested level",
+      "labels": {
+        "axisTitle": "none",
+        "unit": "required",
+        "dataLabels": "every rectangle wide enough; smaller ones listed in the source note",
+        "sourceNote": "slot"
+      },
+      "detail": true,
+      "deterministic": true,
+      "recommended": false
+    },
+    "rungHistogram": {
+      "kind": "chart",
+      "relationships": [
+        "distribution"
+      ],
+      "parameters": {
+        "bins": {
+          "type": "list",
+          "required": true,
+          "minItems": 3,
+          "maxItems": 12,
+          "itemFields": [
+            "label",
+            "count",
+            "open",
+            "detail"
+          ],
+          "itemRequired": [
+            "label",
+            "count"
+          ]
+        },
+        "xAxisTitle": {
+          "type": "text",
+          "required": true
+        },
+        "unit": {
+          "type": "text",
+          "required": true,
+          "note": "what is being counted"
+        },
+        "sourceNote": {
+          "type": "text",
+          "required": true
+        }
+      },
+      "capacity": "3–12 bins",
+      "labels": {
+        "axisTitle": "required",
+        "unit": "required",
+        "dataLabels": "every bin",
+        "sourceNote": "slot"
+      },
+      "detail": true,
+      "deterministic": true,
+      "recommended": false
+    },
+    "tickBox": {
+      "kind": "chart",
+      "relationships": [
+        "distribution",
+        "comparison"
+      ],
+      "parameters": {
+        "groups": {
+          "type": "list",
+          "required": true,
+          "minItems": 1,
+          "maxItems": 6,
+          "itemFields": [
+            "label",
+            "min",
+            "q1",
+            "median",
+            "q3",
+            "max",
+            "outliers",
+            "open",
+            "detail"
+          ],
+          "itemRequired": [
+            "label",
+            "min",
+            "q1",
+            "median",
+            "q3",
+            "max"
+          ]
+        },
+        "xAxisTitle": {
+          "type": "text",
+          "required": true
+        },
+        "unit": {
+          "type": "text",
+          "required": true
+        },
+        "sourceNote": {
+          "type": "text",
+          "required": true
+        }
+      },
+      "capacity": "1–6 groups",
+      "labels": {
+        "axisTitle": "required",
+        "unit": "required",
+        "dataLabels": "the median of every group",
+        "sourceNote": "slot"
+      },
+      "detail": true,
+      "deterministic": true,
+      "recommended": false
+    },
+    "streamRibbon": {
+      "kind": "chart",
+      "relationships": [
+        "time",
+        "part-of-whole"
+      ],
+      "parameters": {
+        "seriesLabels": {
+          "type": "strings",
+          "required": true,
+          "minItems": 2,
+          "maxItems": 5
+        },
+        "xLabels": {
+          "type": "strings",
+          "required": true,
+          "minItems": 3,
+          "maxItems": 12
+        },
+        "values": {
+          "type": "matrix",
+          "required": true,
+          "note": "series × x numbers ≥ 0"
+        },
+        "xAxisTitle": {
+          "type": "text",
+          "required": true
+        },
+        "yAxisTitle": {
+          "type": "text",
+          "required": true
+        },
+        "unit": {
+          "type": "text",
+          "required": true
+        },
+        "sourceNote": {
+          "type": "text",
+          "required": true
+        }
+      },
+      "capacity": "2–5 series × 3–12 points",
+      "labels": {
+        "axisTitle": "required",
+        "unit": "required",
+        "dataLabels": "series named at their last point; the total at first and last",
+        "sourceNote": "slot"
+      },
+      "detail": false,
+      "deterministic": true,
+      "recommended": false
+    },
+    "rangeBars": {
+      "kind": "chart",
+      "relationships": [
+        "quantity",
+        "comparison"
+      ],
+      "parameters": {
+        "items": {
+          "type": "list",
+          "required": true,
+          "minItems": 1,
+          "maxItems": 8,
+          "itemFields": [
+            "label",
+            "low",
+            "high",
+            "mark",
+            "markLabel",
+            "open",
+            "detail"
+          ],
+          "itemRequired": [
+            "label",
+            "low",
+            "high"
+          ]
+        },
+        "unit": {
+          "type": "text",
+          "required": true
+        },
+        "xAxisTitle": {
+          "type": "text",
+          "required": true
+        },
+        "scaleMin": {
+          "type": "number",
+          "required": false
+        },
+        "scaleMax": {
+          "type": "number",
+          "required": false
+        },
+        "sourceNote": {
+          "type": "text",
+          "required": true
+        }
+      },
+      "capacity": "1–8 intervals",
+      "labels": {
+        "axisTitle": "required",
+        "unit": "required",
+        "dataLabels": "low, high, and the mark on every item",
+        "sourceNote": "slot"
+      },
+      "detail": true,
+      "deterministic": true,
+      "recommended": true
+    }
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://legalquants.example/schemas/conform-run-1.0.0.json",
+  "title": "Conform Run Record",
+  "description": "Top-level canonical output of one /conform run. This is what conform.json must conform to.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "engine_version",
+    "run_status",
+    "mode",
+    "source_document",
+    "core_document",
+    "mappings",
+    "escalations",
+    "limitations"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "engine_version": { "type": "string", "minLength": 1 },
+    "run_status": {
+      "enum": [
+        "completed",
+        "completed_reduced_assurance",
+        "not_run_missing_capability",
+        "not_run_policy_restricted",
+        "not_run_unsupported_input",
+        "partial_input",
+        "insufficient_evidence",
+        "failed"
+      ]
+    },
+    "mode": {
+      "enum": ["conform_selected_text", "precedent_leakage_check"]
+    },
+    "source_document": { "$ref": "#/$defs/document_ref" },
+    "core_document": { "$ref": "#/$defs/document_ref" },
+    "mappings": {
+      "type": "array",
+      "items": { "$ref": "https://legalquants.example/schemas/conform-mapping-1.0.0.json" }
+    },
+    "escalations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["mapping_id", "reason"],
+        "properties": {
+          "mapping_id": { "type": "string", "minLength": 1 },
+          "reason": { "type": "string", "minLength": 1 }
+        }
+      },
+      "description": "One entry per mapping whose escalation.required is true, denormalized for a lawyer-facing escalation list. Every mapping_id here must also appear in mappings with escalation.required == true."
+    },
+    "redline": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": { "type": "string", "minLength": 1 },
+        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    },
+    "clean_text": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": { "type": "string", "minLength": 1 },
+        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "$defs": {
+    "document_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["document_id", "name", "sha256", "ledger_schema_version"],
+      "properties": {
+        "document_id": { "type": "string", "minLength": 1 },
+        "name": { "type": "string", "minLength": 1 },
+        "sha256": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$" },
+        "ledger_schema_version": { "const": "0.14.0" }
+      }
+    }
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "name": "legalquants-skills",
+  "interface": {
+    "displayName": "LegalQuants Skills"
+  },
+  "plugins": [
+    {
+      "name": "legalquants-litigation",
+      "source": {
+        "source": "local",
+        "path": "./plugins/legalquants-litigation"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "legalquants-transactional",
+      "source": {
+        "source": "local",
+        "path": "./plugins/legalquants-transactional"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "legalquants-companion",
+      "source": {
+        "source": "local",
+        "path": "./plugins/legalquants-companion"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

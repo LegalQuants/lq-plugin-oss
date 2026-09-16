@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://legalquants.example/schemas/definition-check-single-document-review-packet-v3.json",
+  "title": "Definition Check Single-Document Review Packet",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "stage",
+    "packet",
+    "instruction",
+    "prompt_version",
+    "prompt_sha256",
+    "row_fields",
+    "response_schema",
+    "response_template"
+  ],
+  "properties": {
+    "schema_version": { "const": "review-packet-v3" },
+    "stage": { "enum": ["discovery", "semantic", "occurrence", "reference"] },
+    "packet": { "type": "integer", "minimum": 1 },
+    "instruction": { "type": "string", "minLength": 1 },
+    "prompt_version": { "type": "string", "minLength": 1 },
+    "prompt_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "row_fields": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    },
+    "response_schema": {
+      "type": "object",
+      "required": ["$schema", "type", "additionalProperties", "required", "properties"],
+      "properties": {
+        "$schema": { "const": "https://json-schema.org/draft/2020-12/schema" },
+        "type": { "const": "object" },
+        "additionalProperties": { "const": false },
+        "required": { "const": ["packet", "rows"] },
+        "properties": { "type": "object" }
+      },
+      "additionalProperties": false
+    },
+    "response_template": {
+      "type": "object",
+      "required": ["packet", "rows"],
+      "properties": {
+        "packet": { "type": "integer", "minimum": 1 },
+        "rows": { "type": "array" }
+      },
+      "additionalProperties": false
+    },
+    "outline": { "type": "array" },
+    "fragments": { "type": "array" },
+    "item_constraints": { "type": "array" },
+    "decision_codes": { "type": "array" },
+    "review_reason_codes": { "type": "array" },
+    "term_index": { "type": "array" },
+    "context_pool": { "type": "array" },
+    "items": { "type": "array" },
+    "groups": { "type": "array" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "stage": { "const": "discovery" } } },
+      "then": {
+        "required": ["outline", "fragments"],
+        "not": {
+          "anyOf": [
+            { "required": ["items"] },
+            { "required": ["groups"] },
+            { "required": ["context_pool"] }
+          ]
+        }
+      }
+    },
+    {
+      "if": { "properties": { "stage": { "const": "semantic" } } },
+      "then": {
+        "required": ["item_constraints", "decision_codes", "review_reason_codes", "term_index", "context_pool", "items"]
+      }
+    },
+    {
+      "if": { "properties": { "stage": { "const": "occurrence" } } },
+      "then": {
+        "required": ["decision_codes", "review_reason_codes", "context_pool", "groups"]
+      }
+    },
+    {
+      "if": { "properties": { "stage": { "const": "reference" } } },
+      "then": {
+        "required": ["item_constraints", "decision_codes", "review_reason_codes", "context_pool", "items"]
+      }
+    }
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,8 @@
+interface:
+  display_name: "Debrief"
+  short_description: "The moments that mattered in your recent AI sessions"
+  default_prompt: "Use $debrief to go through my sessions from the last week."
+  brand_color: "#2d2d2d"
+
+policy:
+  allow_implicit_invocation: true

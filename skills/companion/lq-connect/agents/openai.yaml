@@ -1,0 +1,8 @@
+interface:
+  display_name: "Connect"
+  short_description: "Find a LegalQuants member who's been through it"
+  default_prompt: "Use $lq-connect to find someone who knows about <what I'm working on>."
+  brand_color: "#2d2d2d"
+
+policy:
+  allow_implicit_invocation: false

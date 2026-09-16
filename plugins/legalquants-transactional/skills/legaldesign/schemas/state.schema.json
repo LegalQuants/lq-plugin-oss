@@ -1,0 +1,503 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://legalquants.com/schemas/legaldesign-state.schema.json",
+  "title": "LegalDesign portable state",
+  "type": "object",
+  "properties": {
+    "schema": {"const": "legaldesign.state.v1"},
+    "sourceSchemaVersion": {
+      "enum": ["legaldesign.build.v2", "legaldesign.build.v3", "legaldesign.build.v4"],
+      "description": "Build provenance. Legacy v1 state may omit this field."
+    },
+    "artifactId": {"type": "string", "minLength": 1},
+    "savedAt": {"type": ["string", "null"]},
+    "brief": {
+      "type": "object",
+      "properties": {
+        "title": {"type": "string", "minLength": 1},
+        "reader": {"type": "string", "minLength": 1},
+        "action": {"type": "string", "minLength": 1},
+        "purpose": {
+          "enum": ["decide", "understand", "choose", "status", "review", "other"]
+        },
+        "message": {"type": "string", "minLength": 1},
+        "spine": {
+          "enum": [
+            "sequence", "time", "hierarchy", "containment", "comparison",
+            "convergence", "feedback", "priority", "progression", "interaction",
+            "part-of-whole", "distribution", "correlation", "change", "quantity"
+          ]
+        },
+        "situation": {"enum": ["laptop", "phone", "meeting", "print"]},
+        "form": {"enum": ["one-page", "slide-brief", "walkthrough", "report", "library", "custom"]},
+        "sources": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {"type": "string", "minLength": 1},
+              "label": {"type": "string", "minLength": 1},
+              "status": {
+                "enum": ["supplied", "supplied-unverified", "verified", "retrieved", "unavailable"]
+              },
+              "note": {"type": "string"}
+            },
+            "required": ["id", "label", "status"],
+            "additionalProperties": false
+          }
+        },
+        "assumptions": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "gaps": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "run": {"type": "object"}
+      },
+      "required": [
+        "reader", "action", "purpose", "message", "spine", "situation",
+        "form", "sources", "assumptions", "gaps"
+      ],
+      "additionalProperties": false
+    },
+    "style": {
+      "type": "object",
+      "properties": {
+        "source": {"enum": ["loxoto", "design-md", "template", "playbook"]},
+        "ref": {"type": ["string", "null"]}
+      },
+      "required": ["source", "ref"],
+      "additionalProperties": false
+    },
+    "overview": {
+      "type": "object",
+      "description": "Typed orientation and navigation references. Reference existence, first-section identity, anchor distinctness and destination coverage require semantic validation; standard JSON Schema cannot compare these values with sibling data.",
+      "properties": {
+        "sectionId": {"type": "string", "minLength": 1},
+        "contextUnitIds": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "questionUnitId": {"type": "string", "minLength": 1},
+        "answerUnitId": {"type": "string", "minLength": 1},
+        "groups": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 12,
+          "items": {
+            "type": "object",
+            "properties": {
+              "label": {"type": "string", "minLength": 1, "maxLength": 48, "pattern": "\\S"},
+              "topicUnitIds": {
+                "type": "array", "minItems": 1, "uniqueItems": true,
+                "items": {"type": "string", "minLength": 1}
+              }
+            },
+            "required": ["label", "topicUnitIds"],
+            "additionalProperties": false
+          }
+        },
+        "topics": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "properties": {
+              "unitId": {"type": "string", "minLength": 1},
+              "targetSectionId": {"type": "string", "minLength": 1}
+            },
+            "required": ["unitId", "targetSectionId"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": ["sectionId", "contextUnitIds", "questionUnitId", "answerUnitId", "topics"],
+      "additionalProperties": false
+    },
+    "composition": {
+      "type": "object",
+      "description": "A v4 client export retains strategy and section/layout references only. Authoring fields are optional here, but are required for legacy approach compositions below.",
+      "properties": {
+        "strategy": {"enum": ["composed", "template-import"]},
+        "shape": {"type": "string", "minLength": 1},
+        "rationale": {"type": "string", "minLength": 1},
+        "sections": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {"type": "string", "minLength": 1},
+              "purpose": {"type": "string", "minLength": 1},
+              "indexLabel": {"type": "string", "minLength": 1, "maxLength": 48},
+              "issueLayout": {"$ref": "#/$defs/issueLayout"},
+              "unitIds": {
+                "type": "array",
+                "minItems": 1,
+                "items": {"type": "string", "minLength": 1},
+                "uniqueItems": true
+              },
+              "layout": {
+                "type": "object",
+                "properties": {
+                  "columns": {"const": 12},
+                  "placements": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "unitId": {"type": "string", "minLength": 1},
+                        "row": {"type": "integer", "minimum": 1},
+                        "rowSpan": {"type": "integer", "minimum": 1, "maximum": 12, "default": 1},
+                        "column": {"type": "integer", "minimum": 1, "maximum": 12},
+                        "span": {"type": "integer", "minimum": 1, "maximum": 12}
+                      },
+                      "required": ["unitId", "row", "column", "span"],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "required": ["columns", "placements"],
+                "additionalProperties": false
+              }
+            },
+            "required": ["id", "unitIds", "layout"],
+            "additionalProperties": false
+          }
+        },
+        "templateRef": {"type": ["string", "null"]}
+      },
+      "required": ["strategy", "sections"],
+      "additionalProperties": false
+    },
+    "approaches": {
+      "type": "object",
+      "properties": {
+        "a": {"$ref": "#/$defs/approach"},
+        "b": {"$ref": "#/$defs/approach"}
+      },
+      "minProperties": 1,
+      "additionalProperties": false
+    },
+    "claims": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "text": {"type": "string", "minLength": 1},
+          "kind": {"enum": ["material", "context"]},
+          "sourceIds": {
+            "type": "array",
+            "minItems": 1,
+            "items": {"type": "string", "minLength": 1},
+            "uniqueItems": true
+          },
+          "placement": {"enum": ["surface", "detail", "omitted"]},
+          "evidenceIds": {
+            "type": "array",
+            "items": {"type": "string", "minLength": 1},
+            "uniqueItems": true
+          },
+          "omissionReason": {"type": "string", "minLength": 1}
+        },
+        "required": ["id", "text", "kind", "sourceIds", "placement", "evidenceIds"],
+        "additionalProperties": false
+      }
+    },
+    "units": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "kind": {"enum": ["text", "card", "figure", "table", "evidence", "decision"]},
+          "role": {"enum": ["title", "answer", "summary", "action", "scope", "finding", "expected", "matter"]},
+          "claim": {"type": "string"},
+          "relationship": {"type": "string", "minLength": 1},
+          "candidates": {"type": "array", "items": {"type": "string"}},
+          "claimRefs": {
+            "type": "array",
+            "minItems": 1,
+            "items": {"type": "string", "minLength": 1},
+            "uniqueItems": true
+          },
+          "evidence": {
+            "type": "array",
+            "items": {"type": "string", "minLength": 1},
+            "uniqueItems": true
+          },
+          "detail": {
+            "type": "string",
+            "minLength": 1
+          },
+          "detailAnchor": {"type": "string", "minLength": 1, "maxLength": 64},
+          "sourcePreview": {"const": true},
+          "selected": {"enum": ["a", "b"]},
+          "variants": {
+            "type": "object",
+            "properties": {
+              "a": {"$ref": "#/$defs/variant"},
+              "b": {"$ref": "#/$defs/variant"}
+            },
+            "required": ["a"],
+            "additionalProperties": false
+          },
+          "edits": {
+            "type": "object",
+            "properties": {
+              "a": {"type": ["string", "null"]},
+              "b": {"type": ["string", "null"]}
+            },
+            "additionalProperties": false
+          },
+          "placeholder": {"type": "string"},
+          "placeholder_title": {"type": "string"},
+          "placeholder_sub": {"type": "string"},
+          "source_note": {"type": "string"},
+          "single": {"type": "boolean"},
+          "tag": {"type": "string"},
+          "question": {"type": "string"},
+          "selection_mode": {"enum": ["single", "multiple"]},
+          "allow_custom": {"type": "boolean"},
+          "allow_note": {"type": "boolean"},
+          "options": {"type": "array", "items": {"type": "object"}}
+        },
+        "required": ["kind", "selected", "variants", "edits", "placeholder"],
+        "additionalProperties": false
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "cite": {"type": "string"},
+          "locator": {"type": "string"},
+          "sourceId": {"type": "string", "minLength": 1},
+          "claimRefs": {
+            "type": "array",
+            "minItems": 1,
+            "items": {"type": "string", "minLength": 1},
+            "uniqueItems": true
+          },
+          "detail": {"type": "string", "minLength": 1},
+          "popup": {
+            "type": "object",
+            "properties": {
+              "type": {"enum": ["source", "explainer", "detail"]},
+              "title": {"type": "string", "minLength": 1},
+              "lede": {"type": "string", "minLength": 1},
+              "sections": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "heading": {"type": "string", "minLength": 1},
+                    "body": {"type": "string", "minLength": 1}
+                  },
+                  "required": ["heading", "body"],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": ["type", "title", "sections"],
+            "additionalProperties": false
+          },
+          "original": {
+            "type": "object",
+            "properties": {
+              "availability": {"enum": ["linked", "unavailable"]},
+              "href": {"type": "string", "minLength": 1},
+              "label": {"type": "string", "minLength": 1}
+            },
+            "required": ["availability", "label"],
+            "additionalProperties": false
+          },
+          "excerpt": {"type": "string"},
+          "link": {"type": ["string", "null"]},
+          "image": {
+            "type": "object",
+            "properties": {
+              "status": {"type": "string", "minLength": 1},
+              "data": {"type": ["string", "null"]},
+              "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+              "sourceSha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+              "locator": {"type": "string"},
+              "captureMethod": {"type": "string"},
+              "capturedAt": {"type": "string"},
+              "alt": {"type": "string"}
+            },
+            "required": ["status"],
+            "additionalProperties": false
+          },
+          "status": {"type": "string"},
+          "provenance": {"type": "string"}
+        },
+        "required": ["cite", "locator", "excerpt", "link", "status"],
+        "additionalProperties": false
+      }
+    },
+    "review": {
+      "type": "object",
+      "description": "Portable artifact interactions: explicit decision answers plus display state. This namespace is retained for v1 compatibility; it does not imply a universal review UI.",
+      "properties": {
+        "decisions": {
+          "type": "object",
+          "description": "Answers and optional notes for explicit decision units only."
+        },
+        "reactions": {
+          "type": "object",
+          "deprecated": true,
+          "description": "Legacy v1 field. Preserved when an older working file is reopened, but no new artifact creates or displays universal reactions."
+        },
+        "comments": {
+          "type": "array",
+          "deprecated": true,
+          "description": "Legacy v1 field. Preserved when an older working file is reopened, but no new artifact creates or displays universal comments."
+        },
+        "approach": {"enum": ["a", "b"]},
+        "theme": {"enum": ["light", "dark"]},
+        "location": {"type": ["integer", "string", "null"]}
+      },
+      "additionalProperties": false
+    },
+    "history": {"type": "array", "maxItems": 200}
+  },
+  "$defs": {
+    "issueLayout": {
+      "type": "object",
+      "properties": {
+        "findingUnitId": {"type": "string", "minLength": 1},
+        "implicationUnitId": {"type": "string", "minLength": 1},
+        "actionUnitId": {"type": "string", "minLength": 1},
+        "supportUnitIds": {"type": "array", "minItems": 1, "maxItems": 2, "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+      },
+      "required": ["findingUnitId", "implicationUnitId", "actionUnitId", "supportUnitIds"],
+      "additionalProperties": false
+    },
+    "approach": {
+      "type": "object",
+      "properties": {
+        "label": {"type": "string", "minLength": 1},
+        "rationale": {"type": "string", "minLength": 1},
+        "composition": {"$ref": "#/$defs/authoringComposition"}
+      },
+      "required": ["label", "rationale", "composition"],
+      "additionalProperties": false
+    },
+    "authoringComposition": {
+      "allOf": [
+        {"$ref": "#/properties/composition"},
+        {
+          "required": ["shape", "rationale", "templateRef"],
+          "properties": {
+            "sections": {"items": {"required": ["purpose"]}}
+          }
+        }
+      ]
+    },
+    "variant": {
+      "type": "object",
+      "properties": {
+        "html": {"type": "string"},
+        "component": {"type": "string"},
+        "params": {"type": "object"},
+        "axis": {"enum": ["form", "framing", "granularity", "emphasis", "layout", "register", "single"]},
+        "why": {"type": "string"},
+        "encoding": {"type": "string"},
+        "title": {"type": "string"},
+        "sub": {"type": "string"},
+        "layout": {"type": "string"},
+        "cards": {"type": "array"},
+        "segments": {"type": "array"},
+        "items": {"type": "array"},
+        "agreed_line": {"type": "string"},
+        "rows": {},
+        "text": {"type": "boolean"}
+      },
+      "required": ["axis", "why"],
+      "additionalProperties": false
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"sourceSchemaVersion": {"const": "legaldesign.build.v3"}},
+        "required": ["sourceSchemaVersion"]
+      },
+      "then": {
+        "required": ["approaches"],
+        "properties": {
+          "brief": {"required": ["title"]}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"sourceSchemaVersion": {"const": "legaldesign.build.v4"}},
+        "required": ["sourceSchemaVersion"]
+      },
+      "then": {
+        "required": ["composition", "overview"],
+        "not": {"required": ["approaches"]},
+        "properties": {
+          "brief": {
+            "required": ["title"],
+            "properties": {"form": {"enum": ["one-page", "slide-brief"]}}
+          },
+          "composition": {
+            "if": {"properties": {"strategy": {"const": "composed"}}},
+            "then": {"properties": {"templateRef": {"const": null}}},
+            "else": {"properties": {"templateRef": {"type": "string", "minLength": 1}}}
+          },
+          "units": {
+            "minProperties": 1,
+            "propertyNames": {"minLength": 1},
+            "additionalProperties": {
+              "properties": {
+                "selected": {"const": "a"},
+                "variants": {"maxProperties": 1, "not": {"required": ["b"]}},
+                "edits": {"not": {"required": ["b"]}}
+              }
+            }
+          },
+          "review": {
+            "not": {"required": ["approach"]},
+            "properties": {"location": {"type": ["integer", "null"], "minimum": 0}}
+          }
+        },
+        "allOf": [
+          {
+            "if": {"properties": {"overview": {"required": ["groups"]}}},
+            "then": {"properties": {"brief": {"properties": {"form": {"const": "slide-brief"}}}}}
+          },
+          {
+            "if": {"properties": {"brief": {"properties": {"form": {"const": "one-page"}}}}},
+            "then": {
+              "properties": {
+                "composition": {"properties": {"sections": {"maxItems": 1}}},
+                "overview": {"properties": {"topics": {"maxItems": 0}}}
+              }
+            },
+            "else": {
+              "properties": {
+                "composition": {"properties": {"sections": {"minItems": 2}}},
+                "overview": {"properties": {"topics": {"minItems": 1}}}
+              }
+            }
+          }
+        ]
+      },
+      "else": {
+        "not": {"required": ["overview"]},
+        "properties": {
+          "composition": {"$ref": "#/$defs/authoringComposition"},
+          "brief": {"properties": {"form": {"enum": ["one-page", "walkthrough", "report", "library", "custom"]}}}
+        }
+      }
+    }
+  ],
+  "required": ["schema", "artifactId", "savedAt", "brief", "units", "evidence", "review"],
+  "additionalProperties": false
+}

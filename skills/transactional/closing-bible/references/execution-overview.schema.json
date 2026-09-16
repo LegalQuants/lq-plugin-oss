@@ -1,0 +1,69 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "closing-bible execution overview (execution-overview.json)",
+  "description": "PRD §4 'Execution spotlight': for each document, whether execution is expected; the evidence source (verified sigpack ledger or closing-bible visual inspection); apparent execution status and qualification; parties or signature blocks expected and accounted for where already available; apparent document date and whether dating remains unresolved; signature-page locations; and any partial, blank, unclear, missing or version-mismatched execution material. Rendered as execution-overview.html for the front of the bible. Written by the reconciliation script.",
+  "type": "object",
+  "required": ["schema_version", "corpus_id", "sigpack", "documents"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "corpus_id": { "type": "string" },
+    "sigpack": {
+      "type": "object",
+      "required": ["ledger_supplied", "ledger_current", "closing_date", "ledger_receipt"],
+      "additionalProperties": false,
+      "properties": {
+        "ledger_supplied": { "type": "boolean" },
+        "ledger_current": { "type": ["boolean", "null"], "description": "null when not supplied; false when the ledger does not describe the files in the folder (see sigpack-ledger-consumption.md), in which case it is not cited." },
+        "closing_date": { "type": ["string", "null"], "description": "The ledger's closing_date, shown for information. Never used to decide undated." },
+        "ledger_receipt": { "type": ["object", "null"], "description": "The ledger's own receipt, echoed verbatim when current, so the two receipts never disagree silently." }
+      }
+    },
+    "documents": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["item_id", "title", "execution_expected", "evidence_source", "apparent_status", "qualification", "blocks", "document_date", "dating_unresolved", "signature_pages", "exceptions"],
+        "additionalProperties": false,
+        "properties": {
+          "item_id": { "type": "string" },
+          "title": { "type": "string" },
+          "execution_expected": { "type": "boolean" },
+          "evidence_source": { "enum": ["sigpack-ledger", "visual-inspection", "none"] },
+          "apparent_status": { "enum": ["appears-signed", "appears-incomplete", "appears-unsigned", "unclear", "not-expected", "not-inspected"] },
+          "qualification": { "type": "string", "maxLength": 500 },
+          "blocks": {
+            "type": "array",
+            "description": "Signature blocks expected and accounted for, where that information is already available (from the ledger). Empty when not available; never invented.",
+            "items": {
+              "type": "object",
+              "required": ["party", "status", "ledger_page_id"],
+              "additionalProperties": false,
+              "properties": {
+                "party": { "type": "string" },
+                "status": { "type": "string", "description": "The ledger's block status, verbatim." },
+                "ledger_page_id": { "type": ["string", "null"] }
+              }
+            }
+          },
+          "document_date": { "type": ["string", "null"], "description": "The date read from the execution page, as printed. Never from a filename or timestamp." },
+          "dating_unresolved": { "type": "boolean" },
+          "signature_pages": {
+            "type": "array",
+            "description": "Where the signature pages are: manifest id and page number. Bookmarks in the combined PDF are built from these in build mode.",
+            "items": {
+              "type": "object",
+              "required": ["document_id", "page"],
+              "additionalProperties": false,
+              "properties": {
+                "document_id": { "type": "string" },
+                "page": { "type": ["integer", "null"], "minimum": 1 }
+              }
+            }
+          },
+          "exceptions": { "type": "array", "items": { "type": "string" }, "description": "Partial, blank, unclear, missing or version-mismatched execution material, one line each." }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,712 @@
+{
+  "schemaVersion": "legaldesign.build.v3",
+  "brief": {
+    "title": "LegalQuants /legaldesign skill, explained",
+    "reader": "A lawyer or contributor evaluating how the skill works",
+    "action": "Understand the path from source material to an editable client deliverable",
+    "purpose": "understand",
+    "message": "The skill turns source-grounded legal analysis into two complete, editable page designs, then lets the user choose and export one.",
+    "spine": "sequence",
+    "situation": "laptop",
+    "form": "one-page",
+    "sources": [
+      {
+        "id": "skill-spec",
+        "label": "LegalDesign method specification",
+        "status": "supplied"
+      }
+    ],
+    "assumptions": [],
+    "gaps": []
+  },
+  "style": {
+    "source": "loxoto",
+    "ref": null
+  },
+  "approaches": {
+    "a": {
+      "label": "Workflow",
+      "rationale": "A linear path makes the handoff from legal source to deliverable explicit.",
+      "composition": {
+        "strategy": "composed",
+        "shape": "six-stage workflow",
+        "rationale": "The reader can scan the process from intake through export in one direction.",
+        "sections": [
+          {
+            "id": "a-overview",
+            "purpose": "Name the skill and state the result.",
+            "unitIds": ["a-title", "a-summary"],
+            "layout": {
+              "columns": 12,
+              "placements": [
+                {
+                  "unitId": "a-title",
+                  "row": 1,
+                  "column": 1,
+                  "span": 12
+                },
+                {
+                  "unitId": "a-summary",
+                  "row": 2,
+                  "column": 1,
+                  "span": 12
+                }
+              ]
+            }
+          },
+          {
+            "id": "a-workflow",
+            "purpose": "Show the six stages and the choices that connect them.",
+            "unitIds": ["a-flow", "a-output"],
+            "layout": {
+              "columns": 12,
+              "placements": [
+                {
+                  "unitId": "a-flow",
+                  "row": 1,
+                  "column": 1,
+                  "span": 12
+                },
+                {
+                  "unitId": "a-output",
+                  "row": 2,
+                  "column": 1,
+                  "span": 12
+                }
+              ]
+            }
+          }
+        ],
+        "templateRef": null
+      }
+    },
+    "b": {
+      "label": "Decision map",
+      "rationale": "A hierarchy groups the same method by what the agent learns, decides, and produces.",
+      "composition": {
+        "strategy": "composed",
+        "shape": "three-layer decision map",
+        "rationale": "The grouped layout emphasizes the design judgments instead of chronology.",
+        "sections": [
+          {
+            "id": "b-overview",
+            "purpose": "Name the skill before presenting the relationship map.",
+            "unitIds": ["b-title", "b-summary"],
+            "layout": {
+              "columns": 12,
+              "placements": [
+                {
+                  "unitId": "b-title",
+                  "row": 1,
+                  "column": 1,
+                  "span": 12
+                },
+                {
+                  "unitId": "b-summary",
+                  "row": 2,
+                  "column": 1,
+                  "span": 12
+                }
+              ]
+            }
+          },
+          {
+            "id": "b-map",
+            "purpose": "Organize the method around inputs, design judgment, and output.",
+            "unitIds": ["b-hierarchy"],
+            "layout": {
+              "columns": 12,
+              "placements": [
+                {
+                  "unitId": "b-hierarchy",
+                  "row": 1,
+                  "column": 1,
+                  "span": 12
+                }
+              ]
+            }
+          },
+          {
+            "id": "b-close",
+            "purpose": "Close with the two concrete export paths.",
+            "unitIds": ["b-output"],
+            "layout": {
+              "columns": 12,
+              "placements": [
+                {
+                  "unitId": "b-output",
+                  "row": 1,
+                  "column": 1,
+                  "span": 12
+                }
+              ]
+            }
+          }
+        ],
+        "templateRef": null
+      }
+    }
+  },
+  "claims": [
+    {
+      "id": "c-title",
+      "text": "This page explains the LegalQuants /legaldesign skill.",
+      "kind": "context",
+      "sourceIds": ["skill-spec"],
+      "placement": "surface",
+      "evidenceIds": []
+    },
+    {
+      "id": "c-input",
+      "text": "The method begins with the reader, purpose, source record, and communication goal.",
+      "kind": "material",
+      "sourceIds": ["skill-spec"],
+      "placement": "surface",
+      "evidenceIds": ["e-input"]
+    },
+    {
+      "id": "c-judgment",
+      "text": "The core design judgment is to identify the relationship, select the clearest visual form, and encode that relationship through position and structure.",
+      "kind": "material",
+      "sourceIds": ["skill-spec"],
+      "placement": "surface",
+      "evidenceIds": ["e-judgment"]
+    },
+    {
+      "id": "c-output",
+      "text": "Every run produces two complete page alternatives in one editable HTML, with export for the selected page and for a reusable template.",
+      "kind": "material",
+      "sourceIds": ["skill-spec"],
+      "placement": "surface",
+      "evidenceIds": ["e-output"]
+    },
+    {
+      "id": "c-output-close",
+      "text": "The selected client page and reusable design pattern are the two export paths.",
+      "kind": "context",
+      "sourceIds": ["skill-spec"],
+      "placement": "surface",
+      "evidenceIds": []
+    }
+  ],
+  "units": [
+    {
+      "id": "a-title",
+      "kind": "text",
+      "role": "title",
+      "claim": "LegalQuants /legaldesign skill, explained",
+      "claimRefs": ["c-title"],
+      "relationship": "containment",
+      "candidates": ["descriptive title"],
+      "variants": {
+        "a": {
+          "html": "<h1>LegalQuants /legaldesign skill, explained</h1>",
+          "axis": "framing",
+          "encoding": "A full-width descriptive title names the subject without promotional language.",
+          "why": "The reader knows exactly what the page explains."
+        }
+      },
+      "placeholder": "[Matter or deliverable title.]",
+      "evidence": []
+    },
+    {
+      "id": "a-summary",
+      "kind": "text",
+      "role": "summary",
+      "claim": "The method turns grounded legal analysis into two editable page designs.",
+      "claimRefs": ["c-input", "c-judgment", "c-output"],
+      "relationship": "sequence",
+      "candidates": ["one-sentence method summary"],
+      "variants": {
+        "a": {
+          "html": "<p>Start with the legal source and the reader\u2019s job. Choose the relationship that matters, design two complete pages around it, then edit and export the stronger page.</p>",
+          "axis": "framing",
+          "encoding": "One sentence establishes the input, design judgment, alternatives, and output in reading order.",
+          "why": "It gives the workflow context before the diagram."
+        }
+      },
+      "placeholder": "[The method in one sentence.]",
+      "evidence": ["e-input", "e-judgment", "e-output"]
+    },
+    {
+      "id": "a-flow",
+      "kind": "figure",
+      "claim": "Six stages from intake to export",
+      "claimRefs": ["c-input", "c-judgment", "c-output"],
+      "relationship": "sequence",
+      "candidates": ["six-stage flow", "numbered path"],
+      "variants": {
+        "a": {
+          "component": "flow",
+          "params": {
+            "stages": [
+              {
+                "title": "Ask",
+                "sub": "Reader, purpose, audience",
+                "detail": "e-ask"
+              },
+              {
+                "title": "Ground",
+                "sub": "Claims and source record",
+                "detail": "e-ground"
+              },
+              {
+                "title": "Relate",
+                "sub": "Find the core relationship",
+                "detail": "e-relate"
+              },
+              {
+                "title": "Design",
+                "sub": "Choose form and encoding",
+                "detail": "e-design",
+                "accentRole": "decision"
+              },
+              {
+                "title": "Compare",
+                "sub": "Build complete pages A and B",
+                "detail": "e-compare"
+              },
+              {
+                "title": "Export",
+                "sub": "HTML or reusable template",
+                "detail": "e-export"
+              }
+            ],
+            "edges": ["clarify", "source", "decide", "compose", "choose"]
+          },
+          "axis": "form",
+          "encoding": "Left-to-right position shows sequence; labelled connectors explain each transition.",
+          "why": "The workflow makes responsibility and order explicit."
+        }
+      },
+      "placeholder": "[The method as a sequence from intake to export.]",
+      "evidence": [
+        "e-input",
+        "e-judgment",
+        "e-output",
+        "e-ask",
+        "e-ground",
+        "e-relate",
+        "e-design",
+        "e-compare",
+        "e-export"
+      ]
+    },
+    {
+      "id": "a-output",
+      "kind": "card",
+      "role": "answer",
+      "claim": "The user compares whole pages, not isolated text boxes.",
+      "claimRefs": ["c-output"],
+      "relationship": "comparison",
+      "candidates": ["output rule card"],
+      "variants": {
+        "a": {
+          "html": "<h2>Compare and edit the two approaches</h2><p>Edit either approach. Export the selected page as HTML, or keep both approaches in a reusable template.</p>",
+          "axis": "emphasis",
+          "encoding": "A single full-width card states the output rule after the process diagram.",
+          "why": "It prevents the global A/B decision from being confused with component-level variants."
+        }
+      },
+      "placeholder": "[How the two complete page alternatives are used.]",
+      "detail": "e-output",
+      "evidence": ["e-output"]
+    },
+    {
+      "id": "b-title",
+      "kind": "text",
+      "role": "title",
+      "claim": "LegalQuants /legaldesign skill, explained",
+      "claimRefs": ["c-title"],
+      "relationship": "containment",
+      "candidates": ["descriptive title"],
+      "variants": {
+        "a": {
+          "html": "<h1>LegalQuants /legaldesign skill, explained</h1>",
+          "axis": "framing",
+          "encoding": "A full-width descriptive title names the subject without promotional language.",
+          "why": "The title stays constant while the information structure changes."
+        }
+      },
+      "placeholder": "[Matter or deliverable title.]",
+      "evidence": []
+    },
+    {
+      "id": "b-summary",
+      "kind": "text",
+      "role": "summary",
+      "claim": "Three layers govern the skill: inputs, design judgment, and outputs.",
+      "claimRefs": ["c-input", "c-judgment", "c-output"],
+      "relationship": "hierarchy",
+      "candidates": ["three-layer summary"],
+      "variants": {
+        "a": {
+          "html": "<p>Start with what the reader needs to understand. Ground that goal in the source record, make one deliberate design judgment, then deliver both the client page and its reusable pattern.</p>",
+          "axis": "granularity",
+          "encoding": "A compact numbered list gives the categories before the hierarchy expands them.",
+          "why": "This version organizes by decision type instead of chronology."
+        }
+      },
+      "placeholder": "[The method in one sentence, organized around its governing judgment.]",
+      "evidence": ["e-input", "e-judgment", "e-output"]
+    },
+    {
+      "id": "b-hierarchy",
+      "kind": "figure",
+      "claim": "Inputs, design choices and outputs",
+      "claimRefs": ["c-input", "c-judgment", "c-output"],
+      "relationship": "hierarchy",
+      "candidates": ["decision hierarchy", "contained layers"],
+      "variants": {
+        "a": {
+          "component": "hierarchy",
+          "params": {
+            "root": "Communication goal",
+            "rootSub": "What must this reader understand or do?",
+            "branches": [
+              {
+                "title": "Inputs",
+                "edge": "define",
+                "detail": "e-input",
+                "leaves": [
+                  {
+                    "title": "Source record"
+                  },
+                  {
+                    "title": "Reader\u2019s job"
+                  }
+                ]
+              },
+              {
+                "title": "Design judgment",
+                "edge": "shape",
+                "detail": "e-judgment",
+                "accentRole": "decision",
+                "leaves": [
+                  {
+                    "title": "Visual form"
+                  },
+                  {
+                    "title": "Position + structure"
+                  }
+                ]
+              },
+              {
+                "title": "Outputs",
+                "edge": "produce",
+                "detail": "e-output",
+                "leaves": [
+                  {
+                    "title": "Selected HTML"
+                  },
+                  {
+                    "title": "Reusable template"
+                  }
+                ]
+              }
+            ]
+          },
+          "axis": "form",
+          "encoding": "Vertical hierarchy makes the communication goal the root and groups supporting inputs, decisions, and outputs beneath it.",
+          "why": "The hierarchy foregrounds why the skill makes design decisions."
+        }
+      },
+      "placeholder": "[The method grouped into inputs, design judgment, and outputs.]",
+      "evidence": ["e-input", "e-judgment", "e-output"]
+    },
+    {
+      "id": "b-output",
+      "kind": "card",
+      "role": "answer",
+      "claim": "The result is a selected client page plus a reusable design pattern.",
+      "claimRefs": ["c-output-close"],
+      "relationship": "comparison",
+      "candidates": ["deliverables strip"],
+      "variants": {
+        "a": {
+          "html": "<h2>HTML and template exports</h2><p>Export HTML keeps the selected approach and its detail popups. Export template keeps both structures with descriptive placeholders for a new matter.</p>",
+          "axis": "emphasis",
+          "encoding": "A horizontal deliverables strip closes the hierarchy with the two concrete export paths.",
+          "why": "It turns the abstract map back into actions."
+        }
+      },
+      "placeholder": "[The two export paths.]",
+      "evidence": []
+    }
+  ],
+  "evidence": [
+    {
+      "id": "e-input",
+      "sourceId": "skill-spec",
+      "claimRefs": ["c-input"],
+      "cite": "LegalDesign method \u00b7 intake",
+      "locator": "Method specification, intake and source ledger",
+      "status": "supplied",
+      "detail": "The method identifies the audience, purpose, communication goal, source set, assumptions, and known gaps before visual composition begins.",
+      "popup": {
+        "type": "explainer",
+        "title": "Start with the communication problem",
+        "lede": "The page cannot be designed intelligently until the agent knows who must understand what, and what they should do next.",
+        "sections": [
+          {
+            "heading": "Reader and action",
+            "body": "Name the real reader and the decision, task, or understanding the artifact must enable. This determines what leads and how much legal context belongs on the surface."
+          },
+          {
+            "heading": "Controlling record",
+            "body": "Identify the supplied source, its status, and the material claims it actually supports before selecting a visual form."
+          },
+          {
+            "heading": "Assumptions and gaps",
+            "body": "State what is inferred or missing. Design can clarify uncertainty; it cannot quietly turn an unsupported premise into a fact."
+          }
+        ]
+      },
+      "original": {
+        "availability": "linked",
+        "href": "https://example.test/legaldesign/method#intake",
+        "label": "Open the method specification"
+      }
+    },
+    {
+      "id": "e-judgment",
+      "sourceId": "skill-spec",
+      "claimRefs": ["c-judgment"],
+      "cite": "LegalDesign method \u00b7 design intelligence",
+      "locator": "Method specification, relationship-first design",
+      "status": "supplied",
+      "detail": "The method asks what relationship matters, which visual representation communicates it most effectively, and how position, grouping, scale, or direction will encode that relationship.",
+      "popup": {
+        "type": "explainer",
+        "title": "Make the relationship do the explaining",
+        "lede": "A polished page is not a collection of decorated facts. Its structure must make the core relationship perceptible at a glance.",
+        "sections": [
+          {
+            "heading": "What must be communicated?",
+            "body": "Write the message as a checkable claim and name the relationship inside it: sequence, hierarchy, comparison, containment, priority, or another supported form."
+          },
+          {
+            "heading": "Which visual form fits?",
+            "body": "Compare a plain sentence or table against two visual candidates. Use a diagram only when geometry makes the relationship clearer."
+          },
+          {
+            "heading": "How is it encoded?",
+            "body": "Name the position, enclosure, connector, scale, size, or reading order that carries the meaning. Color may label or signal status, but it does not substitute for structure."
+          }
+        ]
+      },
+      "original": {
+        "availability": "linked",
+        "href": "https://example.test/legaldesign/method#design-intelligence",
+        "label": "Open the design-intelligence rules"
+      }
+    },
+    {
+      "id": "e-output",
+      "sourceId": "skill-spec",
+      "claimRefs": ["c-output"],
+      "cite": "LegalDesign method \u00b7 outputs",
+      "locator": "Method specification, alternatives and export",
+      "status": "supplied",
+      "detail": "A working artifact contains two materially different complete page approaches. The user edits and selects at page level, exports the selected HTML, or exports both structures as a reusable template.",
+      "popup": {
+        "type": "explainer",
+        "title": "Compare complete pages, not isolated components",
+        "lede": "Approach A and Approach B are two coherent ways to communicate the same grounded legal answer.",
+        "sections": [
+          {
+            "heading": "Two information structures",
+            "body": "The alternatives differ in organizing relationship, section architecture, or reading path. Rewording the same boxes is not a second approach."
+          },
+          {
+            "heading": "One editable product",
+            "body": "The user can edit page copy, diagram labels, purposeful detail popups, and any express decision response before choosing a page."
+          },
+          {
+            "heading": "Two export paths",
+            "body": "Export HTML keeps the selected client-facing page. Export template preserves both structures with descriptive placeholders and their design reasoning."
+          }
+        ]
+      },
+      "original": {
+        "availability": "linked",
+        "href": "https://example.test/legaldesign/method#outputs",
+        "label": "Open the output contract"
+      }
+    },
+    {
+      "id": "e-ask",
+      "sourceId": "skill-spec",
+      "claimRefs": ["c-input"],
+      "cite": "LegalDesign method · question budget",
+      "locator": "Method specification, intake questions",
+      "status": "supplied",
+      "detail": "The agent asks only what the supplied record cannot answer, within a three-question budget.",
+      "popup": {
+        "type": "detail",
+        "title": "Ask only what the record cannot answer",
+        "lede": "Good intake reduces ambiguity without making the user design the page for the agent.",
+        "sections": [
+          {
+            "heading": "Three-question ceiling",
+            "body": "Missing controlling record, reader and next action, and purpose take priority. Questions already answered by the material are skipped."
+          },
+          {
+            "heading": "The agent owns the message",
+            "body": "The user supplies context and choices. The agent turns those answers into the communication goal and proposes the page architecture."
+          }
+        ]
+      },
+      "original": {
+        "availability": "linked",
+        "href": "https://example.test/legaldesign/method#questions",
+        "label": "Read the intake-question rules"
+      }
+    },
+    {
+      "id": "e-ground",
+      "sourceId": "skill-spec",
+      "claimRefs": ["c-input"],
+      "cite": "LegalDesign method · claim ledger",
+      "locator": "Method specification, source grounding",
+      "status": "supplied",
+      "detail": "A material-claim ledger separates supported facts, context, popup detail, and substantive omissions.",
+      "popup": {
+        "type": "detail",
+        "title": "Build the claim ledger before drawing",
+        "lede": "The ledger is the bridge between legal accuracy and visual hierarchy.",
+        "sections": [
+          {
+            "heading": "One checkable claim per unit",
+            "body": "Each fact names its source, placement, and evidence path. A mood or theme does not qualify as a material claim."
+          },
+          {
+            "heading": "Nothing disappears silently",
+            "body": "Every material point appears on the surface, moves into purposeful detail, or is omitted for a stated substantive reason."
+          }
+        ]
+      },
+      "original": {
+        "availability": "linked",
+        "href": "https://example.test/legaldesign/method#ledger",
+        "label": "Read the claim-ledger rules"
+      }
+    },
+    {
+      "id": "e-relate",
+      "sourceId": "skill-spec",
+      "claimRefs": ["c-judgment"],
+      "cite": "LegalDesign method · relationship",
+      "locator": "Method specification, relationship selection",
+      "status": "supplied",
+      "detail": "The agent names the relationship that best carries the legal message before choosing a diagram.",
+      "popup": {
+        "type": "detail",
+        "title": "Name the relationship that carries the answer",
+        "lede": "Sequence, hierarchy, comparison, containment, and priority demand different reading paths.",
+        "sections": [
+          {
+            "heading": "Start with the claim",
+            "body": "Ask what the reader must perceive between the facts—not which template happens to be available."
+          },
+          {
+            "heading": "Choose one spine",
+            "body": "A dominant relationship gives the page a clear organizing logic. Supporting components may clarify, but they should not compete with it."
+          }
+        ]
+      },
+      "original": {
+        "availability": "linked",
+        "href": "https://example.test/legaldesign/method#relationship",
+        "label": "Read the relationship-selection rules"
+      }
+    },
+    {
+      "id": "e-design",
+      "sourceId": "skill-spec",
+      "claimRefs": ["c-judgment"],
+      "cite": "LegalDesign method · encoding",
+      "locator": "Method specification, visual form and encoding",
+      "status": "supplied",
+      "detail": "The chosen form must encode the relationship through a perceptible geometric property.",
+      "popup": {
+        "type": "detail",
+        "title": "Choose the form, then prove its encoding",
+        "lede": "A diagram earns its place only when its geometry communicates more clearly than a sentence, list, or table.",
+        "sections": [
+          {
+            "heading": "Compare candidates",
+            "body": "Consider a plain form and two visual forms. Reject any figure that merely decorates the claim."
+          },
+          {
+            "heading": "State the mechanism",
+            "body": "Explain exactly how position, enclosure, connector, common scale, or size makes the relationship visible."
+          }
+        ]
+      },
+      "original": {
+        "availability": "linked",
+        "href": "https://example.test/legaldesign/method#encoding",
+        "label": "Read the visual-encoding rules"
+      }
+    },
+    {
+      "id": "e-compare",
+      "sourceId": "skill-spec",
+      "claimRefs": ["c-output"],
+      "cite": "LegalDesign method · alternatives",
+      "locator": "Method specification, two whole-page approaches",
+      "status": "supplied",
+      "detail": "Both approaches cover the same legal record but use materially different information structures.",
+      "popup": {
+        "type": "detail",
+        "title": "A and B must disagree structurally",
+        "lede": "The comparison is valuable only when each page offers a coherent alternative reading path.",
+        "sections": [
+          {
+            "heading": "Same legal meaning",
+            "body": "Both pages cover the same material claims, qualifications, evidence obligations, and express decisions."
+          },
+          {
+            "heading": "Different organization",
+            "body": "The organizing relationship, section sequence, or information hierarchy changes. Swapping one chart or recoloring cards does not count."
+          }
+        ]
+      },
+      "original": {
+        "availability": "linked",
+        "href": "https://example.test/legaldesign/method#approaches",
+        "label": "Read the two-approach rules"
+      }
+    },
+    {
+      "id": "e-export",
+      "sourceId": "skill-spec",
+      "claimRefs": ["c-output"],
+      "cite": "LegalDesign method · export",
+      "locator": "Method specification, client and template exports",
+      "status": "supplied",
+      "detail": "Client export keeps the selected page; template export preserves the reusable structures and their reasoning.",
+      "popup": {
+        "type": "detail",
+        "title": "The selected page travels; the method remains reusable",
+        "lede": "The two exports serve different audiences without leaking matter-specific content into the reusable version.",
+        "sections": [
+          {
+            "heading": "Client HTML",
+            "body": "Keep the selected approach, intended interactions, and saved responses. Remove editor chrome, the unused approach, and authoring rationale."
+          },
+          {
+            "heading": "Reusable template",
+            "body": "Keep both structures and replace matter content with descriptive placeholders so the next user can understand how the pattern works."
+          }
+        ]
+      },
+      "original": {
+        "availability": "linked",
+        "href": "https://example.test/legaldesign/method#exports",
+        "label": "Read the export contract"
+      }
+    }
+  ]
+}

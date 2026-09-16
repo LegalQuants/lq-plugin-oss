@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Public source and packages
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: ./.github/actions/setup-js
+      - uses: ./.github/actions/setup-python
+      - name: Install browser test dependencies
+        run: pnpm exec playwright install --with-deps chromium
+      - name: Check source, scripts, tests, and committed plugin bundles
+        run: pnpm check
+      - name: Build provider submission archives
+        run: pnpm release:archives
+      - name: Upload provider packages
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: legalquants-plugin-packages
+          path: dist/releases/*
+          if-no-files-found: error
+          retention-days: 30

@@ -1,0 +1,341 @@
+{
+  "kind": "objection-review",
+  "format_version": 1,
+  "id": "alder-set-two",
+  "title": "Bayline v. Alder \u00b7 Second requests",
+  "source": {
+    "file": "served-second-set.md",
+    "sha256": "7e59a265a75dc89027df089b96c1495f5d5c15a7f5ca7ce3319770175745f530"
+  },
+  "library": {
+    "kind": "objection-library",
+    "format_version": 1,
+    "id": "alder-demo-library",
+    "version": 2,
+    "entries": [
+      {
+        "id": "scope",
+        "family": "scope",
+        "label": "Unrelated scope",
+        "variant": "specific scope",
+        "wording": "Responding Party objects to {{scope}} because {{reason}}. This objection is limited to the identified portion of the request.",
+        "fields": {
+          "scope": "the precise portion challenged",
+          "reason": "the request-specific reason"
+        },
+        "guidance": "Identify the unrelated category; do not object merely because a request is broad.",
+        "conditions": [
+          "The supplied claims and facts establish the lack of a relevant connection."
+        ],
+        "exclusions": [
+          "Relevant project records within the disputed transaction."
+        ],
+        "sources": [
+          {
+            "source_id": "synthetic-practice-note",
+            "locator": "scope"
+          }
+        ],
+        "status": "approved",
+        "approval": {
+          "record": "Simulated development decision, not attorney approval: accept this exact proposal for the synthetic demonstration.",
+          "proposal_batch": "alder-feedback-development-1",
+          "proposal_id": "edit-2"
+        }
+      },
+      {
+        "id": "period",
+        "family": "period",
+        "label": "Unbounded period",
+        "variant": "specific scope",
+        "wording": "Responding Party objects to the portion seeking {{period}} because {{reason}}.",
+        "fields": {
+          "period": "the disputed time period",
+          "reason": "why this period is outside justified discovery"
+        },
+        "guidance": "A date restriction needs a case-specific reason; the contract date alone is not enough.",
+        "conditions": [],
+        "exclusions": [],
+        "sources": [
+          {
+            "source_id": "synthetic-practice-note",
+            "locator": "period"
+          }
+        ],
+        "status": "approved",
+        "approval": {
+          "record": "Synthetic development-fixture approval; not actual firm policy."
+        }
+      },
+      {
+        "id": "privilege",
+        "family": "privilege",
+        "label": "Attorney-client privilege",
+        "variant": "specific scope",
+        "wording": "Responding Party objects to {{scope}} to the extent it seeks confidential attorney-client communications made for legal advice. This objection does not extend to nonprivileged underlying facts or preexisting documents.",
+        "fields": {
+          "scope": "the protected category"
+        },
+        "guidance": "Check the elements and any waiver issue. Complete withholding and log treatment in the response.",
+        "conditions": [
+          "Confidential legal-advice communications are actually implicated."
+        ],
+        "exclusions": [
+          "A lawyer's presence alone does not establish privilege."
+        ],
+        "sources": [
+          {
+            "source_id": "synthetic-practice-note",
+            "locator": "privilege"
+          }
+        ],
+        "status": "approved",
+        "approval": {
+          "record": "Synthetic development-fixture approval; not actual firm policy."
+        }
+      },
+      {
+        "id": "work-product",
+        "family": "work-product",
+        "label": "Work product",
+        "variant": "specific scope",
+        "wording": "Responding Party objects to {{scope}} to the extent it seeks protected materials prepared in anticipation of litigation, including counsel's mental impressions.",
+        "fields": {
+          "scope": "the materials and protected portion"
+        },
+        "guidance": "Evaluate the factual basis, exceptions and any waiver; do not label ordinary business records work product.",
+        "conditions": [],
+        "exclusions": [],
+        "sources": [
+          {
+            "source_id": "synthetic-practice-note",
+            "locator": "work-product"
+          }
+        ],
+        "status": "approved",
+        "approval": {
+          "record": "Synthetic development-fixture approval; not actual firm policy."
+        }
+      },
+      {
+        "id": "backup",
+        "family": "backup",
+        "label": "Inaccessible ESI",
+        "variant": "specific scope",
+        "wording": "Responding Party objects to searching {{source}} because {{burden}}. The relevance and availability of the requested information from other sources require further evaluation.",
+        "fields": {
+          "source": "the identified source",
+          "burden": "the established inaccessibility facts"
+        },
+        "guidance": "Requires supported burden/access facts; age or the word backup is not enough.",
+        "conditions": [
+          "A knowledgeable person has established the access burden."
+        ],
+        "exclusions": [
+          "Do not assert quantified burden without supporting information."
+        ],
+        "sources": [
+          {
+            "source_id": "synthetic-practice-note",
+            "locator": "backup"
+          }
+        ],
+        "status": "approved",
+        "approval": {
+          "record": "Synthetic development-fixture approval; not actual firm policy."
+        }
+      },
+      {
+        "id": "privacy",
+        "family": "privacy",
+        "label": "Unrelated personal records",
+        "variant": "specific scope",
+        "wording": "Responding Party objects to {{scope}} because {{reason}}. This objection is limited to the unrelated personal information identified here.",
+        "fields": {
+          "scope": "the affected records",
+          "reason": "their lack of relevance and the concrete concern"
+        },
+        "guidance": "Distinguish unrelated personal details from discoverable employment information; consider narrower treatment.",
+        "conditions": [],
+        "exclusions": [],
+        "sources": [
+          {
+            "source_id": "synthetic-practice-note",
+            "locator": "privacy"
+          }
+        ],
+        "status": "approved",
+        "approval": {
+          "record": "Synthetic development-fixture approval; not actual firm policy."
+        }
+      },
+      {
+        "id": "ambiguous",
+        "family": "ambiguous",
+        "label": "Unclear category",
+        "variant": "specific scope",
+        "wording": "Responding Party objects to the phrase \"{{phrase}}\" because {{ambiguity}}.",
+        "fields": {
+          "phrase": "the unclear request phrase",
+          "ambiguity": "the competing meanings or missing definition"
+        },
+        "guidance": "Use only if supplied definitions and context do not resolve the uncertainty.",
+        "conditions": [],
+        "exclusions": [],
+        "sources": [
+          {
+            "source_id": "synthetic-practice-note",
+            "locator": "ambiguous"
+          }
+        ],
+        "status": "approved",
+        "approval": {
+          "record": "Synthetic development-fixture approval; not actual firm policy."
+        }
+      },
+      {
+        "id": "new-record",
+        "family": "new-record",
+        "label": "New record requested",
+        "variant": "specific scope",
+        "wording": "Responding Party objects to the demand to create {{record}} rather than produce existing responsive documents or electronically stored information.",
+        "fields": {
+          "record": "the new record demanded"
+        },
+        "guidance": "Distinguish creation of a new analysis from extracting or producing existing ESI in a usable form.",
+        "conditions": [],
+        "exclusions": [
+          "Existing spreadsheets, data exports and ordinary ESI processing are not categorically excluded."
+        ],
+        "sources": [
+          {
+            "source_id": "synthetic-practice-note",
+            "locator": "new-record"
+          }
+        ],
+        "status": "approved",
+        "approval": {
+          "record": "Synthetic development-fixture approval; not actual firm policy."
+        }
+      },
+      {
+        "id": "duplicate",
+        "family": "duplicate",
+        "label": "Duplicative production",
+        "variant": "specific scope",
+        "wording": "Responding Party objects only to reproducing the identical documents identified as {{prior}}. This objection does not encompass different versions or newly located responsive material.",
+        "fields": {
+          "prior": "the verified prior production"
+        },
+        "guidance": "Verify the prior production and whether repeat delivery imposes a meaningful burden.",
+        "conditions": [
+          "The earlier production and duplication burden are established."
+        ],
+        "exclusions": [],
+        "sources": [
+          {
+            "source_id": "synthetic-practice-note",
+            "locator": "duplicate"
+          }
+        ],
+        "status": "approved",
+        "approval": {
+          "record": "Synthetic development-fixture approval; not actual firm policy."
+        }
+      },
+      {
+        "id": "scope-narrow",
+        "family": "scope",
+        "label": "Unrelated scope",
+        "variant": "specific scope",
+        "wording": "Responding Party objects only to {{scope}}. {{reason}}",
+        "fields": {
+          "scope": "the precise portion challenged",
+          "reason": "the reason for limiting this category"
+        },
+        "guidance": "Alternative wording for a clearly separable category; use one scope variant unless a distinct reason requires both.",
+        "conditions": [],
+        "exclusions": [],
+        "sources": [
+          {
+            "source_id": "synthetic-practice-note",
+            "locator": "scope-narrow"
+          }
+        ],
+        "status": "approved",
+        "approval": {
+          "record": "Synthetic development-fixture approval; not actual firm policy."
+        }
+      }
+    ],
+    "applied_batches": ["alder-feedback-development-1"],
+    "parent_sha256": "dac2fea5fe34c0ff10e9ebcc0e34dbb446549d4afbe6eaff06334a026c198b6b",
+    "last_decisions": {
+      "batch": "alder-feedback-development-1",
+      "accepted": ["edit-2"],
+      "proposals_sha256": "defe6b889db5897faf90ae49f5d5e75105333fb73e40d9b2bc86791a3c9878f0"
+    }
+  },
+  "context": [
+    {
+      "id": "definitions",
+      "title": "Served definitions and instructions",
+      "locator": "served-requests.md, introductory text",
+      "text": "Harbor means the sensor project governed by the March 2024 supply agreement. Alder means Alder Instruments. Documents includes existing ESI and attachments. The default period is January 1, 2024 through December 31, 2025 unless a request states otherwise. Original numbering is retained, including the repeated 8 and omitted 9 and 15."
+    },
+    {
+      "id": "facts",
+      "title": "Supplied case context",
+      "locator": "context.md, fictional facts",
+      "text": "Bayline Labs alleges June 2025 Harbor sensors failed the agreed inspection criteria. Alder disputes the failures and causation. The only transactions pleaded concern Harbor, a product first designed in 2024. No other product or earlier design is alleged to be relevant. No employee-health or compensation issue is pleaded. Litigation counsel's legal-advice communications are confidential; no waiver is reported. Counsel interview memoranda were prepared after this dispute arose. The cost and accessibility of the backup tapes, prior-production identifiers, and any duplication burden have not been established. No search, production or withholding decisions have been supplied."
+    },
+    {
+      "id": "authority",
+      "title": "Supplied governing-source packet and limits",
+      "locator": "authority.md; FRCP 26(b), 34(b)(2)",
+      "text": "Federal rules supply a relevance/proportionality framework, protection for qualifying privileged and trial-preparation material, and item-specific response requirements. Rule 34 requires specific reasons, the extent of a partial objection, and disclosure of withholding. The objection draft leaves actual response and withholding positions to counsel. This is a synthetic federal RFP exercise. No real district or judge is assigned, and no local-order or circuit-law verification is claimed."
+    }
+  ],
+  "requests": [
+    {
+      "id": "alder-2-r01",
+      "label": "RFP 21",
+      "text": "Produce all customer complaint communications for every Alder product from 2024 through 2025.",
+      "locator": "served-second-set.md, occurrence 1",
+      "context_ids": ["definitions", "facts", "authority"],
+      "suggestions": [
+        {
+          "entry_id": "scope",
+          "params": {
+            "scope": "customer complaint communications about products other than Harbor",
+            "reason": "the supplied dispute concerns only Harbor sensors and identifies no relevance theory for other products"
+          },
+          "rationale": "The same unrelated-product distinction arises on the supplied facts. Version 2 now offers the explicitly simulated accepted limiting sentence; no matter-only privacy edit or unexplained deletion entered the library.",
+          "basis": [
+            "Supplied case context",
+            "Approved synthetic library guidance",
+            "FRCP 26(b) / 34(b)(2); local checks incomplete"
+          ],
+          "missing": [],
+          "preselected": true
+        }
+      ]
+    },
+    {
+      "id": "alder-2-r02",
+      "label": "RFP 22",
+      "text": "Produce the Harbor inspection report for the June 2025 shipment.",
+      "locator": "served-second-set.md, occurrence 2",
+      "context_ids": ["definitions", "facts", "authority"],
+      "suggestions": []
+    },
+    {
+      "id": "alder-2-r03",
+      "label": "RFP 23",
+      "text": "Produce the Harbor supplier invoices dated June 2025.",
+      "locator": "served-second-set.md, occurrence 3",
+      "context_ids": ["definitions", "facts", "authority"],
+      "suggestions": []
+    }
+  ]
+}

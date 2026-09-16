@@ -1,0 +1,28 @@
+{
+  "name": "legalquants-transactional",
+  "version": "0.1.0",
+  "description": "Contract and deal workflows for transactional attorneys, with shared daily-practice tools.",
+  "skills": "./skills/",
+  "author": {
+    "name": "LegalQuants",
+    "url": "https://legalquants.com"
+  },
+  "homepage": "https://github.com/LegalQuants/lq-plugin-oss",
+  "repository": "https://github.com/LegalQuants/lq-plugin-oss",
+  "keywords": [
+    "legal",
+    "skills",
+    "agents"
+  ],
+  "interface": {
+    "displayName": "LegalQuants Skills for Transactional Attorneys",
+    "shortDescription": "Contract and deal workflows",
+    "longDescription": "Contract and deal workflows for transactional attorneys, with shared daily-practice tools.",
+    "developerName": "LegalQuants",
+    "category": "Productivity",
+    "logo": "./assets/lq-logo.png",
+    "composerIcon": "./assets/lq-logo.png",
+    "websiteURL": "https://github.com/LegalQuants/lq-plugin-oss"
+  },
+  "hooks": "./hooks/openai.json"
+}
