@@ -502,6 +502,7 @@ function writeTarget(
 ) {
   rmSync(outRoot, { recursive: true, force: true });
   writeManifest(options.repoRoot, outRoot, target, bundle);
+  cpSync(join(options.repoRoot, "LICENSE"), join(outRoot, "LICENSE"));
   copySkills(options.repoRoot, outRoot, target, bundle);
   copyPortableInstructions(options.repoRoot, outRoot, target);
   if (target === "openai") {
@@ -521,6 +522,7 @@ function writeCombinedBundle(
   rmSync(outRoot, { recursive: true, force: true });
   writeManifest(options.repoRoot, outRoot, "openai", bundle);
   writeManifest(options.repoRoot, outRoot, "claude-code", bundle);
+  cpSync(join(options.repoRoot, "LICENSE"), join(outRoot, "LICENSE"));
   copySkills(options.repoRoot, outRoot, "openai", bundle);
   copyOpenAiAssets(options.repoRoot, outRoot);
   copyOpenAiHooks(options.repoRoot, outRoot);

@@ -18,6 +18,7 @@ export function makePackFixture(options?: {
 }) {
   const repoRoot = mkdtempSync(join(tmpdir(), "pluginctl-"));
   const real = findRepoRoot();
+  cpSync(join(real, "LICENSE"), join(repoRoot, "LICENSE"));
 
   // The real manifest has the companion include `core/lq-start`; the fixture only
   // ships a `demo` skill, so point the include at that instead.

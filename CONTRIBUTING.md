@@ -10,6 +10,8 @@ Each skill has a maintainer or domain owner. Route substantive changes to that o
 
 The canonical runtime source is `skills/<group>/<name>/SKILL.md`, with optional `scripts/`, `references/`, `assets/`, and `schemas/` directories beside it. The four groups are `core`, `litigation`, `transactional`, and `companion`.
 
+Include a copy of the root `LICENSE` in each skill directory so individual installations retain the Apache-2.0 terms. CI checks that these copies match.
+
 Public design notes for current skills live in `packages/skill-docs/skills/<name>.md`. They describe intent, boundaries, and open limitations; they are not shipped inside a plugin. Do not put a design note, test, evaluation case, `AGENTS.md`, `CLAUDE.md`, `skill.yaml`, or generated file inside a canonical skill directory.
 
 The public repository carries ordinary unit, browser, package, and packaging checks. Full private evaluation campaigns, confidential corpora, historical review records, and their results stay outside this repository. A public pull request must remain reproducible from the files available here.

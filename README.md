@@ -64,4 +64,4 @@ The generated bundle directories under `plugins/` are build products. After chan
 
 Public contributors do not need access to the private development repository. Public tests, package sources, schemas, synthetic fixtures, and browser checks live under `packages/`; private full evaluation campaigns, corpora, results, and historical development records remain outside this repository.
 
-See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the contribution workflow and [`SECURITY.md`](SECURITY.md) for reporting guidance. The repository license is intentionally not stated here while the license choice is pending.
+Licensed under [Apache-2.0](LICENSE). Each skill and plugin bundle includes the license so it travels with standalone installations. See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the contribution workflow and [`SECURITY.md`](SECURITY.md) for reporting guidance.

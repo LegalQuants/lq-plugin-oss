@@ -106,6 +106,7 @@ export function loadPluginBundles(repoRoot: string): Array<PluginBundle> {
           },
     homepage: asString(release.homepage),
     repository: asString(release.repository),
+    license: asString(release.license),
     keywords: asStringArray(release.keywords),
   };
 

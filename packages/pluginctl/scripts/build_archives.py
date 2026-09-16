@@ -19,7 +19,7 @@ def build_archive(name: str, provider: str, output: Path) -> Path:
     manifest = ".codex-plugin" if provider == "openai" else ".claude-plugin"
     if not (source / manifest / "plugin.json").is_file():
         raise ValueError(f"Missing {provider} package for {name}; run pnpm plugin-pack")
-    allowed = {manifest, "skills", "assets", "hooks"}
+    allowed = {manifest, "skills", "assets", "hooks", "LICENSE"}
     files = sorted(path for path in source.rglob("*") if path.is_file())
     for path in files:
         relative = path.relative_to(source)

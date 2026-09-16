@@ -83,6 +83,14 @@ function nestedDirectoryNames(root: string): Array<string> {
 }
 
 describe("direct-install skill inventory", () => {
+  it("includes the Apache license in every individually installable skill", () => {
+    const repoRoot = findRepoRoot();
+    const license = readFileSync(join(repoRoot, "LICENSE"), "utf8");
+    for (const { dir } of listPackableSkillDirs(repoRoot)) {
+      expect(readFileSync(join(dir, "LICENSE"), "utf8")).toBe(license);
+    }
+  });
+
   it("requires SKILL.md in every skills directory", () => {
     const repoRoot = findRepoRoot();
     const missing = listSkillDirs(repoRoot)

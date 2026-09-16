@@ -90,6 +90,12 @@ describe("packAll", () => {
     try {
       const result = packAll({ repoRoot: fixture.repoRoot, check: false });
       expect(result.stale).toEqual([]);
+      const license = readFileSync(join(fixture.repoRoot, "LICENSE"), "utf8");
+      for (const output of result.wrote.filter((path) =>
+        statSync(path).isDirectory(),
+      )) {
+        expect(readFileSync(join(output, "LICENSE"), "utf8")).toBe(license);
+      }
       expect(
         readFileSync(
           join(fixture.repoRoot, "skills/core/demo/SKILL.md"),
@@ -150,7 +156,11 @@ describe("packAll", () => {
             "utf8",
           ),
         ),
-      ).toMatchObject({ name: "legalquants-litigation", skills: "./skills/" });
+      ).toMatchObject({
+        name: "legalquants-litigation",
+        skills: "./skills/",
+        license: "Apache-2.0",
+      });
       expect(existsSync(join(fixture.repoRoot, "dist/claude-cowork"))).toBe(
         false,
       );

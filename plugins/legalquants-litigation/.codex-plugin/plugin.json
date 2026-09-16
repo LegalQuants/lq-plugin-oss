@@ -9,6 +9,7 @@
   },
   "homepage": "https://github.com/LegalQuants/lq-plugin-oss",
   "repository": "https://github.com/LegalQuants/lq-plugin-oss",
+  "license": "Apache-2.0",
   "keywords": [
     "legal",
     "skills",

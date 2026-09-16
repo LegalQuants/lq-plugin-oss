@@ -8,7 +8,7 @@ root="$(git rev-parse --show-toplevel)"
 cd "$root"
 
 plugin_roots='^plugins/(legalquants-litigation|legalquants-transactional|legalquants-companion)/'
-generator_inputs='^(skills/|AGENTS\.md$|packages/pluginctl/(src|assets|hooks)/|plugin\.release\.yaml$|\.claude-plugin/marketplace\.json$|\.agents/plugins/marketplace\.json$)'
+generator_inputs='^(skills/|AGENTS\.md$|LICENSE$|packages/pluginctl/(src|assets|hooks)/|plugin\.release\.yaml$|\.claude-plugin/marketplace\.json$|\.agents/plugins/marketplace\.json$)'
 staged_files="$(git diff --cached --name-only --diff-filter=ACMRD)"
 
 if ! printf '%s\n' "$staged_files" | grep -Eq "$generator_inputs|$plugin_roots"; then
