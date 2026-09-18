@@ -4,7 +4,7 @@ Use the communication plan from [method.md](method.md) and the fixed UI in [comp
 
 ## Inspect, then adapt
 
-Inspect relevant packaged assets for both reading flow and component anatomy. Filled `stacked-explainer`, `diligence-report`, `slide-brief`, and `method-map` assets are legacy-compatible anatomy references for narrative rhythm, figures, cards, and purposeful detail. All four shipping reusable templates use v4. Consult the current registry and component/build contracts for new authoring.
+Inspect relevant packaged assets for both reading flow and component anatomy. Filled `stacked-explainer`, `diligence-report`, `slide-brief`, and `method-map` assets are legacy-compatible anatomy references for narrative rhythm, figures, cards, and purposeful detail. All shipping reusable templates use v4; `card-hub` adds the compact framing-card/peer-cards/conclusion format. Consult the current registry and component/build contracts for new authoring.
 
 Reuse useful arrangements without requiring a named-template import. Adapt their claim allocation, density, and geometry; never copy example matter or impose its page count. Importing an exact template is a separate user-named path in [build.md](build.md).
 

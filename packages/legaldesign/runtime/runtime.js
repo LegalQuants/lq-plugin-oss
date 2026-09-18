@@ -129,6 +129,7 @@
     const undo = [];
     let redo = [];
     let editing = false;
+    let popupEditSession = null;
     let gesture = null;
     let textUndoArmed = false;
     let returnFocus = null;
@@ -779,12 +780,80 @@
       root.setAttribute("data-theme", next);
       if (!state.review) state.review = {};
       state.review.theme = next;
+      applyPalette(
+        state.review.palette || root.getAttribute("data-palette") || "default",
+        false,
+      );
       if (persist) {
         state.savedAt = new Date().toISOString();
         mirror();
       }
     }
 
+    function applyPalette(value, persist) {
+      const name = ["default", "lavender", "mint", "sand"].includes(value)
+        ? value
+        : "default";
+      root.setAttribute("data-palette", name);
+      state.review.palette = name;
+      all("button[data-palette-choice]").forEach((button) => {
+        button.setAttribute(
+          "aria-pressed",
+          String(button.dataset.paletteChoice === name),
+        );
+      });
+      if (persist) {
+        state.savedAt = new Date().toISOString();
+        mirror();
+      }
+    }
+    function installPaletteChoices() {
+      const host = document.getElementById("editor-overflow-menu");
+      if (!host) return;
+      host.querySelector(".ld-palette-choices")?.remove();
+      const choices = document.createElement("div");
+      choices.className = "ld-palette-choices";
+      choices.setAttribute("role", "group");
+      choices.setAttribute("aria-label", "Page palette");
+      choices.setAttribute("data-editor-only", "");
+      const toggle = document.createElement("button");
+      toggle.type = "button";
+      toggle.className = "ld-tool";
+      toggle.textContent = "Palette";
+      toggle.setAttribute("aria-expanded", "false");
+      const options = document.createElement("div");
+      options.className = "ld-palette-options";
+      options.hidden = true;
+      toggle.addEventListener("click", () => {
+        options.hidden = !options.hidden;
+        toggle.setAttribute("aria-expanded", String(!options.hidden));
+        const box = toggle.getBoundingClientRect();
+        options.style.top = box.bottom + 5 + "px";
+        options.style.left =
+          Math.max(8, Math.min(box.left, layoutViewport().width - 188)) + "px";
+      });
+      options.addEventListener("keydown", (event) => {
+        if (event.key !== "Escape") return;
+        event.stopPropagation();
+        options.hidden = true;
+        toggle.setAttribute("aria-expanded", "false");
+        toggle.focus();
+      });
+      choices.append(toggle, options);
+      for (const name of ["default", "lavender", "mint", "sand"]) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.dataset.paletteChoice = name;
+        button.textContent = name[0].toUpperCase() + name.slice(1);
+        button.addEventListener("click", () => {
+          editorCheckpoint();
+          applyPalette(name, true);
+        });
+        options.appendChild(button);
+      }
+      host.appendChild(choices);
+      applyPalette(state.review.palette || "default", false);
+    }
     function installRestoreBanner() {
       let stored = null;
       try {
@@ -2583,6 +2652,7 @@
       }
     }
     function openPopup(id, source) {
+      if (popupEditSession && popupEditSession.id !== id) finishPopupEdit();
       const scrim = document.getElementById("popup-scrim");
       const pop = popupFor(id);
       if (!scrim || !pop) return;
@@ -2615,6 +2685,7 @@
       updatePopupScrollHint(pop);
     }
     function closePopup() {
+      finishPopupEdit();
       const scrim = document.getElementById("popup-scrim");
       if (!scrim || scrim.hidden) return;
       const prior = popupTrail.pop();
@@ -2640,6 +2711,142 @@
       document.body.style.overflow = "";
       restoreReturnFocus();
     }
+    function finishPopupEdit() {
+      if (!popupEditSession) return;
+      const previous = popupEditSession.previous;
+      all('[contenteditable="true"]', activePopup() || document).forEach(
+        (node) => {
+          node.blur();
+        },
+      );
+      popupEditSession = null;
+      root.removeAttribute("data-popup-editing");
+      all("[data-popup-edit-active]").forEach((node) => {
+        node.removeAttribute("data-popup-edit-active");
+      });
+      all(".ld-popup-pencil").forEach((node) => {
+        node.setAttribute("aria-pressed", "false");
+      });
+      select([]);
+      setMode(previous);
+      storeEditorDOM();
+    }
+    function installPopupEditor(pop) {
+      // The book reader is a temporary reflowed copy, not an authored popup.
+      // Editing it would imply persistence while leaving the source unchanged.
+      if (
+        root.getAttribute("data-exported") === "client" ||
+        pop.classList.contains("ld-page-reader")
+      )
+        return;
+      pop
+        .querySelectorAll(".ld-popup-section,.ld-evidence-row")
+        .forEach((node) => {
+          node.setAttribute("data-editor-object", "");
+          node.setAttribute("data-popup-group", "");
+        });
+      pop
+        .querySelectorAll(".ld-popup-pencil,.ld-popup-size-grip")
+        .forEach((node) => {
+          node.remove();
+        });
+      pop.toggleAttribute(
+        "data-popup-edit-active",
+        popupEditSession?.id === pop.id,
+      );
+      const pencil = document.createElement("button");
+      pencil.type = "button";
+      pencil.className = "ld-popup-pencil";
+      pencil.setAttribute("data-editor-only", "");
+      pencil.setAttribute("aria-label", "Edit this popup");
+      pencil.title =
+        "Edit this popup: double-click text; select and drag handles; Delete removes; Alt-click selects a section";
+      pencil.setAttribute(
+        "aria-pressed",
+        String(popupEditSession?.id === pop.id),
+      );
+      pencil.innerHTML =
+        '<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 5 4 4M4 20l4-1L20 7a2.8 2.8 0 0 0-4-4L4 15Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>';
+      pencil.addEventListener("click", () => {
+        if (popupEditSession?.id === pop.id) {
+          finishPopupEdit();
+          return;
+        }
+        popupEditSession = { id: pop.id, previous: editing };
+        root.setAttribute("data-popup-editing", "");
+        pop.setAttribute("data-popup-edit-active", "");
+        setMode(true);
+        select([]);
+        pencil.setAttribute("aria-pressed", "true");
+      });
+      pop.appendChild(pencil);
+      function setSize(key, value) {
+        const viewport = layoutViewport();
+        const max =
+          key === "width" ? viewport.width - 32 : viewport.height - 32;
+        pop.style[key] =
+          Math.max(
+            Math.min(key === "width" ? 280 : 200, max),
+            Math.min(value, max),
+          ) + "px";
+      }
+      const grip = document.createElement("button");
+      grip.type = "button";
+      grip.className = "ld-popup-size-grip";
+      grip.setAttribute("data-editor-only", "");
+      grip.setAttribute("aria-label", "Resize popup");
+      grip.title =
+        "Drag or use arrow keys to resize; double-click or press Enter to fit height";
+      grip.innerHTML =
+        '<svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="m4 12 8-8m-3 8 3-3" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>';
+      const fitHeight = () => {
+        editorCheckpoint();
+        pop.style.removeProperty("height");
+        commitEditorDOM([pop]);
+      };
+      grip.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          event.stopPropagation();
+          fitHeight();
+          return;
+        }
+        if (!event.key.startsWith("Arrow")) return;
+        event.preventDefault();
+        event.stopPropagation();
+        editorCheckpoint();
+        const box = pop.getBoundingClientRect();
+        const key = /Left|Right/.test(event.key) ? "width" : "height";
+        setSize(key, box[key] + (/Left|Up/.test(event.key) ? -10 : 10));
+        commitEditorDOM([pop]);
+      });
+      grip.addEventListener("dblclick", fitHeight);
+      grip.addEventListener("pointerdown", (event) => {
+        if (event.button !== 0) return;
+        event.preventDefault();
+        event.stopPropagation();
+        editorCheckpoint();
+        const box = pop.getBoundingClientRect(),
+          x = event.clientX,
+          y = event.clientY;
+        grip.setPointerCapture(event.pointerId);
+        const move = (next) => {
+          setSize("width", box.width + 2 * (next.clientX - x));
+          setSize("height", box.height + 2 * (next.clientY - y));
+          renderSelection();
+        };
+        const end = () => {
+          grip.removeEventListener("pointermove", move);
+          grip.removeEventListener("pointerup", end);
+          grip.removeEventListener("pointercancel", end);
+          commitEditorDOM([pop]);
+        };
+        grip.addEventListener("pointermove", move);
+        grip.addEventListener("pointerup", end);
+        grip.addEventListener("pointercancel", end);
+      });
+      pop.appendChild(grip);
+    }
     function bindPopupDOM() {
       all("[data-evidence],[data-detail]").forEach((node) => {
         if (!node.matches("a,button,input,select,textarea,[tabindex]")) {
@@ -2648,6 +2855,11 @@
         }
       });
       all("#popup-scrim .pop").forEach((pop) => {
+        if (
+          typeof LEGALDESIGN_CLIENT_BUILD === "undefined" ||
+          !LEGALDESIGN_CLIENT_BUILD
+        )
+          installPopupEditor(pop);
         if (pop.querySelector(".ld-popup-authoring"))
           popupAuthoringControls(pop);
         if (pop.__legalDesignPopupBound) return;
@@ -3785,6 +3997,14 @@
             };
             return;
           }
+          if (popupEditSession && event.altKey) {
+            const group = event.target.closest("[data-popup-group]");
+            if (group && activePopup()?.contains(group)) {
+              event.preventDefault();
+              select([group]);
+              return;
+            }
+          }
           const diagramLabel = event.target.closest(
             ".ld-diagram [data-diagram-label][data-editable]",
           );
@@ -3798,6 +4018,8 @@
             '.ld-card,.sb-card,section.ld-unit[data-kind="card"]',
           );
           if (card && event.detail < 2) target = card;
+          if (popupEditSession && target && !activePopup()?.contains(target))
+            return;
           // Empty space in a figure starts an enclosure selection, not a drag
           // of its whole editable body. Existing group selection survives a grab.
           if (
@@ -4169,6 +4391,10 @@
       if (block) block.textContent = safeJSON(nextState);
     }
     function scrubTransientEditing(cloneRoot) {
+      cloneRoot.removeAttribute("data-popup-editing");
+      all("[data-popup-edit-active]", cloneRoot).forEach((node) => {
+        node.removeAttribute("data-popup-edit-active");
+      });
       all("[contenteditable]", cloneRoot).forEach((node) => {
         node.removeAttribute("contenteditable");
         node.removeAttribute("spellcheck");
@@ -4235,6 +4461,7 @@
           ...(singleComposition() ? {} : { approach: currentApproach() }),
           decisions: {},
           theme: (state.review && state.review.theme) || "light",
+          palette: (state.review && state.review.palette) || "default",
           location:
             state.review && state.review.location != null
               ? state.review.location
@@ -4257,6 +4484,9 @@
             id: section.id,
             unitIds: [...section.unitIds],
             layout: clone(section.layout),
+            ...(section.presentation === "card-hub"
+              ? { presentation: "card-hub" }
+              : {}),
             ...(section.issueLayout
               ? { issueLayout: clone(section.issueLayout) }
               : {}),
@@ -5025,6 +5255,7 @@
           ...(singleComposition() ? {} : { approach: "a" }),
           decisions: {},
           theme: (state.review && state.review.theme) || "light",
+          palette: (state.review && state.review.palette) || "default",
           location: null,
         },
         history: [],
@@ -5085,6 +5316,9 @@
             purpose:
               "[What this section enables the reader to understand or do.]",
             unitIds: mappedIds(section.unitIds, maps.unit),
+            ...(section.presentation === "card-hub"
+              ? { presentation: "card-hub" }
+              : {}),
             ...(section.issueLayout
               ? {
                   issueLayout: {
@@ -6618,6 +6852,11 @@
     }
 
     function bindChrome() {
+      if (
+        typeof LEGALDESIGN_CLIENT_BUILD === "undefined" ||
+        !LEGALDESIGN_CLIENT_BUILD
+      )
+        installPaletteChoices();
       const theme = document.getElementById("theme-toggle");
       if (theme)
         theme.addEventListener("click", () => {

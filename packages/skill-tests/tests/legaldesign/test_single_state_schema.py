@@ -20,7 +20,13 @@ ROOT = Path(__file__).resolve().parents[4]
 SKILL = ROOT / "skills/core/legaldesign"
 PLANS = ROOT / "packages/legaldesign/templates"
 FIXTURES = ROOT / "packages/skill-tests/tests/legaldesign/fixtures"
-NAMES = ["stacked-explainer", "method-map", "slide-brief", "diligence-report"]
+NAMES = [
+    "stacked-explainer",
+    "method-map",
+    "slide-brief",
+    "diligence-report",
+    "card-hub",
+]
 MODULE = importlib.util.spec_from_file_location(
     "legaldesign_single_state_schema", SKILL / "scripts/scaffold.py"
 )
@@ -145,6 +151,9 @@ def test_actual_client_reducer_keeps_a_valid_minimal_v4_state(name: str) -> None
                 unit_id in section["unitIds"] and unit_id in state["units"]
                 for unit_id in references
             )
+        if "presentation" in section:
+            expected.add("presentation")
+            assert section["presentation"] == "card-hub"
         assert set(section) == expected
     assert all(
         "encoding" not in unit["variants"]["a"] for unit in state["units"].values()

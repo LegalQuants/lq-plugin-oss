@@ -1,0 +1,512 @@
+{
+  "schemaVersion": "legaldesign.build.v4",
+  "brief": {
+    "title": "The question, explained",
+    "reader": "A reader reviewing a reusable explanation.",
+    "action": "Understand the qualified answer and inspect its supporting parts.",
+    "purpose": "understand",
+    "message": "This blueprint shows a card-hub explanation, not completed legal work.",
+    "spine": "containment",
+    "situation": "laptop",
+    "form": "one-page",
+    "sources": [
+      {
+        "id": "guide",
+        "label": "Reusable composition guide",
+        "status": "supplied"
+      }
+    ],
+    "assumptions": [],
+    "gaps": ["No matter-specific source document has been supplied."]
+  },
+  "style": {
+    "source": "loxoto",
+    "ref": null
+  },
+  "claims": [
+    {
+      "id": "c-context",
+      "text": "Frame the reader's question and the scope of the source record.",
+      "kind": "context",
+      "sourceIds": ["guide"],
+      "placement": "surface",
+      "evidenceIds": []
+    },
+    {
+      "id": "c-point-1",
+      "text": "State the main point. Explain its significance in a few direct sentences.",
+      "kind": "material",
+      "sourceIds": ["guide"],
+      "placement": "surface",
+      "evidenceIds": ["support-1"]
+    },
+    {
+      "id": "c-point-2",
+      "text": "Show the condition or exception that limits the answer. Do not hide it in a popup.",
+      "kind": "material",
+      "sourceIds": ["guide"],
+      "placement": "surface",
+      "evidenceIds": ["support-2"]
+    },
+    {
+      "id": "c-point-3",
+      "text": "Connect this point to its supporting record. Put authentic source clips and context in the popup.",
+      "kind": "material",
+      "sourceIds": ["guide"],
+      "placement": "surface",
+      "evidenceIds": ["support-3"]
+    },
+    {
+      "id": "c-point-4",
+      "text": "Explain how this point relates to the others. Use a diagram in the popup only when it clarifies the relationship.",
+      "kind": "material",
+      "sourceIds": ["guide"],
+      "placement": "surface",
+      "evidenceIds": ["support-4"]
+    },
+    {
+      "id": "c-point-5",
+      "text": "State the next action. Preserve this structure as a reusable template; replace the matter-specific content and source record.",
+      "kind": "material",
+      "sourceIds": ["guide"],
+      "placement": "surface",
+      "evidenceIds": ["support-5"]
+    }
+  ],
+  "units": [
+    {
+      "id": "title",
+      "kind": "text",
+      "role": "title",
+      "claim": "The question, explained",
+      "claimRefs": ["c-context"],
+      "relationship": "containment",
+      "candidates": ["concise text", "structured card"],
+      "variants": {
+        "a": {
+          "html": "<h1>The question, explained</h1>",
+          "axis": "framing",
+          "encoding": "Position groups peer principles; it does not rank their importance.",
+          "why": "Keep the answer on the page and supporting explanation in a popup."
+        }
+      },
+      "placeholder": "[The question, explained.]",
+      "evidence": []
+    },
+    {
+      "id": "context",
+      "kind": "text",
+      "role": "summary",
+      "claim": "Context and scope",
+      "claimRefs": ["c-context"],
+      "relationship": "containment",
+      "candidates": ["concise text", "structured card"],
+      "variants": {
+        "a": {
+          "html": "<p>Set out the situation and the source record the reader needs to understand.</p>",
+          "axis": "framing",
+          "encoding": "Position groups peer principles; it does not rank their importance.",
+          "why": "Keep the answer on the page and supporting explanation in a popup."
+        }
+      },
+      "placeholder": "[Context and scope.]",
+      "evidence": []
+    },
+    {
+      "id": "question",
+      "kind": "text",
+      "role": "summary",
+      "claim": "The reader's question",
+      "claimRefs": ["c-context"],
+      "relationship": "containment",
+      "candidates": ["concise text", "structured card"],
+      "variants": {
+        "a": {
+          "html": "<p><strong>What does the reader need to understand or decide?</strong></p>",
+          "axis": "framing",
+          "encoding": "Position groups peer principles; it does not rank their importance.",
+          "why": "Keep the answer on the page and supporting explanation in a popup."
+        }
+      },
+      "placeholder": "[The reader's question.]",
+      "evidence": []
+    },
+    {
+      "id": "answer",
+      "kind": "text",
+      "role": "answer",
+      "claim": "The qualified answer",
+      "claimRefs": ["c-context"],
+      "relationship": "containment",
+      "candidates": ["concise text", "structured card"],
+      "variants": {
+        "a": {
+          "html": "<p>Give the answer with its controlling qualification. The cards below explain its parts.</p>",
+          "axis": "framing",
+          "encoding": "Position groups peer principles; it does not rank their importance.",
+          "why": "Keep the answer on the page and supporting explanation in a popup."
+        }
+      },
+      "placeholder": "[The qualified answer.]",
+      "evidence": []
+    },
+    {
+      "id": "point-1",
+      "kind": "card",
+      "role": "summary",
+      "claim": "Start with the answer",
+      "claimRefs": ["c-point-1"],
+      "relationship": "containment",
+      "candidates": ["concise text", "structured card"],
+      "variants": {
+        "a": {
+          "html": "<h2>Start with the answer</h2><p>State the main point. Explain its significance in a few direct sentences.</p>",
+          "axis": "framing",
+          "encoding": "Position groups peer principles; it does not rank their importance.",
+          "why": "Keep the answer on the page and supporting explanation in a popup."
+        }
+      },
+      "placeholder": "[Start with the answer.]",
+      "evidence": ["support-1"],
+      "detail": "support-1"
+    },
+    {
+      "id": "point-2",
+      "kind": "card",
+      "role": "summary",
+      "claim": "Keep the qualification",
+      "claimRefs": ["c-point-2"],
+      "relationship": "containment",
+      "candidates": ["concise text", "structured card"],
+      "variants": {
+        "a": {
+          "html": "<h2>Keep the qualification</h2><p>Show the condition or exception that limits the answer. Do not hide it in a popup.</p>",
+          "axis": "framing",
+          "encoding": "Position groups peer principles; it does not rank their importance.",
+          "why": "Keep the answer on the page and supporting explanation in a popup."
+        }
+      },
+      "placeholder": "[Keep the qualification.]",
+      "evidence": ["support-2"],
+      "detail": "support-2"
+    },
+    {
+      "id": "point-3",
+      "kind": "card",
+      "role": "summary",
+      "claim": "Make support inspectable",
+      "claimRefs": ["c-point-3"],
+      "relationship": "containment",
+      "candidates": ["concise text", "structured card"],
+      "variants": {
+        "a": {
+          "html": "<h2>Make support inspectable</h2><p>Connect this point to its supporting record. Put authentic source clips and context in the popup.</p>",
+          "axis": "framing",
+          "encoding": "Position groups peer principles; it does not rank their importance.",
+          "why": "Keep the answer on the page and supporting explanation in a popup."
+        }
+      },
+      "placeholder": "[Make support inspectable.]",
+      "evidence": ["support-3"],
+      "detail": "support-3"
+    },
+    {
+      "id": "point-4",
+      "kind": "card",
+      "role": "summary",
+      "claim": "Show the relationship",
+      "claimRefs": ["c-point-4"],
+      "relationship": "containment",
+      "candidates": ["concise text", "structured card"],
+      "variants": {
+        "a": {
+          "html": "<h2>Show the relationship</h2><p>Explain how this point relates to the others. Use a diagram in the popup only when it clarifies the relationship.</p>",
+          "axis": "framing",
+          "encoding": "Position groups peer principles; it does not rank their importance.",
+          "why": "Keep the answer on the page and supporting explanation in a popup."
+        }
+      },
+      "placeholder": "[Show the relationship.]",
+      "evidence": ["support-4"],
+      "detail": "support-4"
+    },
+    {
+      "id": "point-5",
+      "kind": "card",
+      "role": "action",
+      "claim": "Carry it into the next matter",
+      "claimRefs": ["c-point-5"],
+      "relationship": "containment",
+      "candidates": ["concise text", "structured card"],
+      "variants": {
+        "a": {
+          "html": "<h2>Carry it into the next matter</h2><p>State the next action. Preserve this structure as a reusable template; replace the matter-specific content and source record.</p>",
+          "axis": "framing",
+          "encoding": "Position groups peer principles; it does not rank their importance.",
+          "why": "Keep the answer on the page and supporting explanation in a popup."
+        }
+      },
+      "placeholder": "[Carry it into the next matter.]",
+      "evidence": ["support-5"],
+      "detail": "support-5"
+    },
+    {
+      "id": "scope",
+      "kind": "text",
+      "role": "scope",
+      "claim": "Scope and limits",
+      "claimRefs": ["c-context"],
+      "relationship": "containment",
+      "candidates": ["concise text", "structured card"],
+      "variants": {
+        "a": {
+          "html": "<p>Reusable structure only. No matter-specific facts, legal conclusions or source verification are supplied.</p>",
+          "axis": "framing",
+          "encoding": "Position groups peer principles; it does not rank their importance.",
+          "why": "Keep the answer on the page and supporting explanation in a popup."
+        }
+      },
+      "placeholder": "[Scope and limits.]",
+      "evidence": []
+    }
+  ],
+  "evidence": [
+    {
+      "id": "support-1",
+      "sourceId": "guide",
+      "claimRefs": ["c-point-1"],
+      "cite": "Reusable composition guide",
+      "locator": "Point 1",
+      "status": "supplied",
+      "detail": "Replace this guidance with the supplied analysis and its supporting record.",
+      "popup": {
+        "type": "explainer",
+        "title": "Start with the answer",
+        "lede": "Explain the selected point without obscuring the answer on the page.",
+        "sections": [
+          {
+            "heading": "Supporting explanation",
+            "body": "Explain the reasoning and any useful example. Keep material qualifications on the main page as well."
+          },
+          {
+            "heading": "Source and limits",
+            "body": "Identify the actual source and pinpoint. Include an authentic source clip when available; do not invent one."
+          }
+        ]
+      },
+      "original": {
+        "availability": "unavailable",
+        "label": "No matter source supplied"
+      }
+    },
+    {
+      "id": "support-2",
+      "sourceId": "guide",
+      "claimRefs": ["c-point-2"],
+      "cite": "Reusable composition guide",
+      "locator": "Point 2",
+      "status": "supplied",
+      "detail": "Replace this guidance with the supplied analysis and its supporting record.",
+      "popup": {
+        "type": "explainer",
+        "title": "Keep the qualification",
+        "lede": "Explain the selected point without obscuring the answer on the page.",
+        "sections": [
+          {
+            "heading": "Supporting explanation",
+            "body": "Explain the reasoning and any useful example. Keep material qualifications on the main page as well."
+          },
+          {
+            "heading": "Source and limits",
+            "body": "Identify the actual source and pinpoint. Include an authentic source clip when available; do not invent one."
+          }
+        ]
+      },
+      "original": {
+        "availability": "unavailable",
+        "label": "No matter source supplied"
+      }
+    },
+    {
+      "id": "support-3",
+      "sourceId": "guide",
+      "claimRefs": ["c-point-3"],
+      "cite": "Reusable composition guide",
+      "locator": "Point 3",
+      "status": "supplied",
+      "detail": "Replace this guidance with the supplied analysis and its supporting record.",
+      "popup": {
+        "type": "explainer",
+        "title": "Make support inspectable",
+        "lede": "Explain the selected point without obscuring the answer on the page.",
+        "sections": [
+          {
+            "heading": "Supporting explanation",
+            "body": "Explain the reasoning and any useful example. Keep material qualifications on the main page as well."
+          },
+          {
+            "heading": "Source and limits",
+            "body": "Identify the actual source and pinpoint. Include an authentic source clip when available; do not invent one."
+          }
+        ]
+      },
+      "original": {
+        "availability": "unavailable",
+        "label": "No matter source supplied"
+      }
+    },
+    {
+      "id": "support-4",
+      "sourceId": "guide",
+      "claimRefs": ["c-point-4"],
+      "cite": "Reusable composition guide",
+      "locator": "Point 4",
+      "status": "supplied",
+      "detail": "Replace this guidance with the supplied analysis and its supporting record.",
+      "popup": {
+        "type": "explainer",
+        "title": "Show the relationship",
+        "lede": "Explain the selected point without obscuring the answer on the page.",
+        "sections": [
+          {
+            "heading": "Supporting explanation",
+            "body": "Explain the reasoning and any useful example. Keep material qualifications on the main page as well."
+          },
+          {
+            "heading": "Source and limits",
+            "body": "Identify the actual source and pinpoint. Include an authentic source clip when available; do not invent one."
+          }
+        ]
+      },
+      "original": {
+        "availability": "unavailable",
+        "label": "No matter source supplied"
+      }
+    },
+    {
+      "id": "support-5",
+      "sourceId": "guide",
+      "claimRefs": ["c-point-5"],
+      "cite": "Reusable composition guide",
+      "locator": "Point 5",
+      "status": "supplied",
+      "detail": "Replace this guidance with the supplied analysis and its supporting record.",
+      "popup": {
+        "type": "explainer",
+        "title": "Carry it into the next matter",
+        "lede": "Explain the selected point without obscuring the answer on the page.",
+        "sections": [
+          {
+            "heading": "Supporting explanation",
+            "body": "Explain the reasoning and any useful example. Keep material qualifications on the main page as well."
+          },
+          {
+            "heading": "Source and limits",
+            "body": "Identify the actual source and pinpoint. Include an authentic source clip when available; do not invent one."
+          }
+        ]
+      },
+      "original": {
+        "availability": "unavailable",
+        "label": "No matter source supplied"
+      }
+    }
+  ],
+  "composition": {
+    "strategy": "composed",
+    "shape": "A framing card, four peer cards and a concluding card",
+    "rationale": "Give a self-contained answer, then let readers inspect the supporting parts.",
+    "sections": [
+      {
+        "id": "overview",
+        "purpose": "Explain the question and its supporting parts",
+        "presentation": "card-hub",
+        "unitIds": [
+          "title",
+          "context",
+          "question",
+          "answer",
+          "point-1",
+          "point-2",
+          "point-3",
+          "point-4",
+          "point-5",
+          "scope"
+        ],
+        "layout": {
+          "columns": 12,
+          "placements": [
+            {
+              "unitId": "title",
+              "row": 1,
+              "column": 1,
+              "span": 12
+            },
+            {
+              "unitId": "context",
+              "row": 2,
+              "column": 1,
+              "span": 4
+            },
+            {
+              "unitId": "question",
+              "row": 2,
+              "column": 5,
+              "span": 4
+            },
+            {
+              "unitId": "answer",
+              "row": 2,
+              "column": 9,
+              "span": 4
+            },
+            {
+              "unitId": "point-1",
+              "row": 3,
+              "column": 1,
+              "span": 3
+            },
+            {
+              "unitId": "point-2",
+              "row": 3,
+              "column": 4,
+              "span": 3
+            },
+            {
+              "unitId": "point-3",
+              "row": 3,
+              "column": 7,
+              "span": 3
+            },
+            {
+              "unitId": "point-4",
+              "row": 3,
+              "column": 10,
+              "span": 3
+            },
+            {
+              "unitId": "point-5",
+              "row": 4,
+              "column": 1,
+              "span": 12
+            },
+            {
+              "unitId": "scope",
+              "row": 5,
+              "column": 1,
+              "span": 12
+            }
+          ]
+        }
+      }
+    ],
+    "templateRef": null
+  },
+  "overview": {
+    "sectionId": "overview",
+    "contextUnitIds": ["context"],
+    "questionUnitId": "question",
+    "answerUnitId": "answer",
+    "topics": []
+  }
+}

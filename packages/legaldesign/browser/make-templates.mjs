@@ -468,6 +468,7 @@ const jobs = [
   ["slide-brief.html", "slide-brief.template.html"],
   ["diligence-report.html", "diligence-report.template.html"],
   ["method-map.html", "method-map.template.html"],
+  ["card-hub.html", "card-hub.template.html"],
 ];
 for (const [source, output] of jobs) {
   const exportBrowser = await launch();
