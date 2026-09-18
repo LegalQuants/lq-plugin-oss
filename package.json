@@ -10,7 +10,8 @@
   },
   "scripts": {
     "pluginctl": "pnpm --filter @lq/pluginctl start",
-    "check": "pnpm lint && pnpm lint:py && pnpm typecheck && pnpm typecheck:py && pnpm test && pnpm test:browser && pnpm assets:check && pnpm validate",
+    "check": "pnpm lint && pnpm lint:py && pnpm typecheck && pnpm typecheck:py && pnpm test && pnpm test:browser && pnpm test:browser:demo && pnpm assets:check && pnpm validate",
+    "test:browser:demo": "node packages/legaldesign/browser/card-hub.spec.mjs && node packages/legaldesign/browser/popup-palette.spec.mjs",
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
     "lint:py": "uv run ruff format --check skills packages && uv run ruff check skills packages",

@@ -2138,9 +2138,12 @@ await run("popup modal traps Tab and Shift+Tab focus", async () => {
   await trigger.locator(":scope > rect").click();
   const popup = page.locator("#e-ask");
   assert.equal(await popup.isVisible(), true);
-  const focusables = popup.locator(
-    'a[href],button:not(:disabled),input:not([type="hidden"]):not(:disabled),select:not(:disabled),textarea:not(:disabled),summary,[contenteditable="true"],[tabindex]:not([tabindex="-1"])',
-  );
+  // The resize grip is intentionally hidden until popup editing is active.
+  const focusables = popup
+    .locator(
+      'a[href],button:not(:disabled),input:not([type="hidden"]):not(:disabled),select:not(:disabled),textarea:not(:disabled),summary,[contenteditable="true"],[tabindex]:not([tabindex="-1"])',
+    )
+    .filter({ visible: true });
   assert(
     (await focusables.count()) >= 2,
     "focus-trap fixture needs at least two controls",

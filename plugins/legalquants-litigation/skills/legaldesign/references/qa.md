@@ -32,6 +32,8 @@ Validate the specification, compare the source record, and inspect the rendered 
 
 - Exercise all editor capabilities in [component-grammar.md](component-grammar.md) with actual pointer/keyboard actions, not only state setters. Include HTML reflow and SVG geometry resizing, diagram labels, popup title/lede/sections, and undo/redo of added/duplicated objects and popup changes.
 - Save and reopen the working HTML. Confirm text, geometry, paint, additions, popup edits, theme, page, and explicit decision response/note persist over the validated baseline. Source identity/status stay protected; no extra authoring utilities or unsupported comments layer appear.
+- Test the popup pencil from reading mode and from page-edit mode. Resize the frame and a text object, edit text, delete a section, undo/redo, then close and reopen. The page behind it must not become selectable; no large popup toolbar may consume its content area. Check frame and content edits after working Save and client export. Test all four palette buttons in both themes, including restoring Default over a configured authority; preserve the choice in Save and both exports without retaining palette controls in the client.
+- For the card-hub template, check the intro, four peer cards and concluding card at wide and narrow widths. Desktop text stays fixed-size; compact desktop cards reflow without skinny tracks. Check the phone overview and full-size reader separately. Open every card's popup by pointer and keyboard, including after template export.
 
 ## 5. Exports and privacy
 

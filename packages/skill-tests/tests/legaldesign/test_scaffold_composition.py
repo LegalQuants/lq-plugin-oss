@@ -630,7 +630,7 @@ def test_custom_palette_preserves_composed_dom_and_interactions(tmp_path: Path) 
         ("scope: palette-only", "scope: full-system", "scope: palette-only"),
         ("Dark: `--bg #000000", "Dark: `--bg #101010", "pure black"),
         ("--red #c92014", "--red #eeeeee", "contrast"),
-        ("--faint #6f6f6f", "--faint #b0b0b0", "contrast"),
+        ("--faint #666666", "--faint #b0b0b0", "contrast"),
     ],
 )
 def test_design_md_palette_contract_fails_closed(

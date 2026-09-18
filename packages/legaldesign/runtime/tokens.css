@@ -1,12 +1,12 @@
 :root,
 [data-theme="light"] {
   color-scheme: light;
-  --bg: #fbfbfb;
+  --bg: #f2f2f2;
   --card: #ffffff;
   --card-strong: #ffffff;
   --ink: #111111;
   --muted: #565656;
-  --faint: #6f6f6f;
+  --faint: #666666;
   --line: rgba(17, 17, 17, 0.13);
   --line-strong: rgba(17, 17, 17, 0.3);
   --red: #c92014;
@@ -52,6 +52,151 @@
   --scrim: rgba(0, 0, 0, 0.68);
   --shadow-soft: 0 1px 3px rgba(0, 0, 0, 0.5), 0 6px 18px rgba(0, 0, 0, 0.35);
   --shadow: 0 22px 60px rgba(0, 0, 0, 0.62);
+}
+
+/* Optional presentation palettes; Default leaves the design authority intact. */
+html[data-palette="lavender"] {
+  --brand-hue: 285;
+  --accent-hue: 265;
+}
+html[data-palette="mint"] {
+  --brand-hue: 165;
+  --accent-hue: 175;
+}
+html[data-palette="sand"] {
+  --brand-hue: 80;
+  --accent-hue: 75;
+}
+html:is(
+  [data-palette="lavender"],
+  [data-palette="mint"],
+  [data-palette="sand"]
+) {
+  --bg: oklch(96% 0.014 var(--brand-hue));
+  --tint: oklch(97% 0.009 var(--brand-hue));
+  --red: oklch(46% 0.09 var(--accent-hue));
+  --red-strong: oklch(40% 0.08 var(--accent-hue));
+  --red-wash: color-mix(in srgb, var(--red) 6%, transparent);
+  --line: oklch(88% 0.009 var(--brand-hue));
+  --line-strong: oklch(77% 0.012 var(--brand-hue));
+}
+html[data-theme="dark"]:is(
+  [data-palette="lavender"],
+  [data-palette="mint"],
+  [data-palette="sand"]
+) {
+  --bg: oklch(14% 0.006 var(--brand-hue));
+  --card: oklch(20% 0.008 var(--brand-hue));
+  --card-strong: oklch(23% 0.008 var(--brand-hue));
+  --tint: oklch(24% 0.009 var(--brand-hue));
+  --red: oklch(78% 0.09 var(--accent-hue));
+  --red-strong: oklch(84% 0.07 var(--accent-hue));
+  --line: oklch(33% 0.009 var(--brand-hue));
+  --line-strong: oklch(47% 0.012 var(--brand-hue));
+}
+/* Card-hub is an opt-in reusable one-page composition, not every legal output. */
+html .ld-card-hub .ld-composed-unit[data-role="title"] {
+  text-align: center;
+}
+html .ld-card-hub .ld-hub-intro {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 20px;
+}
+html .ld-card-hub .ld-hub-intro .ld-composed-unit {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  color: var(--ink);
+  font-size: var(--ld-type-body);
+}
+html .ld-card-hub .ld-hub-intro p {
+  margin: 0 0 6px;
+}
+html .ld-card-hub .ld-composed-unit[data-kind="card"] {
+  color: var(--ink);
+  align-self: stretch;
+  background: var(--card);
+  padding: 20px;
+  border: 1px solid var(--line-strong);
+  border-radius: 5px;
+  box-shadow: var(--shadow-soft);
+}
+html[data-mode="view"]
+  .ld-card-hub
+  .ld-composed-unit[data-kind="card"][data-detail]:hover {
+  border-color: var(--red);
+  outline-color: var(--red);
+  color: var(--ink);
+}
+html[data-mode="view"]
+  .ld-card-hub
+  [data-kind="card"][data-detail]
+  :is(h2, h3):hover {
+  color: var(--red);
+}
+@media (min-width: 761px) and (max-width: 1120px) {
+  html[data-fixed-pages] .ld-fixed-page .ld-card-hub > .ld-composed-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  html[data-fixed-pages]
+    .ld-fixed-page
+    .ld-card-hub
+    > .ld-composed-grid
+    > :is(.ld-composed-unit, .ld-hub-intro) {
+    grid-column: auto !important;
+    grid-row: auto !important;
+  }
+  html[data-fixed-pages]
+    .ld-fixed-page
+    .ld-card-hub
+    > .ld-composed-grid
+    > :is(
+      [data-role="title"],
+      .ld-hub-intro,
+      [data-role="action"],
+      [data-role="scope"]
+    ) {
+    grid-column: 1 / -1 !important;
+  }
+}
+@media (max-width: 600px) {
+  html .ld-card-hub > .ld-composed-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.ld-palette-choices {
+  position: relative;
+  display: inline-flex;
+}
+.ld-palette-options {
+  position: fixed;
+  z-index: 65;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 6px;
+  width: 180px;
+  background: var(--card);
+  border: 1px solid var(--line-strong);
+  border-radius: 4px;
+  box-shadow: var(--shadow-soft);
+}
+.ld-palette-options[hidden] {
+  display: none;
+}
+.ld-palette-options button {
+  border: 1px solid var(--line-strong);
+  border-radius: 4px;
+  padding: 6px 9px;
+  background: var(--card);
+}
+.ld-palette-options button[aria-pressed="true"] {
+  outline: 2px solid var(--ink);
+  outline-offset: 1px;
 }
 
 * {
@@ -704,6 +849,46 @@ html[data-theme="dark"] .pop :is(.ld-popup-lede, .ld-popup-section p, .desc) {
   color: var(--red);
   font-size: 11px;
   letter-spacing: 0.04em;
+}
+.ld-popup-pencil,
+.ld-popup-size-grip {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: var(--card);
+  color: var(--ink);
+  padding: 0;
+  width: 38px;
+  height: 38px;
+  z-index: 3;
+}
+.ld-popup-pencil {
+  top: 10px;
+  right: 52px;
+}
+.ld-popup-pencil[aria-pressed="true"] {
+  outline: 1px solid var(--line-strong);
+}
+.ld-popup-size-grip {
+  display: none;
+  right: 2px;
+  bottom: 2px;
+  cursor: nwse-resize;
+  touch-action: none;
+}
+.pop[data-popup-edit-active] > .ld-popup-size-grip {
+  display: grid;
+}
+.pop:has(> .ld-popup-pencil) > h2 {
+  margin-right: 0;
+  padding-right: 80px;
+}
+html[data-popup-editing] .ld-editor-tools,
+html[data-popup-editing] .ld-popup-authoring,
+html[data-popup-editing] .ld-unit-tools {
+  display: none !important;
 }
 .pop h2 {
   margin: 0 48px 8px 0;

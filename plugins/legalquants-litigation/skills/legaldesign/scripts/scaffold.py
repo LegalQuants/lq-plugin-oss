@@ -37,6 +37,7 @@ TEMPLATES = {
     "slide-brief": ("slide-brief", "slide-brief.html"),
     "diligence-report": ("slide-brief", "diligence-report.html"),
     "method-map": ("one-page", "method-map.html"),
+    "card-hub": ("one-page", "card-hub.html"),
 }
 RELATIONSHIPS = {
     "sequence",
@@ -506,12 +507,19 @@ def _check_composition(
         _check_keys(
             section,
             allowed={"id", "purpose", "indexLabel", "unitIds", "layout"}
-            | ({"issueLayout"} if allow_issue else set()),
+            | ({"issueLayout", "presentation"} if allow_issue else set()),
             required={"id", "purpose", "unitIds", "layout"},
             path=section_path,
             errors=errors,
         )
         section_id = section.get("id")
+        if "presentation" in section:
+            _check_enum(
+                section["presentation"],
+                {"card-hub"},
+                f"{section_path}.presentation",
+                errors,
+            )
         _check_string(section_id, f"{section_path}.id", errors)
         if isinstance(section_id, str):
             if section_id in section_ids:
@@ -2186,6 +2194,79 @@ def _check_v3_composition_grammar(payload: dict[str, Any], errors: list[str]) ->
                 )
 
 
+def _check_card_hub(payload: dict[str, Any], errors: list[str]) -> None:
+    composition = payload.get("composition")
+    if not isinstance(composition, dict):
+        return
+    sections = composition.get("sections", [])
+    if not isinstance(sections, list):
+        return
+    overview = payload.get("overview", {})
+    raw_units = payload.get("units", [])
+    units = (
+        {
+            unit["id"]: unit
+            for unit in raw_units
+            if isinstance(unit, dict) and isinstance(unit.get("id"), str)
+        }
+        if isinstance(raw_units, list)
+        else {}
+    )
+    for section in sections:
+        if not isinstance(section, dict) or section.get("presentation") != "card-hub":
+            continue
+        path = "$.composition.sections: card-hub"
+        if (
+            not isinstance(payload.get("brief"), dict)
+            or payload["brief"].get("form") != "one-page"
+            or len(sections) != 1
+            or "issueLayout" in section
+            or not isinstance(overview, dict)
+            or section.get("id") != overview.get("sectionId")
+        ):
+            errors.append(f"{path}: requires the sole one-page overview section")
+            continue
+        intro = overview.get("contextUnitIds", [])
+        if not isinstance(intro, list):
+            continue
+        intro = intro + [overview.get("questionUnitId"), overview.get("answerUnitId")]
+        ids = section.get("unitIds", [])
+        if not isinstance(ids, list) or not all(isinstance(uid, str) for uid in ids):
+            continue
+        cards = [
+            units.get(uid, {})
+            for uid in ids
+            if units.get(uid, {}).get("kind") == "card"
+        ]
+        if len(cards) != 5 or cards[-1].get("role") != "action":
+            errors.append(
+                f"{path}: requires four peer cards followed by one action card"
+            )
+        else:
+            ordered = [ids[0], *intro, *(card["id"] for card in cards)]
+            scope = [uid for uid in ids if units.get(uid, {}).get("role") == "scope"]
+            if ids != ordered + scope or len(scope) > 1:
+                errors.append(
+                    f"{path}: order title, intro, peer cards, action, optional scope"
+                )
+        layout = section.get("layout")
+        placements = layout.get("placements", []) if isinstance(layout, dict) else []
+        if isinstance(placements, list):
+            for placement in placements:
+                if (
+                    isinstance(placement, dict)
+                    and placement.get("unitId") in intro
+                    and placement.get("row") != 2
+                ):
+                    errors.append(f"{path}: intro units must share row 2")
+                if (
+                    isinstance(placement, dict)
+                    and placement.get("unitId") not in intro
+                    and placement.get("row") == 2
+                ):
+                    errors.append(f"{path}: row 2 is reserved for the framing card")
+
+
 def _check_issue_features(payload: dict[str, Any], errors: list[str]) -> None:
     units = (
         {
@@ -2398,6 +2479,7 @@ def validate_spec(payload: Any) -> list[str]:
             _check_unit(unit, index, errors, spec_version=validation_version)
     _check_evidence(payload.get("evidence"), errors, spec_version=validation_version)
     _check_issue_features(payload, errors)
+    _check_card_hub(payload, errors)
     if modern:
         _check_v3_links(payload, errors)
         _check_v3_composition_grammar(payload, errors)
@@ -2930,8 +3012,26 @@ def _render_composition(
         )
         support_ids = recipe["supportUnitIds"] if recipe else []
         issue_ids = set(analysis_ids + support_ids)
+        hub = section.get("presentation") == "card-hub"
+        intro_ids = (
+            overview["contextUnitIds"]
+            + [overview["questionUnitId"], overview["answerUnitId"]]
+            if hub
+            else []
+        )
         rendered_units = []
         for unit_id in section["unitIds"]:
+            if unit_id in intro_ids:
+                if unit_id == intro_ids[0]:
+                    rendered_units.append(
+                        '<div class="ld-hub-intro" '
+                        'style="--ld-row:2;--ld-column:1;--ld-span:12">'
+                        + "".join(
+                            render_placed_unit(item, placements) for item in intro_ids
+                        )
+                        + "</div>"
+                    )
+                continue
             if unit_id in issue_ids:
                 if unit_id == analysis_ids[0]:
                     rendered_units.append(
@@ -2983,6 +3083,8 @@ def _render_composition(
                 f"{''.join(rendered_groups)}</div>"
             )
         page_class = " ld-fixed-page" if spec["brief"]["form"] != "one-page" else ""
+        if hub:
+            page_class += " ld-card-hub"
         index_label = (
             f' data-index-label="{escape(section["indexLabel"], quote=True)}"'
             if section.get("indexLabel")

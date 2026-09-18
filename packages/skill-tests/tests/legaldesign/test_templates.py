@@ -29,6 +29,7 @@ TEMPLATES = [
         "slide-brief",
         "diligence-report",
         "method-map",
+        "card-hub",
     )
 ]
 
