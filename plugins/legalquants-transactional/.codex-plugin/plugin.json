@@ -1,6 +1,6 @@
 {
   "name": "legalquants-transactional",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Contract and deal workflows for transactional attorneys, with shared daily-practice tools.",
   "skills": "./skills/",
   "author": {

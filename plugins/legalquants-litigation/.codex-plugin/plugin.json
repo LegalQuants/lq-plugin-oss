@@ -1,6 +1,6 @@
 {
   "name": "legalquants-litigation",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Source-grounded legal workflows for litigators, with shared daily-practice tools.",
   "skills": "./skills/",
   "author": {
