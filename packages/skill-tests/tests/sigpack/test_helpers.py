@@ -362,3 +362,256 @@ def test_legacy_placed_in_migrates_to_chosen(tmp_path: Path) -> None:
     assert migrated["placed_in"].endswith("Doc.pdf#2")
     assert _page_width(out_dir / "(Executed) Doc.pdf", 2) == 500
     assert led["receipt"]["complete"] is True
+
+
+@pytest.mark.parametrize(
+    "copy_source",
+    ["manifest", "build", "legacy-build", "legacy-agreement", "legacy-signatory"],
+)
+def test_complete_requires_every_original_across_batches(tmp_path, capsys, copy_source):
+    sp = _load()
+    exec_dir = tmp_path / "execution"
+    exec_dir.mkdir()
+    _blank_pdf(exec_dir / "Doc.pdf", pages=2)
+    led = _one_page_ledger(exec_dir)
+    if copy_source == "manifest":
+        led["signature_pages"][0]["blocks"][0]["copies_required"] = 2
+    if copy_source.startswith("legacy-"):
+        group_by, group = {
+            "legacy-build": ("counterparty", "ACME"),
+            "legacy-agreement": ("agreement", "Deed"),
+            "legacy-signatory": ("signatory", "A. Signer"),
+        }[copy_source]
+        led["packs_sent"] = [
+            {
+                "group_by": group_by,
+                "group": group,
+                "pages": ["D-p2"],
+                "copies": 2,
+            }
+        ]
+    ledger = tmp_path / "sigpack.ledger.json"
+    ledger.write_text(json.dumps(led))
+    if copy_source == "build":
+        sp.main(
+            [
+                "build",
+                "--ledger",
+                str(ledger),
+                "--group",
+                "counterparty",
+                "--copies",
+                "2",
+                "--out-dir",
+                str(tmp_path / "packs"),
+            ]
+        )
+        led = json.loads(ledger.read_text())
+        assert led["signature_pages"][0]["blocks"][0]["copies_required"] == 2
+
+    out = tmp_path / "executed"
+    for original in (1, 2):
+        batch = tmp_path / f"batch-{original}"
+        batch.mkdir()
+        _blank_pdf(
+            batch / "signed.pdf",
+            width=500 + original,
+            marker=f"original {original}".encode(),
+        )
+        led = json.loads(ledger.read_text())
+        led["returned_pages"].append(_returned_page("signed.pdf", batch))
+        ledger.write_text(json.dumps(led))
+        sp.main(["compile", "--ledger", str(ledger), "--out-dir", str(out)])
+        led = json.loads(ledger.read_text())
+        report = json.loads((out / "compile-report.json").read_text())
+        assert led["receipt"]["complete"] is (original == 2)
+        assert led["receipt"]["copies_outstanding"] == 2 - original
+        assert report["copies_outstanding"] == 2 - original
+        assert led["receipt"]["copies_unplaced"] == 0
+        assert led["receipt"]["copies_required"] == 2
+        assert led["receipt"]["copies_placed"] == original
+        assert ("NOT COMPLETE" in (out / "closing-checklist.md").read_text()) is (
+            original == 1
+        )
+        capsys.readouterr()
+        sp.main(["status", "--ledger", str(ledger)])
+        status = capsys.readouterr().out
+        assert ("NOT COMPLETE" in status) is (original == 1)
+        if original == 1:
+            assert "ACME" in status and "1 more original" in status
+        assert _page_width(out / "(Executed) Doc.pdf", original + 1) == 500 + original
+        block = led["signature_pages"][0]["blocks"][0]
+        assert (
+            block["returned"][-1]["placed_in"] == f"(Executed) Doc.pdf#{original + 1}"
+        )
+    # Rebuilding cannot double-count originals or turn them into spares.
+    sp.main(["compile", "--ledger", str(ledger), "--out-dir", str(out)])
+    receipt = json.loads(ledger.read_text())["receipt"]
+    assert receipt["complete"] is True
+    assert receipt["copies_placed"] == 2
+    assert receipt["spare_originals"] == 0
+
+
+def test_signed_return_without_output_placement_is_not_complete(tmp_path, capsys):
+    sp = _load()
+    exec_dir = tmp_path / "execution"
+    exec_dir.mkdir()
+    _blank_pdf(exec_dir / "Doc.pdf", pages=1)
+    batch = tmp_path / "batch"
+    batch.mkdir()
+    _blank_pdf(batch / "signed.pdf", marker=b"signed")
+    # A stale classification points beyond the end of the execution document.
+    led = _one_page_ledger(exec_dir)
+    led["returned_pages"] = [_returned_page("signed.pdf", batch)]
+    ledger = tmp_path / "sigpack.ledger.json"
+    ledger.write_text(json.dumps(led))
+    sp.main(["compile", "--ledger", str(ledger), "--out-dir", str(tmp_path / "out")])
+    led = json.loads(ledger.read_text())
+    assert led["signature_pages"][0]["blocks"][0]["status"] == "signed"
+    assert led["receipt"]["complete"] is False
+    assert led["receipt"]["copies_unplaced"] == 1
+    assert led["receipt"]["copies_outstanding"] == 0
+    assert "not placed" in sp.render_checklist(led)
+
+
+@pytest.mark.parametrize("unresolved", ["pending", "unmatched", "unreadable"])
+def test_new_unreconciled_returns_reopen_receipt(tmp_path, unresolved):
+    sp = _load()
+    led = _one_page_ledger(tmp_path)
+    block = led["signature_pages"][0]["blocks"][0]
+    block["status"] = "signed"
+    block["returned"] = [
+        dict(
+            _returned_page("signed.pdf", tmp_path),
+            chosen=True,
+            placed_in="(Executed) Doc.pdf#2",
+        )
+    ]
+    assert sp.recompute_receipt(led)["complete"] is True
+    if unresolved == "pending":
+        led["returned_pages"] = [
+            _returned_page("new.pdf", tmp_path, execution="unknown")
+        ]
+    elif unresolved == "unmatched":
+        led["unmatched_returns"] = [{"pack": "side-letter.pdf", "page": 1}]
+    else:
+        led["returned_pages"] = [
+            {
+                "pack": "locked.pdf",
+                "page": None,
+                "error": "encrypted",
+                "batch": str(tmp_path),
+            }
+        ]
+    assert sp.recompute_receipt(led)["complete"] is False
+
+
+def test_duplicate_sheet_cannot_satisfy_second_original(tmp_path):
+    sp = _load()
+    exec_dir = tmp_path / "execution"
+    exec_dir.mkdir()
+    _blank_pdf(exec_dir / "Doc.pdf", pages=2)
+    batch = tmp_path / "batch"
+    batch.mkdir()
+    _blank_pdf(batch / "signed.pdf", marker=b"same original")
+    _blank_pdf(batch / "renamed.pdf", marker=b"same original")
+    led = _one_page_ledger(exec_dir)
+    led["signature_pages"][0]["blocks"][0]["copies_required"] = 2
+    led["returned_pages"] = [
+        _returned_page(pack, batch, sheet_hash="same-sheet")
+        for pack in ("signed.pdf", "renamed.pdf")
+    ]
+    ledger = tmp_path / "sigpack.ledger.json"
+    ledger.write_text(json.dumps(led))
+    sp.main(["compile", "--ledger", str(ledger), "--out-dir", str(tmp_path / "out")])
+    led = json.loads(ledger.read_text())
+    assert led["returned_pages"][1]["outcome"] == "duplicate"
+    assert led["receipt"]["complete"] is False
+    assert led["receipt"]["copies_outstanding"] == 1
+
+
+@pytest.mark.parametrize("group", ["agreement", "signatory"])
+def test_grouped_pack_honours_largest_copy_requirement(tmp_path, group):
+    from pypdf import PdfReader
+
+    sp = _load()
+    _blank_pdf(tmp_path / "Doc.pdf", pages=2)
+    led = _one_page_ledger(tmp_path)
+    first = led["signature_pages"][0]["blocks"][0]
+    led["signature_pages"][0]["blocks"].append(
+        {**first, "block": 2, "party": "BLUECO", "copies_required": 3}
+    )
+    ledger = tmp_path / "sigpack.ledger.json"
+    ledger.write_text(json.dumps(led))
+    out = tmp_path / "packs"
+    sp.main(
+        [
+            "build",
+            "--ledger",
+            str(ledger),
+            "--group",
+            group,
+            "--out-dir",
+            str(out),
+        ]
+    )
+    name = "Deed" if group == "agreement" else "A. Signer"
+    assert len(PdfReader(out / f"Signature Pack – {name}.pdf").pages) == 3
+    saved = json.loads(ledger.read_text())["signature_pages"][0]["blocks"]
+    assert [b["copies_required"] for b in saved] == [1, 3]
+
+
+@pytest.mark.parametrize("copies", [1, 2])
+def test_shared_page_reconciles_each_counterparty_copy(tmp_path, copies):
+    from pypdf import PdfReader
+
+    sp = _load()
+    exec_dir = tmp_path / "execution"
+    exec_dir.mkdir()
+    _blank_pdf(exec_dir / "Doc.pdf", pages=2)
+    led = _one_page_ledger(exec_dir)
+    blocks = led["signature_pages"][0]["blocks"]
+    blocks[0]["copies_required"] = copies
+    blocks.append({**blocks[0], "block": 2, "party": "BLUECO", "returned": []})
+    ledger = tmp_path / "sigpack.ledger.json"
+    out = tmp_path / "executed"
+    for party in ("ACME", "BLUECO"):
+        batch = tmp_path / party
+        batch.mkdir()
+        for original in range(copies):
+            pack = f"{original}.pdf"
+            _blank_pdf(
+                batch / pack,
+                width=500 if party == "ACME" else 700,
+                marker=f"{party}-{original}".encode(),
+            )
+            led["returned_pages"].append(_returned_page(pack, batch, party=party))
+        ledger.write_text(json.dumps(led))
+        before = ledger.read_bytes()
+        sp.main(
+            ["compile", "--ledger", str(ledger), "--out-dir", str(out), "--dry-run"]
+        )
+        assert ledger.read_bytes() == before
+        sp.main(["compile", "--ledger", str(ledger), "--out-dir", str(out)])
+        led = json.loads(ledger.read_text())
+        receipt = led["receipt"]
+        assert receipt["complete"] is (party == "BLUECO")
+        if party == "ACME":
+            assert receipt["copies_unplaced"] == copies  # held for the other party
+            assert receipt["copies_outstanding"] == copies
+            chasers = tmp_path / "chasers"
+            sp.main(["chase", "--ledger", str(ledger), "--out-dir", str(chasers)])
+            assert set(json.loads((chasers / "index.json").read_text())) == {"BLUECO"}
+            assert "ACME" in sp.render_checklist(led)
+            assert "not placed" in sp.render_checklist(led)
+    assert receipt["copies_placed"] == 2 * copies
+    executed = out / "(Executed) Doc.pdf"
+    assert len(PdfReader(executed).pages) == 1 + 2 * copies
+    assert [_page_width(executed, i + 2) for i in range(2 * copies)] == (
+        [500] * copies + [700] * copies
+    )
+    for block in led["signature_pages"][0]["blocks"]:
+        for r in block["returned"]:
+            filename, page = r["placed_in"].rsplit("#", 1)
+            assert (out / filename).is_file()
+            assert 1 <= int(page) <= 1 + 2 * copies
