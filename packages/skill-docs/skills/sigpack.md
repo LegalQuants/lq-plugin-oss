@@ -55,3 +55,10 @@ Transactional and funds lawyers running closings, and the paralegal or PSL runni
 ## When: When does it ship and what are the milestones?
 
 The skill is shipped in the transactional bundle. Pack and compile changes should preserve page accounting, ambiguity handling, and the separate validation of each half.
+
+
+## Required-copy completion gate
+
+A block can be signed while an original is still missing. Completion therefore reconciles every live block's required copies to distinct accepted returns and compiler-recorded output placements. The receipt, status, checklist and compile report share the copy balance; unresolved registered returns also prevent completion. Build-time copy instructions persist in the ledger, including recovery from historical pack records. Rebuilding a grouped pack honours the largest copy requirement on each included page without increasing another party's requirement.
+
+Public synthetic regression checks in `packages/skill-tests/tests/sigpack/test_helpers.py` cover a two-original obligation arriving across batches, build-time and legacy copy requirements, a stale page slot that cannot be placed, duplicate sheets, unresolved returns and grouped pack counts. They exercise compilation and receipt mechanics, not signature recognition or legal validity. The confirmed manifest and final visual review remain the lawyer's gates; a status lookup does not revalidate output files after compilation.

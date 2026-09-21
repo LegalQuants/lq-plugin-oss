@@ -66,7 +66,7 @@ Worked examples:
 
 - A returned page usually carries a footer naming its agreement, sometimes its party. Read it, native text or OCR. When the footer names only the document, or nothing, read the block: the party name in caps or after "for and on behalf of", the capacity in brackets, the signatory under the line. Normalise dashes (– — - ~), quotes (’ '), and whitespace before matching; OCR mangles all three.
 - Match on agreement + party. If the footer is missing or unreadable, read the block itself (party name, signatory name).
-- A returned page that matches a target already filled by another returned page is a **duplicate**: place one, report the other.
+- The same returned sheet arriving again is a **duplicate** and never fills another required original. A distinct signed original fills the next required copy of its block; only originals beyond `copies_required` are spares.
 - A returned page that matches nothing is **unmatched**: never force it; report it with what could be read. On real closings this is usually a page for a document that is not in the execution folder (a side letter, a fee letter) — say so, because the user may have simply not handed that document over.
 - A signature page in an execution version with no returned page is **missing**; the gap list is the deliverable as much as the executed PDFs are.
 - E-signature envelopes (DocuSign, Adobe Sign): the completed PDF often ends with a completion certificate and may open with an envelope cover; those pages are not signature pages. The file may be locked; unlock or flatten only if permitted, otherwise report it as needing manual handling.
@@ -96,10 +96,14 @@ Other things a returned bundle contains that are not signature pages: initialled
 
 Replace, page for page: each signed page sits exactly where its unsigned page was, and schedules and exhibits after the signature block stay where they are. One exception, from how counterparts work: a page shared by two or more parties, where each party returns its own signed sheet, is placed as ALL of those sheets, one after another in block order — a counterpart-executed page genuinely is several sheets, and none of them may be dropped. The executed page count grows by exactly those extra sheets; nothing else moves.
 
-- Only pages whose blocks are all `signed` are placed. Spare originals (a second signed copy where `copies_required` is 1, or a duplicate return) go to `executed/spare-originals/`, never into the executed PDF.
+- Only pages whose blocks are all `signed` are placed. Spare originals (a distinct extra signed copy beyond `copies_required`) go to `executed/spare-originals/`, never into the executed PDF.
 - If a firm wants a separator sheet before e-signed pages in a mixed closing, `esig_separator` on the ledger line adds a labelled sheet; page count then grows by the number of separators, and the report says so.
 - The ledger (`references/ledger_schema.md`) is the record: every page, every block, every return, and the receipt. It lives in the matter folder and is the memory across batches of returns.
 
 ## The ledger is the memory
 
 Signed pages arrive over days. The pack half writes the ledger; each compile run reads it, places only what is new, updates statuses, recomputes the receipt. Nothing is reclassified, no pack is rebuilt. At any moment `status` says what is signed, what is missing, from whom, and whether the closing is complete.
+
+## Completion is reconciliation
+
+Never infer completion from all blocks being `signed`: that records signature presence, not the number of originals received or whether the writer placed them. Reconcile each live block's required copies to distinct accepted returns and output page locations. The receipt remains NOT COMPLETE for a missing original, an accepted but unplaced sheet, or a pending, unreadable or unmatched return. After compilation, render the output signature pages and verify those locations against the confirmed execution set. Apply the same gate with host-native tools when the script cannot run.

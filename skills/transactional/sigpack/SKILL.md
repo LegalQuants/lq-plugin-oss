@@ -90,7 +90,7 @@ Parsing the arguments:
    ```
    python3 scripts/sigpack.py build --ledger sigpack.ledger.json --group counterparty --out-dir packs/ [--copies N] [--no-duplicate] [--name "Signature Pack – {group}"]
    ```
-   One PDF per group, pages ordered by document then page, `copies_required` honoured. Pack pages are exact copies of the execution pages — the skill never writes anything onto a page that will be signed. Blocks move to `sent`; `packs_sent` is recorded. `instructions.json` is the table.
+   One PDF per group, pages ordered by document then page, `copies_required` honoured. Pack pages are exact copies of the execution pages — the skill never writes anything onto a page that will be signed. Blocks move to `sent`; `packs_sent` is recorded. `--copies N` raises and saves each block's `copies_required`; rebuilding never silently lowers it. `instructions.json` is the table.
 
 6. **Write the instructions and the cover note.** Render `instructions.json` as a table: party, document, sign as (capacity), by (signatory), copies. Then the cover note, from the playbook or the default: the packs attached and the copies to sign; return by [date]; signed pages held in escrow, undated, and released only on the user's instruction once the documents are in execution form; the user will be asked before release. The escrow line ships by default; a firm overrides it in the playbook.
 
@@ -117,9 +117,11 @@ Parsing the arguments:
    ```
    Matches each new return to a signature-page block by agreement and party (signatory fallback), quarantines version mismatches, places `signed` blocks only — replace, page for page; a page executed in counterparts is placed as all its signed sheets in block order, so the count grows by exactly those sheets — files extra signed copies to `executed/spare-originals/`, records every return on its block, recomputes the receipt. Idempotent: run it after every batch; nothing is re-placed. `--date` writes the date as a visible annotation on pages that have a date field and are not already dated. `--separator` inserts a labelled sheet before pages marked `esig_separator`. `--place-partial` places pages where at least one block is signed; off by default.
 
-4. **Look before delivering.** For each executed PDF, render the signature pages and confirm the signed page sits where the unsigned one was and belongs to that document. Any blank, partial, unclear, wrong-version or unmatched return: render it, say what it is and where it came from. Unmatched returns are usually documents that were never handed over — say so.
+4. **Reconcile before declaring completion.** For every live document/party/block, compare the lawyer-confirmed `copies_required` with distinct accepted returns and their `placed_in` output pages. One signed return is not proof that all originals arrived. Every required copy must have a placement; duplicates, spare copies and rejected sheets do not fill a missing original. Resolve pending, unreadable and unmatched returns before saying COMPLETE. `status`, the compile report and the checklist must agree; show the count and named gaps even when every block says `signed`. A dry-run receipt is a projection, never evidence that files were written.
 
-5. **Present.** If anything moved since the last batch, that line first (`compile` prints it; `status --since` shows it any time, `status --since <batch folder>` since a named batch). Then the receipt line (the same numbers head `closing-checklist.md`, which every compile writes beside the executed PDFs: parties down the side, documents across, one mark per block). If anything is outstanding, run `python3 scripts/sigpack.py chase --ledger sigpack.ledger.json --out-dir chasers/` and hand the lawyer the per-party facts it writes; they choose the words and send from their own mail. The skill never sends anything. The receipt line: *N pages / M blocks required · signed · partial · blank · unclear · wrong-version · missing · unmatched · spare originals · COMPLETE or NOT COMPLETE*. Then the missing list per document and party, then the executed PDFs. `python3 scripts/sigpack.py status --ledger sigpack.ledger.json` prints it any time.
+   **Look before delivering.** For each executed PDF, render the signature pages and confirm the signed page sits where the unsigned one was and belongs to that document. Any blank, partial, unclear, wrong-version or unmatched return: render it, say what it is and where it came from. Unmatched returns are usually documents that were never handed over — say so.
+
+5. **Present.** If anything moved since the last batch, that line first (`compile` prints it; `status --since` shows it any time, `status --since <batch folder>` since a named batch). Then the receipt line (the same numbers head `closing-checklist.md`, which every compile writes beside the executed PDFs: parties down the side, documents across, one mark per block). If anything is outstanding, run `python3 scripts/sigpack.py chase --ledger sigpack.ledger.json --out-dir chasers/` and hand the lawyer the per-party facts it writes; they choose the words and send from their own mail. The skill never sends anything. The receipt line: *N pages / M blocks required · signed · partial · blank · unclear · wrong-version · missing · unmatched · spare originals · required copies placed/required · copies outstanding · accepted copies not placed · returns pending · return errors · COMPLETE or NOT COMPLETE*. Then the missing list per document and party, then the executed PDFs. `python3 scripts/sigpack.py status --ledger sigpack.ledger.json` prints it any time.
 
 ## Output conventions
 - Ledger: `sigpack.ledger.json` in the closing folder, next to the execution versions. It stays with the matter.
@@ -132,14 +134,14 @@ Parsing the arguments:
 
 The bundled script requires `pypdf`. Scanned-page processing and rendering use Poppler and `tesseract` when available; Word conversion uses LibreOffice. Probe those capabilities before reading client material. Do not assume they are installed, and do not ask to install packages inside a hosted task.
 
-If the script cannot run, use host-native PDF and document capabilities while preserving the same ledger, classification, page-by-page visual review, matching, and receipt rules. Without a way to render every candidate and returned page, say plainly that the visual-review gate cannot run and do not compile an executed set. If Word conversion is unavailable, ask for PDFs rather than treating the documents as converted.
+If the script cannot run, use host-native PDF and document capabilities while preserving the same ledger, classification, page-by-page visual review, matching, and receipt rules, including reconciliation of every required copy to its actual output page. A signed-block count alone can never establish completion. Without a way to render every candidate and returned page, say plainly that the visual-review gate cannot run and do not compile an executed set. If Word conversion is unavailable, ask for PDFs rather than treating the documents as converted.
 
 ## Final checks
 - Every candidate page was looked at with the document in view; the rejected count was stated.
 - The classification was shown and confirmed before the ledger was opened.
 - Every returned page in the batch was looked at; none is `unknown`; none was guessed.
-- The receipt was shown, even when complete; the missing list names parties.
-- Executed PDFs have the same page count as their execution versions (plus separators, if any); spare originals are filed, not lost.
+- The receipt was shown, even when complete; every required counterparty copy was reconciled to a distinct accepted return and its output placement. Any copy deficit, missing placement or unresolved return means NOT COMPLETE; the outstanding list names parties.
+- Executed PDF page counts equal the execution versions plus extra required counterpart sheets and separators, if any; render and check every required placement. Spare originals are filed, not lost.
 - The ledger was left in the closing folder.
 
 ## Scripts

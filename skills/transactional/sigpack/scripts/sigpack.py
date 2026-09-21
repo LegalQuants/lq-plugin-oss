@@ -421,7 +421,47 @@ def print_delta(d: dict | None) -> None:
     )
 
 
+def _restore_copy_requirements(led: dict) -> None:
+    """Older builds stored --copies only on packs_sent, not on their blocks."""
+    pages = {p["id"]: p for p in led["signature_pages"]}
+    for pack in led.get("packs_sent", []):
+        for page_id in set(pack.get("pages", [])):
+            p = pages.get(page_id)
+            if p is None:
+                continue
+            for b in p["blocks"]:
+                key = {"counterparty": "party", "signatory": "signatory"}.get(
+                    pack.get("group_by")
+                )
+                if pack.get("group_by") == "agreement" or (
+                    key and (b.get(key) or "Unknown").strip() == pack.get("group")
+                ):
+                    b["copies_required"] = max(
+                        int(b.get("copies_required") or 1), int(pack.get("copies") or 1)
+                    )
+
+
+def _copy_balance(b: dict) -> tuple[int, int, int]:
+    """Required, accepted and placed originals, deduplicated within this block."""
+    required = max(1, int(b.get("copies_required") or 1))
+    sheets: dict = {}
+    for r in b.get("returned", []):
+        if (
+            not r.get("chosen")
+            or r.get("execution") != "signed"
+            or r.get("spare")
+            or r.get("duplicate_of")
+            or r.get("reason")
+            or r.get("printed_name_matches") is False
+        ):
+            continue
+        key = r.get("sheet_hash") or (r["batch"], r["pack"], r["page"])
+        sheets[key] = sheets.get(key, False) or bool(r.get("placed_in"))
+    return required, min(required, len(sheets)), min(required, sum(sheets.values()))
+
+
 def recompute_receipt(led: dict) -> dict:
+    _restore_copy_requirements(led)
     blocks = [(p, b) for p in led["signature_pages"] for b in p["blocks"]]
     live = [(p, b) for p, b in blocks if page_is_live(p)]
     cnt: dict = defaultdict(int)
@@ -429,7 +469,23 @@ def recompute_receipt(led: dict) -> dict:
         cnt[b.get("status", "required")] += 1
     spare = sum(1 for _p, b in blocks for r in b.get("returned", []) if r.get("spare"))
     missing = sum(1 for _p, b in live if b.get("status") in ("required", "sent"))
+    balances = [_copy_balance(b) for _p, b in live]
+    copies_outstanding = sum(required - accepted for required, accepted, _ in balances)
+    copies_unplaced = sum(accepted - placed for _, accepted, placed in balances)
+    pending = sum(
+        1
+        for r in led.get("returned_pages", [])
+        if r.get("page") and not r.get("_settled") and not r.get("error")
+    )
+    errors = sum(1 for r in led.get("returned_pages", []) if r.get("error"))
+    unmatched = len(led.get("unmatched_returns", []))
     rec = {
+        "copies_required": sum(required for required, _, _ in balances),
+        "copies_placed": sum(placed for _, _, placed in balances),
+        "copies_outstanding": copies_outstanding,
+        "copies_unplaced": copies_unplaced,
+        "returns_pending": pending,
+        "return_errors": errors,
         "pages_required": len([p for p in led["signature_pages"] if page_is_live(p)]),
         "blocks_required": len(live),
         "blocks_signed": cnt["signed"],
@@ -445,7 +501,11 @@ def recompute_receipt(led: dict) -> dict:
             for p in led["signature_pages"]
             if p.get("reserved") and not page_is_live(p)
         ),
-        "complete": bool(live) and all(b.get("status") == "signed" for _p, b in live),
+        "complete": bool(live)
+        and all(b.get("status") == "signed" for _p, b in live)
+        and not (
+            copies_outstanding or copies_unplaced or pending or errors or unmatched
+        ),
         "as_of": today(),
     }
     led["receipt"] = rec
@@ -458,18 +518,17 @@ def print_receipt(led: dict) -> None:
         f"{r['pages_required']} pages / {r['blocks_required']} blocks required · {r['blocks_signed']} signed · "
         f"{r['blocks_partial']} partial · {r['blocks_blank']} blank · {r['blocks_unclear']} unclear · "
         f"{r['blocks_wrong_version']} wrong-version · {r['blocks_missing']} missing · {r['unmatched_returns']} unmatched returns · "
-        f"{r['spare_originals']} spare originals · {'COMPLETE' if r['complete'] else 'NOT COMPLETE'}"
+        f"{r['spare_originals']} spare originals · "
+        f"{r['copies_placed']}/{r['copies_required']} required copies placed · "
+        f"{r['copies_outstanding']} copies outstanding · {r['copies_unplaced']} accepted copies not placed · "
+        f"{r['returns_pending']} returns pending · {r['return_errors']} return errors · "
+        f"{'COMPLETE' if r['complete'] else 'NOT COMPLETE'}"
     )
-    miss = [
-        (p["id"], b["block"], b.get("party"))
-        for p in led["signature_pages"]
-        for b in p["blocks"]
-        if page_is_live(p) and b.get("status") in ("required", "sent")
-    ]
-    for pid, bn, party in miss[:40]:
-        print(f"  MISSING  {pid} block {bn}  {party}")
-    if len(miss) > 40:
-        print(f"  … and {len(miss) - 40} more")
+    for party, items in sorted(outstanding_by_party(led).items()):
+        for item in items:
+            print(
+                f"  OUTSTANDING  {item['page_id']} block {item['block']}  {party} — {item['need']}"
+            )
     for p in led["signature_pages"]:
         if p.get("held"):
             print(
@@ -1065,8 +1124,15 @@ def cmd_init(args):
 # ---------------------------------------------------------------- build
 def cmd_build(args):
     led = load(args.ledger)
+    _restore_copy_requirements(led)
     exec_dir = Path(led["execution_dir"])
     pages = [p for p in led["signature_pages"] if page_is_live(p)]
+    # The instruction and receipt must use the same requirement across sessions.
+    for p in pages:
+        for b in p["blocks"]:
+            b["copies_required"] = max(
+                int(args.copies or 1), int(b.get("copies_required") or 1)
+            )
     groups: dict = defaultdict(list)  # group -> [(page, block)]
     for p in pages:
         if args.group == "agreement":
@@ -1074,12 +1140,8 @@ def cmd_build(args):
                 groups[p["agreement"]].append((p, b))
         else:
             key = "party" if args.group == "counterparty" else "signatory"
-            seen = set()
             for b in p["blocks"]:
                 k = (b.get(key) or "Unknown").strip()
-                if k in seen and (args.no_duplicate or args.group == "signatory"):
-                    continue
-                seen.add(k)
                 groups[k].append((p, b))
     out_dir = Path(args.out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -1088,26 +1150,38 @@ def cmd_build(args):
     readers: dict = {}
     sent: list[dict[str, object]] = []
     for g, items in groups.items():
+        copies_by_page: dict[str, int] = {}
+        for p, b in items:
+            copies_by_page[p["id"]] = max(
+                copies_by_page.get(p["id"], 1), int(b.get("copies_required") or 1)
+            )
         seen_pages = set()
         ordered = []
         for p, b in sorted(
             items, key=lambda x: (x[0]["file"], x[0]["page"], x[1]["block"])
         ):
-            if args.group == "agreement" and p["id"] in seen_pages:
+            if (args.group in ("agreement", "signatory") or args.no_duplicate) and p[
+                "id"
+            ] in seen_pages:
                 continue
             seen_pages.add(p["id"])
             ordered.append((p, b))
         w = PdfWriter()
         page_ids = []
-        for p, b in ordered:
+        for p, _b in ordered:
             rd = readers.setdefault(p["file"], PdfReader(str(exec_dir / p["file"])))
-            copies = max(int(args.copies or 1), int(b.get("copies_required") or 1))
+            copies = copies_by_page[p["id"]]
             for _ in range(copies):
                 w.add_page(rd.pages[p["page"] - 1])
             page_ids.append(p["id"])
             for bb in p["blocks"]:
                 if bb.get("status") == "required" and (
-                    args.group == "agreement" or bb is b
+                    args.group == "agreement"
+                    or (
+                        bb.get("party" if args.group == "counterparty" else "signatory")
+                        or "Unknown"
+                    ).strip()
+                    == g
                 ):
                     bb["status"] = "sent"
         safe = re.sub(r'[/\\?%*:|"<>]', "", args.name.format(group=g)).strip()
@@ -1471,6 +1545,7 @@ def _free_text(
 def cmd_compile(args):
     dry = bool(getattr(args, "dry_run", False))
     led = load(args.ledger)
+    _restore_copy_requirements(led)
     if dry:
         # A preview never touches the ledger: work on a copy and write only the plan.
         led = copy.deepcopy(led)
@@ -1743,7 +1818,7 @@ def cmd_compile(args):
                     pg = reader_for(src["pack"], src["batch"]).pages[src["page"] - 1]
                     w.add_page(pg)
                     placed_here += 1
-                    src["placed_in"] = f"(Executed) {outp.name}#{len(w.pages)}"
+                    src["placed_in"] = f"{outp.name}#{len(w.pages)}"
                     placement["sheets"].append(
                         {
                             "pack": src["pack"],
@@ -1816,19 +1891,10 @@ def cmd_compile(args):
                         sw.write(fh)
                     x["spare_file"] = sf.name
                     spare_written += 1
-    copies_outstanding = sum(
-        max(
-            0,
-            int(b.get("copies_required") or 1)
-            - sum(1 for x in b.get("returned", []) if x.get("chosen")),
-        )
-        for p in led["signature_pages"]
-        for b in p["blocks"]
-        if page_is_live(p) and b.get("status") == "signed"
-    )
     if date:
         led["closing_date"] = date
     recompute_receipt(led)
+    copies_outstanding = led["receipt"]["copies_outstanding"]
     since_last = delta(led)
     if not dry:
         checkpoint(led, "compile")
@@ -1930,7 +1996,7 @@ MARK = {
 }
 
 
-def _block_need(p: dict, b: dict) -> str | None:
+def _block_need(p: dict, b: dict, *, include_placement: bool = True) -> str | None:
     """Why this block is outstanding, in the ledger's own words, or None."""
     status = b.get("status", "required")
     returns = b.get("returned", [])
@@ -1964,20 +2030,29 @@ def _block_need(p: dict, b: dict) -> str | None:
             + (f"; marks: {marks}" if marks else "")
         )
     if status == "signed":
-        copies = int(b.get("copies_required") or 1)
-        chosen = sum(1 for x in returns if x.get("chosen"))
-        if chosen < copies:
-            return f"{copies - chosen} more original(s) to sign ({copies} required)"
+        copies, accepted, placed = _copy_balance(b)
+        needs = []
+        if accepted < copies:
+            needs.append(
+                f"{copies - accepted} more original(s) to sign ({copies} required)"
+            )
+        if include_placement and placed < accepted:
+            needs.append(
+                f"{accepted - placed} accepted original(s) not placed in executed output"
+            )
+        return "; ".join(needs) or None
     return None
 
 
-def outstanding_by_party(led: dict) -> dict[str, list[dict]]:
+def outstanding_by_party(
+    led: dict, *, include_placement: bool = True
+) -> dict[str, list[dict]]:
     out: dict[str, list[dict]] = defaultdict(list)
     for p in led["signature_pages"]:
         if not page_is_live(p):
             continue
         for b in p["blocks"]:
-            need = _block_need(p, b)
+            need = _block_need(p, b, include_placement=include_placement)
             if need:
                 out[b.get("party") or "Unknown"].append(
                     {
@@ -2005,7 +2080,9 @@ def cmd_chase(args):
     out_dir = Path(args.out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
     index = {}
-    for party, items in sorted(outstanding_by_party(led).items()):
+    for party, items in sorted(
+        outstanding_by_party(led, include_placement=False).items()
+    ):
         held = [
             (p["agreement"], p["page"])
             for p in led["signature_pages"]
@@ -2051,7 +2128,7 @@ def cmd_chase(args):
         index[party] = {"file": f.name, "items": len(items)}
     save(out_dir / "index.json", index)
     if not index:
-        print("nothing outstanding — no chasers to write")
+        print("no counterparty signatures outstanding — no chasers to write")
         return
     print(
         f"wrote {len(index)} chaser draft(s) -> {out_dir}/ (facts only; nothing sent)"
@@ -2076,7 +2153,9 @@ def render_checklist(led: dict) -> str:
             if party not in parties:
                 parties.append(party)
             cells[(party, p["agreement"])].append(
-                MARK.get(b.get("status", "required"), "?")
+                "!"
+                if b.get("status") == "signed" and _block_need(p, b)
+                else MARK.get(b.get("status", "required"), "?")
             )
     lines = [
         f"# Closing checklist — {led['matter']} (as of {today()})",
@@ -2084,9 +2163,13 @@ def render_checklist(led: dict) -> str:
         f"{r['pages_required']} pages / {r['blocks_required']} blocks required · {r['blocks_signed']} signed · "
         f"{r['blocks_partial']} partial · {r['blocks_blank']} blank · {r['blocks_unclear']} unclear · "
         f"{r['blocks_wrong_version']} wrong-version · {r['blocks_missing']} missing · "
+        f"{r['copies_placed']}/{r['copies_required']} required copies placed · "
+        f"{r['copies_outstanding']} copies outstanding · {r['copies_unplaced']} accepted copies not placed · "
+        f"{r['returns_pending']} returns pending · {r['return_errors']} return errors · "
+        f"{r['unmatched_returns']} unmatched returns · "
         f"{'COMPLETE' if r['complete'] else 'NOT COMPLETE'}",
         "",
-        "\u2713 signed · \u25d0 partial · \u2717 blank or unclear · \u27f3 wrong version · \u00b7 not returned",
+        "\u2713 signed and required copies placed · ! copies outstanding or not placed · \u25d0 partial · \u2717 blank or unclear · \u27f3 wrong version · \u00b7 not returned",
         "",
         "| Party | " + " | ".join(docs) + " |",
         "|---|" + "---|" * len(docs),

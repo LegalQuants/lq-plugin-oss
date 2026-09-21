@@ -106,7 +106,15 @@ Recomputed after every operation, printed by `status`, and shown in every presen
 
 > 27 pages / 27 blocks required · 21 signed · 0 partial · 0 blank · 0 unclear · 6 missing · 2 unmatched returns · 0 spare originals · **not complete**
 
-`complete` is true only when every non-reserved block is `signed`. Reserved unassigned pages are listed separately. This line is the deliverable as much as the PDFs are.
+`complete` is true only when there is at least one live block, every live block is `signed`, every required copy has a distinct accepted return and a writer-recorded `placed_in`, and there are no pending, unreadable or unmatched returns. A reserved page with an assigned party is live; reserved unassigned pages are listed separately. This line is the deliverable as much as the PDFs are.
+
+The receipt also records `copies_required`, `copies_placed`, `copies_outstanding` (required originals without an accepted return), `copies_unplaced` (accepted originals without a recorded placement), `returns_pending` and `return_errors`. These counts appear in both `status` and the checklist. The compile report's `copies_outstanding` comes from that same receipt, including blocks with no returns. A signed block with either kind of copy deficit is marked `!` in the checklist and named in the outstanding list. Placement gaps are internal compilation work: `chase` requests only signatures or originals that the counterparty still owes, while the receipt and checklist continue to show unplaced sheets. Duplicate sheets, rejected returns and spare originals never satisfy required copies. For example, one accepted and placed original against two required means `1/2 required copies placed · 1 copies outstanding · NOT COMPLETE`.
+
+`build --copies N` persists the requirement per block. Older ledgers recover the minimum from matching `packs_sent` entries by page and group (agreement, counterparty or signatory); requirements are never silently lowered. Legacy placement records without `chosen` must be recompiled before they count. Correct any erroneous requirement against the lawyer-confirmed instructions, including historical pack records, before recompiling.
+
+New returns reopen completion until reviewed and settled. For an unmatched return, the lawyer must confirm the correct manifest mapping or exclusion; correct the registry/classification, remove only the reconciled unmatched entry, clear that return's `_settled` and `outcome`, and recompile. Keep the reason and the lawyer's decision in the matter record. For an unreadable file, resolve the source and remove its error entry before reading it again; do not erase an unresolved return merely to clear the receipt.
+
+Placement is evidence recorded by the compiler, not a fresh audit of files on disk. `status` does not detect deletion or alteration after compilation, and the ledger cannot detect documents or parties omitted from the confirmed manifest. The final rendered-page review remains mandatory; COMPLETE describes the reconciled supplied set, not authority, authenticity or legal enforceability.
 
 ## Dating
 
