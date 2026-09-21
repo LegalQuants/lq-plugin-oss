@@ -1,6 +1,6 @@
 {
   "name": "legalquants-companion",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Your journey with AI as a lawyer — ask, assess, reflect, apply, connect.",
   "skills": "./skills/",
   "author": {
