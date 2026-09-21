@@ -65,3 +65,5 @@ The generated bundle directories under `plugins/` are build products. After chan
 Public contributors do not need access to the private development repository. Public tests, package sources, schemas, synthetic fixtures, and browser checks live under `packages/`; private full evaluation campaigns, corpora, results, and historical development records remain outside this repository.
 
 Licensed under [Apache-2.0](LICENSE). Each skill and plugin bundle includes the license so it travels with standalone installations. See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the contribution workflow and [`SECURITY.md`](SECURITY.md) for reporting guidance.
+
+The plugins run in your own workspace and send no documents, prompts, or outputs to LegalQuants. See the [Plugins Privacy Notice](https://legalquants.com/lqplugins/privacy) and [Plugins Terms](https://legalquants.com/lqplugins/terms).
