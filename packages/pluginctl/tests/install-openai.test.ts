@@ -50,8 +50,8 @@ describe("installOpenAi", () => {
       writeFileSync(
         releasePath,
         readFileSync(releasePath, "utf8").replace(
-          "version: 0.1.0",
-          "version: 0.1.0+old-token",
+          "version: 0.1.1",
+          "version: 0.1.1+old-token",
         ),
       );
       const { calls, runner } = runnerFor([]);
@@ -70,7 +70,7 @@ describe("installOpenAi", () => {
           "utf8",
         ),
       ) as Record<string, unknown>;
-      expect(staged.version).toBe("0.1.0+codex.local-20260818-190405");
+      expect(staged.version).toBe("0.1.1+codex.local-20260818-190405");
       const packed = JSON.parse(
         readFileSync(
           join(
@@ -80,7 +80,7 @@ describe("installOpenAi", () => {
           "utf8",
         ),
       ) as Record<string, unknown>;
-      expect(packed.version).toBe("0.1.0+old-token");
+      expect(packed.version).toBe("0.1.1+old-token");
       expect(calls.map(({ args }) => args)).toEqual([
         ["plugin", "marketplace", "list", "--json"],
         [
