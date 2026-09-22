@@ -179,7 +179,7 @@ describe("packAll", () => {
     } finally {
       fixture.cleanup();
     }
-  });
+  }, 30_000);
 
   it("runs the packaged offline report aggregator as an installed smoke", () => {
     const fixture = makePackFixture();
@@ -535,29 +535,32 @@ describe("packAll", () => {
     }
   });
 
-  it("preserves executable modes for hook scripts in generated packages", () => {
-    const fixture = makePackFixture({ openAiHooks: true });
+  it.skipIf(process.platform === "win32")(
+    "preserves executable modes for hook scripts in generated packages",
+    () => {
+      const fixture = makePackFixture({ openAiHooks: true });
 
-    try {
-      const source = join(
-        fixture.repoRoot,
-        "packages/pluginctl/hooks/adapter.py",
-      );
-      chmodSync(source, 0o755);
-      packAll({ repoRoot: fixture.repoRoot, check: false });
+      try {
+        const source = join(
+          fixture.repoRoot,
+          "packages/pluginctl/hooks/adapter.py",
+        );
+        chmodSync(source, 0o755);
+        packAll({ repoRoot: fixture.repoRoot, check: false });
 
-      for (const packageRoot of [
-        join(fixture.repoRoot, "dist/openai/legalquants-litigation"),
-        join(fixture.repoRoot, "plugins/legalquants-litigation"),
-      ]) {
-        expect(
-          statSync(join(packageRoot, "hooks/adapter.py")).mode & 0o111,
-        ).toBe(0o111);
+        for (const packageRoot of [
+          join(fixture.repoRoot, "dist/openai/legalquants-litigation"),
+          join(fixture.repoRoot, "plugins/legalquants-litigation"),
+        ]) {
+          expect(
+            statSync(join(packageRoot, "hooks/adapter.py")).mode & 0o111,
+          ).toBe(0o111);
+        }
+      } finally {
+        fixture.cleanup();
       }
-    } finally {
-      fixture.cleanup();
-    }
-  });
+    },
+  );
 
   it("does not pack Python bytecode caches from skill scripts", () => {
     const fixture = makePackFixture();

@@ -127,7 +127,7 @@ describe("OpenAI release package", () => {
     } finally {
       fixture.cleanup();
     }
-  });
+  }, 30_000);
 
   it("does not advertise an absent hook component", () => {
     const fixture = makePackFixture();

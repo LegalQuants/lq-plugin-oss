@@ -84,7 +84,9 @@ def _proposal_occurrence_locations(
     if singular := _singular_form(proposal.term):
         spellings.add(singular)
 
-    locations = {proposal.location}
+    # Discovery offsets are suggestions, not authoritative occurrences. Rescan
+    # the source so a substring inside a word cannot enter the review inventory.
+    locations: set[Location] = set()
     for block in source.blocks:
         for spelling in spellings:
             locations.update(
@@ -305,8 +307,20 @@ def build_term_candidates(
         )
     for proposal in proposals:
         existing = groups.get(proposal.normalized_term)
+        block = blocks.get(proposal.location.block_id)
+        location = proposal.location
+        # Preserve the existing-group fast path only for a source-backed label.
+        # Match against the full block: slicing would hide adjacent word chars.
+        match = (
+            term_pattern(proposal.term).match(block.text, location.char_start)
+            if block
+            and block.part == location.part
+            and block.order == location.block_order
+            and 0 <= location.char_start < location.char_end <= len(block.text)
+            else None
+        )
         locations = (
-            (proposal.location,)
+            ((location,) if match and match.end() == location.char_end else ())
             if existing is not None
             else _proposal_occurrence_locations(source, proposal)
         )
