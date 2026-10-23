@@ -14,14 +14,38 @@
     {
       "name": "as-enacted-text",
       "severity": "superseded",
-      "pattern": "Status:\\s*This is the original version \\(as it was originally enacted\\)",
-      "note": "You are on the /enacted page. This is the Act as passed, and it says nothing about what has happened to it since. Refetch the base URL without /enacted."
+      "pattern": "Status:\\s*This is the original version \\(as it was originally (?:enacted\\)|made\\)(?!\\.?\\s*This item of legislation is currently only available in its original format))",
+      "note": "You are on the /enacted page, or for a statutory instrument the /made page. This is the text as passed or made, and it says nothing about what has happened to it since. Refetch the base URL without /enacted or /made."
+    },
+    {
+      "name": "point-in-time-view",
+      "severity": "superseded",
+      "pattern": "Status:\\s*Point in time view as at\\s+(\\d{2}/\\d{2}/\\d{4})",
+      "note": "You are on a dated point-in-time page. It is the text as it stood on the captured date, which is not necessarily the latest revised text, and it can still print the 'up to date' sentence. Refetch the base URL, or record the dated question with --historical-effective and --research-date."
+    },
+    {
+      "name": "provision-prospective",
+      "severity": "superseded",
+      "pattern": "Status:\\s*(?:Point in time view as at \\d{2}/\\d{2}/\\d{4}\\.\\s*)?This version of this provision is prospective",
+      "note": "The publisher marks the version of the provision on this page as prospective: either the provision has never come into force, or this text of it awaits a date for the changes to come into force. It is printed in full and is not the operative text. Do not quote it as operative law. Check its Commencement Information, and state in the note what applies until it comes into force."
+    },
+    {
+      "name": "provision-no-longer-has-effect",
+      "severity": "superseded",
+      "pattern": "Status:\\s*This version of this provision no longer has effect",
+      "note": "The publisher marks the provision on this page as no longer having effect, which generally means that it has been repealed. Read the annotations at the end of the provision. Do not quote it as operative law."
+    },
+    {
+      "name": "provision-repealed-annotation",
+      "severity": "superseded",
+      "pattern": "Changes to legislation: [^.]{0,200}?, (?:Section|Regulation|Article) (\\d+[A-Z]*)\\b.*?\\bF\\d+ (?-i:S|Reg|Art)\\. \\1 (?:repealed|revoked|omitted)\\b(?!\\s*\\((?:prosp|[ENSW]\\.))",
+      "note": "The Textual Amendments on this page record that the provision itself has been repealed, revoked or omitted, and the page shows only what is left in its place. Read the annotation for the date and extent, and do not quote the provision as operative law."
     },
     {
       "name": "changes-yet-to-be-applied",
       "severity": "incomplete",
       "pattern": "Changes and effects yet to be applied to",
-      "note": "Amendments that are IN FORCE but not yet written into the words on this page. The text you are reading is out of date by exactly this list. Read the list."
+      "note": "Effects recorded by the editorial team that are not yet written into the words on this page. If the banner above the list says the item is up to date with all changes known to be in force, a listed effect may be a change not yet in force rather than one missing from the text; otherwise a listed effect may already be in force. Check the commencement of each listed effect that touches a provision relied on."
     },
     {
       "name": "revised-to-date",
@@ -32,7 +56,7 @@
     {
       "name": "prospective-provisions",
       "severity": "info",
-      "pattern": "Status:\\s*This version of this Act contains provisions that are prospective",
+      "pattern": "Status:\\s*This version of this [A-Za-z ]{1,40}?contains provisions that are prospective",
       "note": "Some provisions shown are NOT in force. They are printed in full, tagged 'Prospective' above the heading. Check that tag on any section you quote."
     },
     {
@@ -49,15 +73,19 @@
 
 legislation.gov.uk will tell you a statute *"is up to date with all changes known
 to be in force on or before 23 August 2026"* and, further down the same page,
-list under **"Changes and effects yet to be applied"** a set of amendments that
-are already in force and are **not** in the text above.
+list under **"Changes and effects yet to be applied"** a set of changes and
+effects that are **not** yet applied to the text above.
 
-Both statements are true. The editorial team applies amendments by hand, and the
-backlog is public. So the revised text is the law as far as it has been typed up.
-The gap is the list, and the list is on the page.
+Both statements are true. Where the banner says the item is up to date with all
+changes known to be in force, the text above includes every change the publisher
+knows to be in force on that date, so a listed effect may be a change not yet in
+force rather than one missing from the text. The editorial team applies
+amendments by hand, so where the banner does not say that, a listed effect may
+already be in force. The list is on the page.
 
-That is why `changes-yet-to-be-applied` stops the run. It is the only UK marker
-that means the words you just read are wrong.
+That is why `changes-yet-to-be-applied` stops the run: check the commencement of
+every listed effect that touches a provision relied on before treating the words
+you just read as either current or out of date.
 
 ## Prospective provisions are printed as though they were law
 
@@ -96,7 +124,7 @@ equally authentic.
 
 ## URL forms
 
-All four verified against this publisher:
+All five verified against this publisher:
 
     /ukpga/2023/50                        latest revised text
     /ukpga/2023/50/enacted                as enacted, frozen at Royal Assent
@@ -124,14 +152,21 @@ regex over saved bytes and not a reading.
 ## Also worth knowing
 
 - **Correction slips** are the UK analogue of a corrigendum, listed on the page
-  under "More Resources" with a date. They change the text without an amending
-  instrument.
+  under "More Resources" with a date. They correct minor errors that do not
+  change the meaning of the legislation (for example a wrong cross-reference)
+  without an amending instrument; the correction is made on the website copy,
+  not on the original print PDF. A substantive error is corrected by new
+  legislation.
 - **Statutory instruments carry most of the operative detail.** An Act that says
   the Secretary of State "may by regulations specify" has told you nothing about
   the threshold; the SI has. Find it.
-- **Explanatory Notes are not law.** They are useful, they are published by the
-  department, and they are not evidence of what the Act means. Do not quote them
-  in an operative position.
+- **Explanatory Notes are not law.** They are useful, they are prepared by the
+  government department responsible for the subject matter of the Act, and a
+  court may use them to cast light on the meaning of particular provisions, but
+  they do not displace the meaning of words that, read in context, are clear and
+  unambiguous and do not produce absurdity (R (O) v Secretary of State for the
+  Home Department [2022] UKSC 3, para 30). Do not quote them in an operative
+  position.
 - **Retained/assimilated EU law** still sits under UK law with its own amendment
   history. If the instrument began life in Brussels, check what the Retained EU
   Law (Revocation and Reform) Act 2023 did to it before relying on the text.
