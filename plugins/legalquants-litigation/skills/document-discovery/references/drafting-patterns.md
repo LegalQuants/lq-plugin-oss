@@ -71,7 +71,7 @@ INTERROGATORY NO. [__]
 Identify each person with knowledge of [bounded event or issue], stating the person's role, the subject of knowledge, and the date range of the person's involvement.
 ```
 
-For a contention interrogatory, identify the proposition and the point in the schedule or order at which contention discovery is permitted. A response may answer, object specifically, or state that the investigation is continuing with a concrete supplementation plan. A records-based response under Rule 33(d) must identify the records in enough detail to locate them and provide a reasonable opportunity to examine, audit, or copy them; “see the production” without a usable identification is not the pattern.
+For a contention interrogatory, identify the proposition and the point in the schedule or order at which contention discovery is permitted. Each interrogatory, to the extent it is not objected to, must be answered separately and fully in writing under oath, and the grounds for objecting must be stated with specificity (Rule 33(b)(3) and (4)). A statement that the investigation is continuing, with a concrete supplementation plan, can accompany an answer but does not replace it; a later or deferred answer needs a stipulation under Rule 29 or a court order, including an order under Rule 33(a)(2) that a contention interrogatory need not be answered until designated discovery is complete, or until a pretrial conference or some other time. A records-based response under Rule 33(d) must specify the records in sufficient detail to enable the interrogating party to locate and identify them as readily as the responding party could, and give the interrogating party a reasonable opportunity to examine and audit the records and to make copies, compilations, abstracts, or summaries; “see the production” without a usable identification is not the pattern.
 
 ## Requests for admission
 
@@ -81,7 +81,7 @@ Separate each matter. Use a short factual, law-to-fact, or genuineness propositi
 REQUEST FOR ADMISSION NO. [__]: Admit that the version of Schedule 3 attached as Exhibit [__] is the version signed by [party] on [date].
 ```
 
-If the proposition contains multiple facts, split it or make the components explicit. The response should admit, deny, or explain after reasonable inquiry why it cannot truthfully admit or deny, and should fairly address any part that can be admitted. State objections and grounds. Track the 30-day default and any local/order variation; do not silently treat a missed response as conclusively resolved without counsel checking service, extensions, and the court's rules.
+If the proposition contains multiple facts, split it or make the components explicit. If a matter is not admitted, the answer must specifically deny it or state in detail why the answering party cannot truthfully admit or deny it; lack of knowledge or information is a reason for failing to admit or deny only if the party states that it has made reasonable inquiry and that the information it knows or can readily obtain is insufficient to enable it to admit or deny. A denial must fairly respond to the substance of the matter, and when good faith requires that a party qualify an answer or deny only a part of a matter, the answer must specify the part admitted and qualify or deny the rest (Rule 36(a)(4)). State objections and grounds. Track the 30-day default and any local/order variation; do not silently treat a missed response as conclusively resolved without counsel checking service, extensions, and the court's rules.
 
 ## Preserving objections and response dates
 
@@ -177,7 +177,7 @@ Use a row per potentially withheld item unless an operative rule or order author
 | Log/order | Rule 26(b)(5), local/order field, categorical agreement, or Rule 502(d)/502(e) status |
 | Human disposition | Pending; counsel decision and date; no automatic release |
 
-A machine signal is only a queue entry. Counsel must decide whether the communication was for legal advice or litigation preparation, whether confidentiality was maintained, whether waiver or a common-interest theory applies, and whether a redacted or factual portion is discoverable. For an inadvertent-production notice, record the notice and hold the item while counsel applies Rule 26(b)(5)(B), FRE 502, and any Rule 502(d) order; do not return, destroy, sequester, retrieve, or disclose it through this skill.
+A machine signal is only a queue entry. Counsel must decide whether the communication was for legal advice or litigation preparation, whether confidentiality was maintained, whether waiver or a common-interest theory applies, and whether a redacted or factual portion is discoverable. For a notice under Rule 26(b)(5)(B) that information produced in discovery is subject to a claim of privilege or of protection as trial-preparation material, record the notice and hold the item while counsel applies Rule 26(b)(5)(B), FRE 502, and any Rule 502(d) order; do not return, destroy, sequester, retrieve, or disclose it through this skill.
 
 ## Authority-check worksheet
 
